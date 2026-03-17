@@ -1,0 +1,62 @@
+<section class="w-full rounded-3xl bg-gradient-to-br from-blue-50 to-emerald-50 p-6">
+  <div class="flex flex-col items-center justify-center rounded-2xl bg-white p-8 shadow-lg">
+    <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Box Breathing Exercise</div>
+    <div class="mt-2 text-xl font-semibold text-slate-700">{{ instruction() }}</div>
+
+    <div class="mt-6 flex items-center justify-center">
+      <div
+        class="breathing-shape w-40 h-40 rounded-full bg-blue-300 transition-all duration-4000"
+        [ngClass]="shapeScaleClass()"></div>
+    </div>
+
+    <div class="mt-6 text-3xl font-semibold text-slate-700 tabular-nums">
+      {{ formatTime(elapsedSeconds()) }}
+    </div>
+    <div class="mt-1 text-sm text-slate-600">
+      Phase: {{ phaseLabel() }} ({{ phaseRemaining() }}s remaining)
+    </div>
+    <div class="mt-1 text-xs text-slate-500">Total: {{ formatTime(durationSeconds()) }}</div>
+
+    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+      <button
+        type="button"
+        (click)="start()"
+        [disabled]="running()"
+        class="rounded-xl bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-60">
+        Start Exercise
+      </button>
+      <button
+        type="button"
+        (click)="pause()"
+        [disabled]="!running()"
+        class="rounded-xl bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-60">
+        Pause
+      </button>
+      <button
+        type="button"
+        (click)="reset()"
+        class="rounded-xl bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600">
+        Reset
+      </button>
+    </div>
+
+    <div class="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs font-semibold text-slate-600">
+      <span class="text-slate-500">Duration</span>
+      <button
+        *ngFor="let option of durationOptions"
+        type="button"
+        (click)="selectDuration(option)"
+        [disabled]="running()"
+        class="rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold transition"
+        [class.bg-blue-500]="durationMinutes() === option"
+        [class.text-white]="durationMinutes() === option"
+        [class.border-blue-500]="durationMinutes() === option">
+        {{ option }} min
+      </button>
+    </div>
+
+    <div *ngIf="isComplete()" class="mt-4 rounded-xl bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-700">
+      Exercise complete. Reset to try another round.
+    </div>
+  </div>
+</section>

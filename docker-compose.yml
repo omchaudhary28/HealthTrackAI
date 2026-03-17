@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: mindtrack-ai
+    volumes:
+      - mongodb-data:/data/db
+
+  backend:
+    build:
+      context: ./backend
+    command: npm run dev
+    working_dir: /app
+    environment:
+      PORT: 4000
+      MONGODB_URI: mongodb://mongodb:27017/mindtrack-ai
+      AI_SERVICE_URL: http://ai-service:8000
+      ML_SERVICE_URL: http://ml-service:9000
+      JWT_SECRET: change-me
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongodb
+      - ai-service
+      - ml-service
+
+  ai-service:
+    build:
+      context: ./ai-service
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    working_dir: /app
+    ports:
+      - "8000:8000"
+
+  ml-service:
+    build:
+      context: ./ml-service
+    command: uvicorn app.main:app --host 0.0.0.0 --port 9000 --reload
+    working_dir: /app
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/mindtrack-ai
+      MONGO_DB_NAME: mindtrack-ai
+      TRAINING_COLLECTION: ml_training_samples
+    ports:
+      - "9000:9000"
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb-data:

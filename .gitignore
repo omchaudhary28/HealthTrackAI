@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.angular/
+.env
+.env.local
+backend/.env
+frontend/.env
+ml-service/.env
+ai-service/.env
+coverage/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+.DS_Store
+Thumbs.db
