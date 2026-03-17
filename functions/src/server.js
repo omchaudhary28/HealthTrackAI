@@ -2,14 +2,10 @@ import { app } from "./app.js";
 import { connectToDatabase } from "./config/db.js";
 import { env } from "./config/env.js";
 
-/* Render provides its own port */
-const PORT = process.env.PORT || env.port;
-
 async function start() {
   await connectToDatabase();
-
-  app.listen(PORT, () => {
-    console.log(`MindTrack AI API listening on port ${PORT}`);
+  app.listen(env.port, () => {
+    console.log(`MindTrack AI API listening on http://localhost:${env.port}`);
   });
 }
 

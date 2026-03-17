@@ -22,20 +22,6 @@ app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("dev"));
 
-/* ---------------- ROOT ROUTE (added fix) ---------------- */
-
-app.get("/", (_req, res) => {
-  res.json({
-    status: "ok",
-    service: "mindtrack-ai-api",
-    message: "MindTrack AI API is running 🚀",
-    disclaimer:
-      "MindTrack AI is a wellness support platform and not a medical diagnostic system."
-  });
-});
-
-/* ---------------- HEALTH CHECK ---------------- */
-
 app.get("/health", (_req, res) => {
   res.json({
     status: "ok",
@@ -44,8 +30,6 @@ app.get("/health", (_req, res) => {
       "MindTrack AI is a wellness support platform and not a medical diagnostic system."
   });
 });
-
-/* ---------------- API ROUTES ---------------- */
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/tests", testsRoutes);
@@ -58,10 +42,6 @@ app.use("/api/v1/dashboard", dashboardRoutes);
 app.use("/api/v1/chat", chatRoutes);
 app.use("/api/v1/chatbot", chatbotRoutes);
 app.use("/api/v1/admin", adminRoutes);
-
-/* legacy route */
 app.use("/api/chat", chatRoutes);
-
-/* ---------------- ERROR HANDLER ---------------- */
 
 app.use(errorHandler);
