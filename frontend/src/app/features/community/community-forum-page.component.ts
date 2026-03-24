@@ -8,8 +8,10 @@ import {
   CommunityReactionKey,
   CommunityScope,
   CommunityService,
+  CommunityShareType,
   ConversationMessage,
-  ConversationSummary
+  ConversationSummary,
+  DiscoverUser
 } from "../../core/services/community.service";
 import { RealtimeService } from "../../core/services/realtime.service";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
@@ -18,377 +20,26 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
   selector: "app-community-forum-page",
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink],
-  template: `
-    <section appScrollReveal class="space-y-6">
-      <div class="glass-card rounded-[2.75rem] bg-[linear-gradient(150deg,rgba(255,255,255,0.8),rgba(255,255,255,0.52),rgba(99,102,241,0.08))] p-8">
-        <div class="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-          <div class="min-w-0">
-            <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Community</div>
-            <h1 class="mt-3 text-3xl font-semibold text-slate-900 sm:text-4xl">Supportive social space with calm sharing, follows, and live chat.</h1>
-            <p class="mt-3 max-w-3xl text-base leading-8 text-slate-700">
-              Share reflections or progress wins, follow people who feel relatable, and message them in a low-pressure space. Anonymous mode stays available for anything that should remain private.
-            </p>
-          </div>
-
-          <div class="flex flex-wrap gap-3">
-            <div class="rounded-full border border-white/70 bg-white/80 px-4 py-2 text-xs font-semibold text-slate-500">
-              Similar state: {{ spotlightMentalState || 'Balanced' }}
-            </div>
-            <a routerLink="/feedback" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Product feedback</a>
-          </div>
-        </div>
-
-        <div class="mt-6 flex flex-wrap gap-2">
-          <button
-            *ngFor="let item of scopes"
-            type="button"
-            (click)="setScope(item.key)"
-            class="rounded-full border px-4 py-2 text-sm font-semibold transition"
-            [class.border-slate-900]="scope === item.key"
-            [class.bg-slate-900]="scope === item.key"
-            [class.text-white]="scope === item.key"
-            [class.border-slate-200]="scope !== item.key"
-            [class.text-slate-600]="scope !== item.key">
-            {{ item.label }}
-          </button>
-        </div>
-      </div>
-
-      <div class="grid gap-6 xl:grid-cols-[1.08fr_0.92fr]">
-        <div class="space-y-6">
-          <form class="glass-card rounded-[2rem] p-6" (ngSubmit)="createPost()">
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <div class="text-sm font-semibold text-slate-900">Create a post</div>
-                <div class="mt-1 text-xs leading-5 text-slate-500">Share a reflection, progress win, streak, or something that helped.</div>
-              </div>
-              <label class="inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600">
-                <input [(ngModel)]="compose.isAnonymous" name="isAnonymous" type="checkbox" class="rounded border-slate-300 text-slate-900 focus:ring-slate-200" />
-                Anonymous mode
-              </label>
-            </div>
-
-            <div class="mt-5 grid gap-4 md:grid-cols-2">
-              <label class="block text-sm font-medium text-slate-600">
-                Title
-                <input [(ngModel)]="compose.title" name="title" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100" placeholder="Example: A small win from this week" />
-              </label>
-
-              <label class="block text-sm font-medium text-slate-600">
-                Mental state tag
-                <select [(ngModel)]="compose.mentalStateTag" name="mentalStateTag" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100">
-                  <option *ngFor="let state of mentalStates" [ngValue]="state">{{ state }}</option>
-                </select>
-              </label>
-            </div>
-
-            <div class="mt-4 grid gap-4 md:grid-cols-[0.9fr_1.1fr]">
-              <label class="block text-sm font-medium text-slate-600">
-                Share type
-                <select [(ngModel)]="compose.shareType" name="shareType" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100">
-                  <option value="reflection">Reflection</option>
-                  <option value="progress">Progress update</option>
-                  <option value="streak">Streak</option>
-                  <option value="milestone">Milestone</option>
-                </select>
-              </label>
-
-              <label *ngIf="compose.isAnonymous" class="block text-sm font-medium text-slate-600">
-                Anonymous alias
-                <input [(ngModel)]="compose.anonymousAlias" name="anonymousAlias" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100" placeholder="Optional. Example: Quiet Lantern" />
-              </label>
-            </div>
-
-            <label class="mt-4 block text-sm font-medium text-slate-600">
-              Content
-              <textarea [(ngModel)]="compose.content" name="content" rows="5" class="mt-2 w-full resize-none rounded-[1.75rem] border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100" placeholder="What improved? What feels hard? What helped a little?"></textarea>
-            </label>
-
-            <div *ngIf="compose.shareType !== 'reflection'" class="mt-4 grid gap-4 md:grid-cols-2">
-              <label class="block text-sm font-medium text-slate-600">
-                What improved
-                <textarea [(ngModel)]="compose.whatImproved" name="whatImproved" rows="3" class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100" placeholder="Example: I recovered faster after stressful meetings."></textarea>
-              </label>
-
-              <label class="block text-sm font-medium text-slate-600">
-                What helped
-                <textarea [(ngModel)]="compose.whatHelped" name="whatHelped" rows="3" class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100" placeholder="Example: Breathing, journaling, and cutting late-night scrolling."></textarea>
-              </label>
-            </div>
-
-            <div *ngIf="compose.shareType !== 'reflection'" class="mt-4 grid gap-4 sm:grid-cols-3">
-              <label class="block text-sm font-medium text-slate-600">
-                Streak days
-                <input [(ngModel)]="compose.streakDays" name="streakDays" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100" />
-              </label>
-              <label class="block text-sm font-medium text-slate-600">
-                Mood average
-                <input [(ngModel)]="compose.moodAverage" name="moodAverage" type="number" step="0.1" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100" />
-              </label>
-              <label class="block text-sm font-medium text-slate-600">
-                Exercise streak
-                <input [(ngModel)]="compose.exerciseStreak" name="exerciseStreak" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100" />
-              </label>
-            </div>
-
-            <label class="mt-4 block text-sm font-medium text-slate-600">
-              Tags
-              <input [(ngModel)]="compose.tags" name="tags" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100" placeholder="sleep, journaling, overthinking" />
-            </label>
-
-            <div *ngIf="createError" class="mt-4 rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-              {{ createError }}
-            </div>
-
-            <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
-              <div class="text-xs leading-6 text-slate-500">Safety filters block hostile or harmful language. Reactions stay supportive only.</div>
-              <button type="submit" [disabled]="creatingPost" class="btn-primary rounded-2xl px-5 py-3 text-sm font-semibold disabled:opacity-60">
-                {{ creatingPost ? 'Posting...' : 'Post to community' }}
-              </button>
-            </div>
-          </form>
-
-          <div class="space-y-4">
-            <div *ngIf="loadingFeed" class="glass-card rounded-[2rem] p-6 text-sm text-slate-500">Loading community feed...</div>
-            <div *ngIf="feedError" class="rounded-3xl border border-rose-100 bg-rose-50 px-5 py-4 text-sm text-rose-700">{{ feedError }}</div>
-            <div *ngIf="!loadingFeed && !feed.length" class="glass-card rounded-[2rem] p-6 text-sm text-slate-500">
-              No posts match this feed yet. Start the tone by sharing the first supportive update.
-            </div>
-
-            <article *ngFor="let post of feed; trackBy: trackById" appScrollReveal class="glass-card rounded-[2rem] p-6">
-              <div class="flex items-start justify-between gap-4">
-                <div class="flex min-w-0 gap-3">
-                  <div class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-slate-900 text-sm font-semibold text-white">
-                    {{ post.author.initials }}
-                  </div>
-
-                  <div class="min-w-0">
-                    <div class="flex flex-wrap items-center gap-2">
-                      <ng-container *ngIf="post.author.id; else anonymousName">
-                        <a [routerLink]="['/profile', post.author.id]" class="text-sm font-semibold text-slate-900 hover:text-[var(--mt-accent-strong)]">
-                          {{ post.author.displayName }}
-                        </a>
-                      </ng-container>
-                      <ng-template #anonymousName>
-                        <div class="text-sm font-semibold text-slate-900">{{ post.author.displayName }}</div>
-                      </ng-template>
-                      <span class="rounded-full bg-[var(--mt-accent-soft)] px-3 py-1 text-[11px] font-semibold text-[var(--mt-accent-strong)]">
-                        {{ post.mentalStateTag }}
-                      </span>
-                      <span *ngIf="post.shareType !== 'reflection'" class="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-600">
-                        {{ label(post.shareType) }}
-                      </span>
-                    </div>
-                    <div class="mt-1 text-xs text-slate-400">{{ post.author.headline }} · {{ post.createdAt | date: 'mediumDate' }}</div>
-                  </div>
-                </div>
-
-                <div class="flex flex-wrap justify-end gap-2">
-                  <button *ngIf="post.author.canFollow" type="button" (click)="toggleFollow(post)" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">
-                    {{ post.author.isFollowing ? 'Following' : 'Follow' }}
-                  </button>
-                  <button *ngIf="post.author.canMessage && post.author.id" type="button" (click)="startConversation(post.author.id)" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">
-                    Message
-                  </button>
-                </div>
-              </div>
-
-              <h2 class="mt-4 text-xl font-semibold text-slate-900">{{ post.title }}</h2>
-              <p class="mt-3 text-sm leading-8 text-slate-600">{{ post.content }}</p>
-
-              <div *ngIf="post.progressSnapshot" class="mt-4 grid gap-3 sm:grid-cols-2">
-                <div *ngIf="post.progressSnapshot.whatImproved" class="rounded-3xl bg-slate-50 px-4 py-4">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">What improved</div>
-                  <div class="mt-2 text-sm leading-7 text-slate-600">{{ post.progressSnapshot.whatImproved }}</div>
-                </div>
-                <div *ngIf="post.progressSnapshot.whatHelped" class="rounded-3xl bg-slate-50 px-4 py-4">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">What helped</div>
-                  <div class="mt-2 text-sm leading-7 text-slate-600">{{ post.progressSnapshot.whatHelped }}</div>
-                </div>
-                <div *ngIf="post.progressSnapshot.streakDays" class="rounded-3xl bg-slate-50 px-4 py-4">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Streak days</div>
-                  <div class="mt-2 text-2xl font-semibold text-slate-900">{{ post.progressSnapshot.streakDays }}</div>
-                </div>
-                <div *ngIf="post.progressSnapshot.moodAverage" class="rounded-3xl bg-slate-50 px-4 py-4">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Mood average</div>
-                  <div class="mt-2 text-2xl font-semibold text-slate-900">{{ post.progressSnapshot.moodAverage }}</div>
-                </div>
-              </div>
-
-              <div *ngIf="post.tags.length" class="mt-4 flex flex-wrap gap-2">
-                <span *ngFor="let tag of post.tags" class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm">
-                  #{{ tag }}
-                </span>
-              </div>
-
-              <div class="mt-5 flex flex-wrap gap-2">
-                <button
-                  *ngFor="let reaction of post.reactions"
-                  type="button"
-                  (click)="toggleReaction(post, reaction.key)"
-                  class="rounded-full border px-3 py-2 text-xs font-semibold transition"
-                  [class.border-slate-900]="reaction.active"
-                  [class.bg-slate-900]="reaction.active"
-                  [class.text-white]="reaction.active"
-                  [class.border-slate-200]="!reaction.active"
-                  [class.text-slate-600]="!reaction.active">
-                  {{ reaction.emoji }} {{ reaction.count }}
-                </button>
-                <button type="button" (click)="sharePost(post)" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Share</button>
-                <button type="button" (click)="reportPost(post)" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Report</button>
-              </div>
-
-              <div class="mt-5 rounded-[1.75rem] bg-slate-50/80 p-4">
-                <div class="flex items-center justify-between gap-3">
-                  <div class="text-sm font-semibold text-slate-900">Comments</div>
-                  <div class="text-xs text-slate-400">{{ post.commentCount }} total</div>
-                </div>
-
-                <div class="mt-3 space-y-3">
-                  <div *ngFor="let comment of post.comments" class="rounded-2xl bg-white px-4 py-3 shadow-sm">
-                    <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                      <span>{{ comment.author.displayName }}</span>
-                      <span class="text-slate-300">&middot;</span>
-                      <span>{{ comment.createdAt | date: 'short' }}</span>
-                    </div>
-                    <div class="mt-2 text-sm leading-7 text-slate-600">{{ comment.content }}</div>
-                  </div>
-                </div>
-
-                <div class="mt-4 flex gap-3">
-                  <input
-                    [(ngModel)]="draftComments[post.id]"
-                    [ngModelOptions]="{ standalone: true }"
-                    class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100"
-                    placeholder="Add a supportive comment..." />
-                  <button
-                    type="button"
-                    (click)="submitComment(post)"
-                    [disabled]="commentPending[post.id]"
-                    class="btn-primary shrink-0 rounded-2xl px-4 py-3 text-sm font-semibold disabled:opacity-60">
-                    {{ commentPending[post.id] ? 'Sending...' : 'Send' }}
-                  </button>
-                </div>
-              </div>
-            </article>
-
-            <div *ngIf="hasMore" class="flex justify-center pt-2">
-              <button type="button" (click)="loadFeed(false)" [disabled]="loadingMore" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold disabled:opacity-60">
-                {{ loadingMore ? 'Loading...' : 'Load more posts' }}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="space-y-6">
-          <div class="glass-card rounded-[2rem] p-6">
-            <div class="text-sm font-semibold text-slate-900">Community principles</div>
-            <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
-              <div class="rounded-3xl bg-slate-50/80 px-4 py-4">Support people without diagnosing them.</div>
-              <div class="rounded-3xl bg-slate-50/80 px-4 py-4">Use anonymous mode whenever privacy matters more than recognition.</div>
-              <div class="rounded-3xl bg-slate-50/80 px-4 py-4">Report anything hostile, unsafe, or manipulative so moderators can review it.</div>
-            </div>
-          </div>
-
-          <div class="glass-card rounded-[2rem] p-6">
-            <div class="flex items-center justify-between gap-3">
-              <div>
-                <div class="text-sm font-semibold text-slate-900">Direct messages</div>
-                <div class="mt-1 text-xs leading-5 text-slate-500">Low-pressure 1:1 support with online state and typing indicators.</div>
-              </div>
-              <button type="button" (click)="loadConversations()" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Refresh</button>
-            </div>
-
-            <div class="mt-4 space-y-3">
-              <button
-                *ngFor="let conversation of conversations; trackBy: trackById"
-                type="button"
-                (click)="selectConversation(conversation)"
-                class="flex w-full items-start gap-3 rounded-3xl border px-4 py-4 text-left transition"
-                [class.border-slate-900]="selectedConversation?.id === conversation.id"
-                [class.bg-slate-900]="selectedConversation?.id === conversation.id"
-                [class.text-white]="selectedConversation?.id === conversation.id"
-                [class.border-slate-100]="selectedConversation?.id !== conversation.id"
-                [class.bg-white]="selectedConversation?.id !== conversation.id">
-                <div class="relative grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/15 text-sm font-semibold" [class.bg-slate-100]="selectedConversation?.id !== conversation.id">
-                  <span [class.text-slate-900]="selectedConversation?.id !== conversation.id">{{ conversation.participant.initials }}</span>
-                  <span class="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white"
-                    [class.bg-emerald-400]="conversation.participant.isOnline"
-                    [class.bg-slate-300]="!conversation.participant.isOnline"></span>
-                </div>
-                <div class="min-w-0 flex-1">
-                  <div class="text-sm font-semibold">{{ conversation.participant.name }}</div>
-                  <div class="mt-1 text-xs opacity-75">{{ conversation.participant.headline }}</div>
-                  <div class="mt-2 truncate text-xs opacity-75">{{ conversation.lastMessageText || 'No messages yet' }}</div>
-                </div>
-              </button>
-
-              <div *ngIf="!conversations.length" class="rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-4 py-5 text-sm text-slate-500">
-                Follow someone or tap Message on a post author to start a conversation.
-              </div>
-            </div>
-          </div>
-
-          <div class="glass-card rounded-[2rem] p-6">
-            <div *ngIf="selectedConversation; else emptyChat">
-              <div class="flex items-start justify-between gap-4">
-                <div>
-                  <div class="text-sm font-semibold text-slate-900">{{ selectedConversation?.participant?.name }}</div>
-                  <div class="mt-1 text-xs text-slate-500">
-                    {{ selectedConversation?.participant?.isOnline ? 'Online now' : 'Offline' }} · {{ selectedConversation?.participant?.headline }}
-                  </div>
-                </div>
-                <a [routerLink]="['/profile', selectedConversation?.participant?.id]" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">View profile</a>
-              </div>
-
-              <div class="mt-4 h-[20rem] space-y-3 overflow-y-auto rounded-[1.75rem] bg-slate-50/80 p-4">
-                <div *ngIf="chatLoading" class="text-sm text-slate-500">Loading messages...</div>
-                <div *ngFor="let message of messages; trackBy: trackById" class="flex" [class.justify-end]="message.isOwn">
-                  <div class="max-w-[85%] rounded-[1.5rem] px-4 py-3 text-sm leading-7 shadow-sm"
-                    [class.bg-slate-900]="message.isOwn"
-                    [class.text-white]="message.isOwn"
-                    [class.bg-white]="!message.isOwn"
-                    [class.text-slate-700]="!message.isOwn">
-                    <div>{{ message.content }}</div>
-                    <div class="mt-2 text-[11px] opacity-70">{{ message.createdAt | date: 'shortTime' }}</div>
-                  </div>
-                </div>
-                <div *ngIf="typingLabel" class="text-xs font-semibold text-slate-500">{{ typingLabel }}</div>
-              </div>
-
-              <div class="mt-4 flex gap-3">
-                <input
-                  [(ngModel)]="chatDraft"
-                  [ngModelOptions]="{ standalone: true }"
-                  (ngModelChange)="handleTyping()"
-                  class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100"
-                  placeholder="Send a calm, supportive message..." />
-                <button type="button" (click)="sendMessage()" [disabled]="chatPending" class="btn-primary rounded-2xl px-4 py-3 text-sm font-semibold disabled:opacity-60">
-                  {{ chatPending ? 'Sending...' : 'Send' }}
-                </button>
-              </div>
-            </div>
-
-            <ng-template #emptyChat>
-              <div class="rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-4 py-5 text-sm text-slate-500">
-                Select a conversation to start chatting in real time.
-              </div>
-            </ng-template>
-          </div>
-        </div>
-      </div>
-    </section>
-  `
+  templateUrl: "./community-forum-page.component.html"
 })
 export class CommunityForumPageComponent implements OnInit, OnDestroy {
   readonly scopes: Array<{ key: CommunityScope; label: string }> = [
     { key: "global", label: "Global feed" },
     { key: "following", label: "Following" },
-    { key: "similar", label: "Similar minds" }
+    { key: "similar", label: "Similar minds" },
+    { key: "mine", label: "My posts" }
+  ];
+  readonly shareFilters: Array<{ key: CommunityShareType; label: string }> = [
+    { key: "all", label: "All" },
+    { key: "reflection", label: "Reflections" },
+    { key: "progress", label: "Progress" },
+    { key: "streak", label: "Streaks" },
+    { key: "milestone", label: "Milestones" }
   ];
   readonly mentalStates = ["Overthinker", "Stressed", "Depressed", "FOMO", "Balanced"];
 
   scope: CommunityScope = "global";
+  activeShareFilter: CommunityShareType = "all";
   spotlightMentalState: string | null = null;
   feed: CommunityPost[] = [];
   page = 1;
@@ -400,6 +51,9 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
   createError = "";
   commentPending: Record<string, boolean> = {};
   draftComments: Record<string, string> = {};
+  discoverUsers: DiscoverUser[] = [];
+  discoverLoading = true;
+  discoverError = "";
 
   conversations: ConversationSummary[] = [];
   selectedConversation: ConversationSummary | null = null;
@@ -416,7 +70,7 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
     mentalStateTag: "Balanced",
     isAnonymous: true,
     anonymousAlias: "",
-    shareType: "reflection" as "reflection" | "progress" | "streak" | "milestone",
+    shareType: "reflection" as Exclude<CommunityShareType, "all">,
     whatImproved: "",
     whatHelped: "",
     streakDays: null as number | null,
@@ -435,14 +89,27 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
     private readonly router: Router
   ) {}
 
+  get emptyFeedLabel(): string {
+    if (this.scope === "mine") {
+      return "Your account has no posts in this filter yet. Create your first post above and it will show up here and on your profile.";
+    }
+
+    if (this.scope === "following") {
+      return "Follow a few people to build a more personal feed.";
+    }
+
+    return "No posts match this feed yet. Start the tone by sharing the first supportive update.";
+  }
+
   ngOnInit(): void {
     this.realtimeService.ensureConnected();
     this.loadFeed(true);
+    this.loadDiscover();
     this.loadConversations();
 
     this.subs.add(
       this.realtimeService.communityPostCreated$.subscribe((post) => {
-        if (this.scope === "global") {
+        if (this.shouldDisplayInCurrentFeed(post)) {
           this.feed = [post, ...this.feed.filter((item) => item.id !== post.id)];
         }
       })
@@ -508,7 +175,7 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
         if (chatUser && chatUser !== this.handledChatUserId) {
           this.handledChatUserId = chatUser;
           this.startConversation(chatUser);
-          this.router.navigate([], { queryParams: { chatUser: null }, queryParamsHandling: "merge" });
+          void this.router.navigate([], { queryParams: { chatUser: null }, queryParamsHandling: "merge" });
         }
       })
     );
@@ -530,6 +197,15 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
     this.loadFeed(true);
   }
 
+  setShareFilter(filter: CommunityShareType): void {
+    if (this.activeShareFilter === filter) {
+      return;
+    }
+
+    this.activeShareFilter = filter;
+    this.loadFeed(true);
+  }
+
   loadFeed(reset: boolean): void {
     if (reset) {
       this.page = 1;
@@ -541,7 +217,7 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
 
     this.feedError = "";
 
-    this.communityService.listFeed(this.scope, this.page, 8).subscribe({
+    this.communityService.listFeed(this.scope, this.page, 8, this.activeShareFilter).subscribe({
       next: (response) => {
         this.feed = reset ? response.items : [...this.feed, ...response.items];
         this.hasMore = response.hasMore;
@@ -556,6 +232,23 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
         this.loadingFeed = false;
         this.loadingMore = false;
         this.feedError = err?.error?.error || "Unable to load the community feed right now.";
+      }
+    });
+  }
+
+  loadDiscover(): void {
+    this.discoverLoading = true;
+    this.discoverError = "";
+
+    this.communityService.listDiscover(6).subscribe({
+      next: (response) => {
+        this.discoverUsers = response.items || [];
+        this.discoverLoading = false;
+      },
+      error: () => {
+        this.discoverUsers = [];
+        this.discoverLoading = false;
+        this.discoverError = "Unable to load discover suggestions right now.";
       }
     });
   }
@@ -591,7 +284,9 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (post) => {
           this.creatingPost = false;
-          this.feed = [post, ...this.feed.filter((item) => item.id !== post.id)];
+          if (this.shouldDisplayInCurrentFeed(post)) {
+            this.feed = [post, ...this.feed.filter((item) => item.id !== post.id)];
+          }
           this.resetCompose();
         },
         error: (err) => {
@@ -630,6 +325,18 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
     this.communityService.reportPost(post.id, "Needs moderator review").subscribe();
   }
 
+  removePost(post: CommunityPost): void {
+    if (!post.isOwnPost) {
+      return;
+    }
+
+    this.communityService.deletePost(post.id).subscribe({
+      next: () => {
+        this.feed = this.feed.filter((item) => item.id !== post.id);
+      }
+    });
+  }
+
   toggleFollow(post: CommunityPost): void {
     const userId = post.author.id;
     if (!userId) {
@@ -639,17 +346,34 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
     const request = post.author.isFollowing ? this.communityService.unfollow(userId) : this.communityService.follow(userId);
     request.subscribe({
       next: (state) => {
-        this.feed = this.feed.map((item) =>
-          item.author.id === userId
-            ? {
-                ...item,
-                author: {
-                  ...item.author,
-                  isFollowing: state.isFollowing
+        if (this.scope === "following" && !state.isFollowing) {
+          this.feed = this.feed.filter((item) => item.author.id !== userId);
+        } else {
+          this.feed = this.feed.map((item) =>
+            item.author.id === userId
+              ? {
+                  ...item,
+                  author: {
+                    ...item.author,
+                    isFollowing: state.isFollowing
+                  }
                 }
-              }
-            : item
-        );
+              : item
+          );
+        }
+
+        this.loadDiscover();
+      }
+    });
+  }
+
+  followSuggestedUser(user: DiscoverUser): void {
+    this.communityService.follow(user.id).subscribe({
+      next: () => {
+        this.discoverUsers = this.discoverUsers.filter((item) => item.id !== user.id);
+        if (this.scope === "following") {
+          this.loadFeed(true);
+        }
       }
     });
   }
@@ -783,6 +507,26 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
       moodAverage: null,
       exerciseStreak: null
     };
+  }
+
+  private shouldDisplayInCurrentFeed(post: CommunityPost): boolean {
+    if (this.activeShareFilter !== "all" && post.shareType !== this.activeShareFilter) {
+      return false;
+    }
+
+    if (this.scope === "global") {
+      return true;
+    }
+
+    if (this.scope === "similar") {
+      return post.mentalStateTag === (this.spotlightMentalState || post.mentalStateTag);
+    }
+
+    if (this.scope === "mine") {
+      return post.isOwnPost;
+    }
+
+    return false;
   }
 
   private upsertConversationPreview(conversationId: string, message: ConversationMessage): void {

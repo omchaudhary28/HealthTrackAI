@@ -3,8 +3,9 @@ import { Injectable, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { API_BASE_URL } from "../api/api.config";
 
-export type CommunityScope = "global" | "following" | "similar";
+export type CommunityScope = "global" | "following" | "similar" | "mine";
 export type CommunityReactionKey = "support" | "hug" | "strength";
+export type CommunityShareType = "all" | "reflection" | "progress" | "streak" | "milestone";
 
 export interface CommunityAuthor {
   id: string | null;
@@ -72,6 +73,9 @@ export interface CommunityFeedResponse {
     similarMentalState: string | null;
     followingCount: number;
   };
+  filters?: {
+    shareType: CommunityShareType;
+  };
 }
 
 export interface FollowState {
@@ -107,6 +111,24 @@ export interface CommunityProfileResponse {
     journalEntries30d: number;
   } | null;
   recentPosts: CommunityPost[];
+}
+
+export interface CommunityProfilePostsResponse {
+  items: CommunityPost[];
+  page: number;
+  limit: number;
+  hasMore: boolean;
+  filter: CommunityShareType;
+}
+
+export interface DiscoverUser {
+  id: string;
+  name: string;
+  headline: string;
+  initials: string;
+  mentalStateTag: string;
+  followers: number;
+  recentPosts: number;
 }
 
 export interface ConversationSummary {
@@ -146,17 +168,22 @@ interface MessageListResponse {
   items: ConversationMessage[];
 }
 
+interface DiscoverResponse {
+  items: DiscoverUser[];
+}
+
 @Injectable({ providedIn: "root" })
 export class CommunityService {
   private readonly http = inject(HttpClient);
   private readonly apiBaseUrl = inject(API_BASE_URL);
   private readonly communityUrl = `${this.apiBaseUrl}/community`;
 
-  listFeed(scope: CommunityScope, page = 1, limit = 8): Observable<CommunityFeedResponse> {
+  listFeed(scope: CommunityScope, page = 1, limit = 8, shareType: CommunityShareType = "all"): Observable<CommunityFeedResponse> {
     const params = new HttpParams()
       .set("scope", scope)
       .set("page", String(page))
-      .set("limit", String(limit));
+      .set("limit", String(limit))
+      .set("shareType", shareType);
 
     return this.http.get<CommunityFeedResponse>(this.communityUrl, { params });
   }
@@ -190,12 +217,29 @@ export class CommunityService {
     return this.http.get<CommunityProfileResponse>(`${this.communityUrl}/profiles/${userId}`);
   }
 
+  listProfilePosts(userId: string, page = 1, limit = 9, shareType: CommunityShareType = "all"): Observable<CommunityProfilePostsResponse> {
+    const params = new HttpParams()
+      .set("page", String(page))
+      .set("limit", String(limit))
+      .set("shareType", shareType);
+    return this.http.get<CommunityProfilePostsResponse>(`${this.communityUrl}/profiles/${userId}/posts`, { params });
+  }
+
+  listDiscover(limit = 6): Observable<DiscoverResponse> {
+    const params = new HttpParams().set("limit", String(limit));
+    return this.http.get<DiscoverResponse>(`${this.communityUrl}/discover`, { params });
+  }
+
   follow(userId: string): Observable<FollowState> {
     return this.http.post<FollowState>(`${this.communityUrl}/follow/${userId}`, {});
   }
 
   unfollow(userId: string): Observable<FollowState> {
     return this.http.delete<FollowState>(`${this.communityUrl}/follow/${userId}`);
+  }
+
+  deletePost(postId: string): Observable<{ removed: boolean; postId: string }> {
+    return this.http.delete<{ removed: boolean; postId: string }>(`${this.communityUrl}/${postId}`);
   }
 
   listConversations(): Observable<ConversationListResponse> {

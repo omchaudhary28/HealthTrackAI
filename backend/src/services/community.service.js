@@ -24,11 +24,12 @@ import {
 } from "./realtime.service.js";
 import { HttpError } from "../utils/http-error.js";
 
-export async function listCommunityFeed({ viewerId, scope = "global", page = 1, limit = 10 }) {
+export async function listCommunityFeed({ viewerId, scope = "global", page = 1, limit = 10, shareType = "all" }) {
   const safePage = clampNumber(page, 1, 500);
   const safeLimit = clampNumber(limit, 1, 20);
   const viewerContext = await buildViewerContext(viewerId);
   const normalizedScope = normalizeScope(scope);
+  const normalizedShareType = normalizeShareTypeFilter(shareType);
   const filter = { status: "visible" };
 
   if (normalizedScope === "following") {
@@ -49,8 +50,30 @@ export async function listCommunityFeed({ viewerId, scope = "global", page = 1, 
     filter.userId = { $in: [...viewerContext.followingIds] };
   }
 
+  if (normalizedScope === "mine") {
+    if (!viewerContext.viewerId) {
+      return {
+        items: [],
+        page: safePage,
+        limit: safeLimit,
+        hasMore: false,
+        scope: normalizedScope,
+        spotlight: {
+          similarMentalState: viewerContext.mentalStateTag,
+          followingCount: viewerContext.followingIds.size
+        }
+      };
+    }
+
+    filter.userId = viewerContext.viewerId;
+  }
+
   if (normalizedScope === "similar" && viewerContext.mentalStateTag) {
     filter.mentalStateTag = viewerContext.mentalStateTag;
+  }
+
+  if (normalizedShareType !== "all") {
+    filter.shareType = normalizedShareType;
   }
 
   const skip = (safePage - 1) * safeLimit;
@@ -74,6 +97,9 @@ export async function listCommunityFeed({ viewerId, scope = "global", page = 1, 
     spotlight: {
       similarMentalState: viewerContext.mentalStateTag,
       followingCount: viewerContext.followingIds.size
+    },
+    filters: {
+      shareType: normalizedShareType
     }
   };
 }
@@ -311,6 +337,152 @@ export async function getCommunityProfile(viewerId, targetUserId) {
         mentalStateTag: latestMentalState?.mentalState || null
       })
     )
+  };
+}
+
+export async function listCommunityProfilePosts(viewerId, targetUserId, { page = 1, limit = 9, shareType = "all" } = {}) {
+  const user = await User.findById(targetUserId).lean();
+  if (!user) {
+    throw new HttpError(404, "User not found");
+  }
+
+  const safePage = clampNumber(page, 1, 500);
+  const safeLimit = clampNumber(limit, 1, 18);
+  const normalizedShareType = normalizeShareTypeFilter(shareType);
+  const isOwnProfile = String(viewerId || "") === String(targetUserId || "");
+  const filter = {
+    userId: targetUserId,
+    status: "visible",
+    ...(isOwnProfile ? {} : { isAnonymous: false })
+  };
+
+  if (normalizedShareType !== "all") {
+    filter.shareType = normalizedShareType;
+  }
+
+  const skip = (safePage - 1) * safeLimit;
+  const viewerContext = await buildViewerContext(viewerId);
+  const [total, posts] = await Promise.all([
+    ForumPost.countDocuments(filter),
+    ForumPost.find(filter)
+      .sort({ lastActivityAt: -1, createdAt: -1 })
+      .skip(skip)
+      .limit(safeLimit)
+      .populate({ path: "userId", select: "name profile" })
+      .populate({ path: "comments.userId", select: "name profile" })
+      .lean()
+  ]);
+
+  return {
+    items: posts.map((post) => serializePost(post, viewerContext)),
+    page: safePage,
+    limit: safeLimit,
+    hasMore: skip + posts.length < total,
+    filter: normalizedShareType
+  };
+}
+
+export async function listDiscoverUsers(viewerId, limit = 6) {
+  if (!viewerId) {
+    return { items: [] };
+  }
+
+  const safeLimit = clampNumber(limit, 1, 12);
+  const viewerContext = await buildViewerContext(viewerId);
+  const excludedIds = new Set([String(viewerId), ...viewerContext.followingIds]);
+  const candidateRows = await ForumPost.aggregate([
+    {
+      $match: {
+        status: "visible",
+        isAnonymous: false
+      }
+    },
+    {
+      $group: {
+        _id: "$userId",
+        recentPosts: { $sum: 1 },
+        latestShareAt: { $max: "$createdAt" }
+      }
+    },
+    { $sort: { latestShareAt: -1 } },
+    { $limit: 40 }
+  ]);
+
+  const candidateIdPairs = candidateRows
+    .map((row) => ({ rawId: row._id, id: String(row._id || "") }))
+    .filter((item) => item.id && !excludedIds.has(item.id));
+  const candidateIds = candidateIdPairs.map((item) => item.id);
+  const candidateObjectIds = candidateIdPairs.map((item) => item.rawId);
+
+  if (!candidateIds.length) {
+    return { items: [] };
+  }
+
+  const [users, followerRows, states] = await Promise.all([
+    User.find({ _id: { $in: candidateIds } }).lean(),
+    Follow.aggregate([
+      { $match: { followingId: { $in: candidateObjectIds } } },
+      { $group: { _id: "$followingId", followers: { $sum: 1 } } }
+    ]),
+    MentalState.find({ userId: { $in: candidateIds } })
+      .sort({ createdAt: -1 })
+      .lean()
+  ]);
+
+  const postCountMap = new Map(candidateRows.map((row) => [String(row._id), Number(row.recentPosts || 0)]));
+  const followerMap = new Map(followerRows.map((row) => [String(row._id), Number(row.followers || 0)]));
+  const stateMap = new Map();
+  states.forEach((state) => {
+    const key = String(state.userId || "");
+    if (key && !stateMap.has(key)) {
+      stateMap.set(key, normalizeMentalStateTag(state.mentalState, "Balanced"));
+    }
+  });
+
+  const items = users
+    .map((user) => {
+      const id = String(user._id);
+      const mentalStateTag = stateMap.get(id) || "Balanced";
+      const recentPosts = postCountMap.get(id) || 0;
+      const followers = followerMap.get(id) || 0;
+      const similarityScore = mentalStateTag === viewerContext.mentalStateTag ? 20 : 0;
+      const activityScore = Math.min(recentPosts, 8) * 2 + Math.min(followers, 20);
+
+      return {
+        id,
+        name: user.name,
+        headline: user.profile?.headline || mentalStateTag,
+        initials: buildInitials(user.name),
+        mentalStateTag,
+        followers,
+        recentPosts,
+        score: similarityScore + activityScore
+      };
+    })
+    .sort((left, right) => right.score - left.score)
+    .slice(0, safeLimit)
+    .map(({ score: _score, ...item }) => item);
+
+  return { items };
+}
+
+export async function deleteCommunityPost(viewerId, postId) {
+  const post = await ForumPost.findById(postId);
+  if (!post || post.status === "removed") {
+    throw new HttpError(404, "Post not found");
+  }
+
+  if (String(post.userId) !== String(viewerId)) {
+    throw new HttpError(403, "You can only remove your own posts");
+  }
+
+  post.status = "removed";
+  post.lastActivityAt = new Date();
+  await post.save();
+
+  return {
+    removed: true,
+    postId: String(post._id)
   };
 }
 
@@ -674,7 +846,7 @@ function buildProgressSnapshot(payload = {}) {
 
 function normalizeScope(value) {
   const scope = String(value || "global").trim().toLowerCase();
-  if (scope === "following" || scope === "similar" || scope === "personality") {
+  if (scope === "following" || scope === "similar" || scope === "personality" || scope === "mine") {
     return scope === "personality" ? "similar" : scope;
   }
 
@@ -688,6 +860,15 @@ function normalizeShareType(value) {
   }
 
   return "reflection";
+}
+
+function normalizeShareTypeFilter(value) {
+  const type = String(value || "all").trim().toLowerCase();
+  if (["reflection", "progress", "streak", "milestone"].includes(type)) {
+    return type;
+  }
+
+  return "all";
 }
 
 function defaultTitle(shareType) {

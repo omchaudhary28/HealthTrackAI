@@ -1,10 +1,13 @@
 import {
   addCommunityComment,
   createCommunityPost,
+  deleteCommunityPost,
   createDirectMessage,
   createOrGetDirectConversation,
   followCommunityUser,
   getCommunityProfile,
+  listCommunityProfilePosts,
+  listDiscoverUsers,
   listCommunityFeed,
   listDirectConversations,
   listDirectMessages,
@@ -19,7 +22,8 @@ export async function listForumPosts(req, res) {
     viewerId: req.user?.sub,
     scope: req.query.scope,
     page: req.query.page,
-    limit: req.query.limit
+    limit: req.query.limit,
+    shareType: req.query.shareType
   });
 
   res.json(result);
@@ -48,6 +52,25 @@ export async function reportPost(req, res) {
 export async function getProfile(req, res) {
   const profile = await getCommunityProfile(req.user?.sub, req.params.userId);
   res.status(200).json(profile);
+}
+
+export async function getProfilePosts(req, res) {
+  const result = await listCommunityProfilePosts(req.user?.sub, req.params.userId, {
+    page: req.query.page,
+    limit: req.query.limit,
+    shareType: req.query.shareType
+  });
+  res.status(200).json(result);
+}
+
+export async function getDiscoverUsers(req, res) {
+  const result = await listDiscoverUsers(req.user.sub, req.query.limit);
+  res.status(200).json(result);
+}
+
+export async function removePost(req, res) {
+  const result = await deleteCommunityPost(req.user.sub, req.params.postId);
+  res.status(200).json(result);
 }
 
 export async function followUser(req, res) {

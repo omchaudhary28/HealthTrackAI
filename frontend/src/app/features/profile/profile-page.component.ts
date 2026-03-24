@@ -4,7 +4,7 @@ import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Subscription } from "rxjs";
 import { AuthService, UserProfile } from "../../core/services/auth.service";
-import { CommunityProfileResponse, CommunityService } from "../../core/services/community.service";
+import { CommunityPost, CommunityProfileResponse, CommunityService, CommunityShareType } from "../../core/services/community.service";
 import { DashboardService, DashboardSummary } from "../../core/services/dashboard.service";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
@@ -133,6 +133,55 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
           <div class="space-y-6">
             <div class="glass-card rounded-[2rem] p-6">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <div class="text-sm font-semibold text-slate-900">Publish from your profile</div>
+                  <div class="mt-1 text-xs leading-5 text-slate-500">Post to your account and the community feed from here.</div>
+                </div>
+                <a routerLink="/community" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Open community</a>
+              </div>
+
+              <div class="mt-5 grid gap-4 md:grid-cols-2">
+                <label class="block text-sm font-medium text-slate-600">Title
+                  <input [(ngModel)]="postCompose.title" name="postTitle" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+                </label>
+                <label class="block text-sm font-medium text-slate-600">Share type
+                  <select [(ngModel)]="postCompose.shareType" name="postShareType" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100">
+                    <option value="reflection">Reflection</option>
+                    <option value="progress">Progress</option>
+                    <option value="streak">Streak</option>
+                    <option value="milestone">Milestone</option>
+                  </select>
+                </label>
+              </div>
+
+              <label class="mt-4 block text-sm font-medium text-slate-600">Content
+                <textarea [(ngModel)]="postCompose.content" name="postContent" rows="4" class="mt-2 w-full resize-none rounded-[1.75rem] border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"></textarea>
+              </label>
+
+              <div class="mt-4 grid gap-4 md:grid-cols-2">
+                <label class="block text-sm font-medium text-slate-600">Mental state
+                  <select [(ngModel)]="postCompose.mentalStateTag" name="postMentalState" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100">
+                    <option value="Overthinker">Overthinker</option>
+                    <option value="Stressed">Stressed</option>
+                    <option value="Depressed">Depressed</option>
+                    <option value="FOMO">FOMO</option>
+                    <option value="Balanced">Balanced</option>
+                  </select>
+                </label>
+                <label class="block text-sm font-medium text-slate-600">Tags
+                  <input [(ngModel)]="postCompose.tags" name="postTags" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" placeholder="sleep, journaling, recovery" />
+                </label>
+              </div>
+
+              <div *ngIf="postError" class="mt-4 rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700">{{ postError }}</div>
+
+              <button type="button" (click)="createProfilePost()" [disabled]="postPending" class="btn-primary mt-5 rounded-2xl px-5 py-3 text-sm font-semibold disabled:opacity-60">
+                {{ postPending ? 'Publishing...' : 'Publish post' }}
+              </button>
+            </div>
+
+            <div class="glass-card rounded-[2rem] p-6">
               <div class="text-sm font-semibold text-slate-900">Shared progress stats</div>
               <div class="mt-5 grid gap-4 sm:grid-cols-3" *ngIf="profile.activitySummary as activity">
                 <div class="rounded-3xl bg-slate-50/80 p-5">
@@ -165,16 +214,40 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
             <div class="glass-card rounded-[2rem] p-6">
               <div class="flex items-center justify-between gap-3">
-                <div class="text-sm font-semibold text-slate-900">Recent community posts</div>
-                <a routerLink="/community" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Open feed</a>
+                <div>
+                  <div class="text-sm font-semibold text-slate-900">Posts on your account</div>
+                  <div class="mt-1 text-xs text-slate-500">Your profile feed updates as you publish.</div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" (click)="setPostFilter('all')" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">All</button>
+                  <button type="button" (click)="setPostFilter('progress')" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Progress</button>
+                  <button type="button" (click)="setPostFilter('reflection')" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Reflections</button>
+                </div>
               </div>
               <div class="mt-4 space-y-3">
-                <div *ngFor="let post of profile.recentPosts" class="rounded-3xl border border-slate-100 bg-white/80 px-4 py-4">
+                <div *ngIf="profilePostsLoading" class="rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-4 py-5 text-sm text-slate-500">
+                  Loading your posts...
+                </div>
+                <div *ngIf="profilePostsError" class="rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700">{{ profilePostsError }}</div>
+                <div *ngIf="!profilePostsLoading && !profilePosts.length" class="rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-4 py-5 text-sm text-slate-500">
+                  Publish from this profile to start your account feed.
+                </div>
+                <div *ngFor="let post of profilePosts" class="rounded-3xl border border-slate-100 bg-white/80 px-4 py-4">
                   <div class="flex flex-wrap items-center gap-2">
                     <div class="text-sm font-semibold text-slate-900">{{ post.title }}</div>
                     <span class="rounded-full bg-[var(--mt-accent-soft)] px-3 py-1 text-[11px] font-semibold text-[var(--mt-accent-strong)]">{{ post.mentalStateTag }}</span>
+                    <span *ngIf="post.shareType !== 'reflection'" class="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-600">{{ post.shareType }}</span>
                   </div>
                   <div class="mt-2 text-sm leading-7 text-slate-600">{{ post.content }}</div>
+                  <div class="mt-4 flex flex-wrap gap-2">
+                    <button type="button" (click)="sharePost(post)" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Share</button>
+                    <button type="button" (click)="removeOwnPost(post)" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Remove</button>
+                  </div>
+                </div>
+                <div *ngIf="profilePostsHasMore" class="pt-1">
+                  <button type="button" (click)="loadMorePosts()" [disabled]="profilePostsLoadingMore" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold disabled:opacity-60">
+                    {{ profilePostsLoadingMore ? 'Loading...' : 'Load more' }}
+                  </button>
                 </div>
               </div>
             </div>
@@ -208,17 +281,36 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             </div>
 
             <div class="glass-card rounded-[2rem] p-6">
-              <div class="text-sm font-semibold text-slate-900">Recent visible posts</div>
+              <div class="flex items-center justify-between gap-3">
+                <div class="text-sm font-semibold text-slate-900">Visible posts</div>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" (click)="setPostFilter('all')" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">All</button>
+                  <button type="button" (click)="setPostFilter('progress')" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Progress</button>
+                  <button type="button" (click)="setPostFilter('reflection')" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Reflections</button>
+                </div>
+              </div>
               <div class="mt-4 space-y-3">
-                <div *ngIf="!profile.recentPosts.length" class="rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-4 py-5 text-sm text-slate-500">
+                <div *ngIf="profilePostsLoading" class="rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-4 py-5 text-sm text-slate-500">
+                  Loading posts...
+                </div>
+                <div *ngIf="profilePostsError" class="rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700">{{ profilePostsError }}</div>
+                <div *ngIf="!profilePostsLoading && !profilePosts.length" class="rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-4 py-5 text-sm text-slate-500">
                   No public posts yet.
                 </div>
-                <div *ngFor="let post of profile.recentPosts" class="rounded-3xl border border-slate-100 bg-white/80 px-4 py-4">
+                <div *ngFor="let post of profilePosts" class="rounded-3xl border border-slate-100 bg-white/80 px-4 py-4">
                   <div class="flex flex-wrap items-center gap-2">
                     <div class="text-sm font-semibold text-slate-900">{{ post.title }}</div>
                     <span class="rounded-full bg-[var(--mt-accent-soft)] px-3 py-1 text-[11px] font-semibold text-[var(--mt-accent-strong)]">{{ post.mentalStateTag }}</span>
                   </div>
                   <div class="mt-2 text-sm leading-7 text-slate-600">{{ post.content }}</div>
+                  <div class="mt-4 flex flex-wrap gap-2">
+                    <button type="button" (click)="sharePost(post)" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Share</button>
+                  </div>
+                </div>
+                <div *ngIf="profilePostsHasMore" class="pt-1">
+                  <button type="button" (click)="loadMorePosts()" [disabled]="profilePostsLoadingMore" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold disabled:opacity-60">
+                    {{ profilePostsLoadingMore ? 'Loading...' : 'Load more' }}
+                  </button>
                 </div>
               </div>
             </div>
@@ -239,6 +331,22 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   stressIndicators = "";
   summary: DashboardSummary | null = null;
   profileData: CommunityProfileResponse | null = null;
+  profilePosts: CommunityPost[] = [];
+  profilePostsPage = 1;
+  profilePostsHasMore = false;
+  profilePostsLoading = false;
+  profilePostsLoadingMore = false;
+  profilePostsError = "";
+  profilePostsFilter: CommunityShareType = "all";
+  postPending = false;
+  postError = "";
+  postCompose = {
+    title: "",
+    content: "",
+    shareType: "reflection" as Exclude<CommunityShareType, "all">,
+    mentalStateTag: "Balanced",
+    tags: ""
+  };
 
   form: {
     name: string;
@@ -370,10 +478,116 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     void navigator.clipboard?.writeText(text);
   }
 
+  setPostFilter(filter: CommunityShareType): void {
+    if (this.profilePostsFilter === filter || !this.profileData) {
+      return;
+    }
+
+    this.profilePostsFilter = filter;
+    this.loadProfilePosts(this.profileData.profile.id, true);
+  }
+
+  createProfilePost(): void {
+    if (this.postPending) {
+      return;
+    }
+
+    this.postPending = true;
+    this.postError = "";
+
+    this.communityService
+      .createPost({
+        title: this.postCompose.title,
+        content: this.postCompose.content,
+        shareType: this.postCompose.shareType,
+        mentalStateTag: this.postCompose.mentalStateTag,
+        tags: splitList(this.postCompose.tags),
+        isAnonymous: false,
+        progressSnapshot: null
+      })
+      .subscribe({
+        next: (post) => {
+          this.postPending = false;
+          if (this.profileData && (this.profilePostsFilter === "all" || post.shareType === this.profilePostsFilter)) {
+            this.profilePosts = [post, ...this.profilePosts];
+          } else if (this.profileData) {
+            this.loadProfilePosts(this.profileData.profile.id, true);
+          }
+          this.postCompose = {
+            title: "",
+            content: "",
+            shareType: "reflection",
+            mentalStateTag: this.profileData?.currentMentalState || "Balanced",
+            tags: ""
+          };
+
+          if (this.profileData) {
+            this.profileData = {
+              ...this.profileData,
+              social: {
+                ...this.profileData.social,
+                posts: this.profileData.social.posts + 1,
+                progressShares:
+                  post.shareType === "reflection" ? this.profileData.social.progressShares : this.profileData.social.progressShares + 1
+              }
+            };
+          }
+        },
+        error: (err) => {
+          this.postPending = false;
+          this.postError = err?.error?.error || "Unable to publish this post right now.";
+        }
+      });
+  }
+
+  loadMorePosts(): void {
+    if (!this.profileData || this.profilePostsLoadingMore || !this.profilePostsHasMore) {
+      return;
+    }
+
+    this.loadProfilePosts(this.profileData.profile.id, false);
+  }
+
+  sharePost(post: CommunityPost): void {
+    const text = `I'm improving my mental health with MindTrack AI \ud83d\udc99\n\n${post.title}`;
+
+    if (navigator.share) {
+      void navigator.share({ title: "MindTrack AI", text });
+      return;
+    }
+
+    void navigator.clipboard?.writeText(text);
+  }
+
+  removeOwnPost(post: CommunityPost): void {
+    if (!post.isOwnPost || !this.profileData) {
+      return;
+    }
+
+    this.communityService.deletePost(post.id).subscribe({
+      next: () => {
+        this.profilePosts = this.profilePosts.filter((item) => item.id !== post.id);
+        this.profileData = {
+          ...this.profileData!,
+          social: {
+            ...this.profileData!.social,
+            posts: Math.max(0, this.profileData!.social.posts - 1),
+            progressShares:
+              post.shareType === "reflection" ? this.profileData!.social.progressShares : Math.max(0, this.profileData!.social.progressShares - 1)
+          }
+        };
+      }
+    });
+  }
+
   private loadProfile(userId: string): void {
     this.loadingProfile = true;
     this.profileData = null;
     this.summary = null;
+    this.profilePosts = [];
+    this.profilePostsPage = 1;
+    this.profilePostsHasMore = false;
+    this.profilePostsError = "";
     const currentUser = this.authService.currentUser();
     this.prefill(currentUser);
 
@@ -381,6 +595,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       next: (profile) => {
         this.profileData = profile;
         this.loadingProfile = false;
+        this.postCompose.mentalStateTag = profile.currentMentalState || "Balanced";
+        this.loadProfilePosts(profile.profile.id, true);
 
         if (profile.isOwnProfile) {
           this.dashboardService.getSummary().subscribe({
@@ -392,6 +608,35 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       error: () => {
         this.loadingProfile = false;
         this.profileData = null;
+      }
+    });
+  }
+
+  private loadProfilePosts(userId: string, reset: boolean): void {
+    if (reset) {
+      this.profilePostsPage = 1;
+      this.profilePosts = [];
+      this.profilePostsLoading = true;
+    } else {
+      this.profilePostsLoadingMore = true;
+    }
+
+    this.profilePostsError = "";
+
+    this.communityService.listProfilePosts(userId, this.profilePostsPage, 6, this.profilePostsFilter).subscribe({
+      next: (response) => {
+        this.profilePosts = reset ? response.items : [...this.profilePosts, ...response.items];
+        this.profilePostsHasMore = response.hasMore;
+        this.profilePostsLoading = false;
+        this.profilePostsLoadingMore = false;
+        if (response.hasMore) {
+          this.profilePostsPage += 1;
+        }
+      },
+      error: () => {
+        this.profilePostsLoading = false;
+        this.profilePostsLoadingMore = false;
+        this.profilePostsError = "Unable to load profile posts right now.";
       }
     });
   }
