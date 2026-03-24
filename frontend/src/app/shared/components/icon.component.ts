@@ -9,6 +9,7 @@ export type MindtrackIconName =
   | "journal"
   | "exercises"
   | "community"
+  | "compose"
   | "progress"
   | "profile"
   | "feedback";
@@ -78,6 +79,11 @@ export type MindtrackIconName =
           <path d="M16.5 21a5.8 5.8 0 0 0-9 0"></path>
           <path d="M16 11.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4z"></path>
           <path d="M8 11.8a3.7 3.7 0 1 0 0-7.4 3.7 3.7 0 0 0 0 7.4z"></path>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'compose'">
+          <path d="M12 20h9"></path>
+          <path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path>
         </ng-container>
 
         <ng-container *ngSwitchCase="'progress'">

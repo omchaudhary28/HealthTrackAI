@@ -83,6 +83,13 @@ export const routes: Routes = [
     data: { animation: "community", themeKey: "community" }
   },
   {
+    path: "community/create",
+    loadComponent: () =>
+      import("./features/community/create-post-page.component").then((m) => m.CreatePostPageComponent),
+    canActivate: [authGuard, baselineGuard],
+    data: { animation: "create-post", themeKey: "createPost" }
+  },
+  {
     path: "feedback",
     loadComponent: () =>
       import("./features/feedback/feedback-page.component").then((m) => m.FeedbackPageComponent),

@@ -67,9 +67,10 @@ export class SideNavComponent {
     { label: "Journal", link: "/journal", icon: "journal" as MindtrackIconName, shortcut: "05", exact: true },
     { label: "Exercises", link: "/exercises", icon: "exercises" as MindtrackIconName, shortcut: "06", exact: true },
     { label: "Community", link: "/community", icon: "community" as MindtrackIconName, shortcut: "07", exact: true },
-    { label: "Progress", link: "/progress", icon: "progress" as MindtrackIconName, shortcut: "08", exact: true },
-    { label: "Profile", link: "/profile", icon: "profile" as MindtrackIconName, shortcut: "09", exact: true },
-    { label: "Feedback", link: "/feedback", icon: "feedback" as MindtrackIconName, shortcut: "10", exact: true }
+    { label: "Create Post", link: "/community/create", icon: "compose" as MindtrackIconName, shortcut: "08", exact: true },
+    { label: "Progress", link: "/progress", icon: "progress" as MindtrackIconName, shortcut: "09", exact: true },
+    { label: "Profile", link: "/profile", icon: "profile" as MindtrackIconName, shortcut: "10", exact: true },
+    { label: "Feedback", link: "/feedback", icon: "feedback" as MindtrackIconName, shortcut: "11", exact: true }
   ];
 
   onNavigate(): void {

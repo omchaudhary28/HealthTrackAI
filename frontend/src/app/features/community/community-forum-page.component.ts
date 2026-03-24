@@ -36,8 +36,6 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
     { key: "streak", label: "Streaks" },
     { key: "milestone", label: "Milestones" }
   ];
-  readonly mentalStates = ["Overthinker", "Stressed", "Depressed", "FOMO", "Balanced"];
-
   scope: CommunityScope = "global";
   activeShareFilter: CommunityShareType = "all";
   spotlightMentalState: string | null = null;
@@ -47,8 +45,6 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
   loadingFeed = true;
   loadingMore = false;
   feedError = "";
-  creatingPost = false;
-  createError = "";
   commentPending: Record<string, boolean> = {};
   draftComments: Record<string, string> = {};
   discoverUsers: DiscoverUser[] = [];
@@ -62,21 +58,6 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
   chatPending = false;
   chatLoading = false;
   typingLabel = "";
-
-  compose = {
-    title: "",
-    content: "",
-    tags: "",
-    mentalStateTag: "Balanced",
-    isAnonymous: true,
-    anonymousAlias: "",
-    shareType: "reflection" as Exclude<CommunityShareType, "all">,
-    whatImproved: "",
-    whatHelped: "",
-    streakDays: null as number | null,
-    moodAverage: null as number | null,
-    exerciseStreak: null as number | null
-  };
 
   private readonly subs = new Subscription();
   private typingTimer?: ReturnType<typeof setTimeout>;
@@ -251,49 +232,6 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
         this.discoverError = "Unable to load discover suggestions right now.";
       }
     });
-  }
-
-  createPost(): void {
-    if (this.creatingPost) {
-      return;
-    }
-
-    this.creatingPost = true;
-    this.createError = "";
-
-    this.communityService
-      .createPost({
-        title: this.compose.title,
-        content: this.compose.content,
-        tags: splitList(this.compose.tags),
-        mentalStateTag: this.compose.mentalStateTag,
-        isAnonymous: this.compose.isAnonymous,
-        anonymousAlias: this.compose.anonymousAlias,
-        shareType: this.compose.shareType,
-        progressSnapshot:
-          this.compose.shareType === "reflection"
-            ? null
-            : {
-                whatImproved: this.compose.whatImproved || undefined,
-                whatHelped: this.compose.whatHelped || undefined,
-                streakDays: this.compose.streakDays ?? undefined,
-                moodAverage: this.compose.moodAverage ?? undefined,
-                exerciseStreak: this.compose.exerciseStreak ?? undefined
-              }
-      })
-      .subscribe({
-        next: (post) => {
-          this.creatingPost = false;
-          if (this.shouldDisplayInCurrentFeed(post)) {
-            this.feed = [post, ...this.feed.filter((item) => item.id !== post.id)];
-          }
-          this.resetCompose();
-        },
-        error: (err) => {
-          this.creatingPost = false;
-          this.createError = err?.error?.error || "Unable to create this post right now.";
-        }
-      });
   }
 
   submitComment(post: CommunityPost): void {
@@ -492,23 +430,6 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
     this.feed = this.feed.map((item) => (item.id === post.id ? post : item));
   }
 
-  private resetCompose(): void {
-    this.compose = {
-      title: "",
-      content: "",
-      tags: "",
-      mentalStateTag: this.spotlightMentalState || "Balanced",
-      isAnonymous: true,
-      anonymousAlias: "",
-      shareType: "reflection",
-      whatImproved: "",
-      whatHelped: "",
-      streakDays: null,
-      moodAverage: null,
-      exerciseStreak: null
-    };
-  }
-
   private shouldDisplayInCurrentFeed(post: CommunityPost): boolean {
     if (this.activeShareFilter !== "all" && post.shareType !== this.activeShareFilter) {
       return false;
@@ -547,11 +468,4 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
       return rightTime - leftTime;
     });
   }
-}
-
-function splitList(value: string): string[] {
-  return String(value || "")
-    .split(/[,;\n]/g)
-    .map((item) => item.trim())
-    .filter(Boolean);
 }

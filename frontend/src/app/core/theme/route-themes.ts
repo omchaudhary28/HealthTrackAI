@@ -110,6 +110,17 @@ export const ROUTE_THEMES: Record<string, RouteTheme> = {
     orbB: "rgba(34, 197, 94, 0.12)",
     tabGradient: "linear-gradient(90deg, rgba(99,102,241,0.95), rgba(34,197,94,0.88))"
   },
+  createPost: {
+    key: "createPost",
+    shellGradient: "linear-gradient(140deg, #fff7f1 0%, #f7f8ff 50%, #eefdf8 100%)",
+    accent: "#f97316",
+    accentStrong: "#c2410c",
+    accentSoft: "rgba(249, 115, 22, 0.14)",
+    activeSurface: "rgba(255, 247, 237, 0.9)",
+    orbA: "rgba(251, 146, 60, 0.18)",
+    orbB: "rgba(99, 102, 241, 0.12)",
+    tabGradient: "linear-gradient(90deg, rgba(249,115,22,0.95), rgba(99,102,241,0.88))"
+  },
   progress: {
     key: "progress",
     shellGradient: "linear-gradient(140deg, #eef8ff 0%, #fefbf4 48%, #eefcf8 100%)",

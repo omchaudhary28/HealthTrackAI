@@ -40,6 +40,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               <div *ngIf="profile.currentMentalState" class="rounded-full bg-[var(--mt-accent-soft)] px-4 py-2 text-xs font-semibold text-[var(--mt-accent-strong)]">
                 {{ profile.currentMentalState }}
               </div>
+              <a *ngIf="profile.isOwnProfile" routerLink="/community/create" class="btn-primary rounded-full px-5 py-3 text-sm font-semibold">Create post</a>
               <button type="button" (click)="shareProfile()" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Share</button>
               <button *ngIf="!profile.isOwnProfile" type="button" (click)="toggleFollow()" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">
                 {{ profile.isFollowing ? 'Following' : 'Follow' }}
@@ -135,50 +136,14 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             <div class="glass-card rounded-[2rem] p-6">
               <div class="flex items-start justify-between gap-4">
                 <div>
-                  <div class="text-sm font-semibold text-slate-900">Publish from your profile</div>
-                  <div class="mt-1 text-xs leading-5 text-slate-500">Post to your account and the community feed from here.</div>
+                  <div class="text-sm font-semibold text-slate-900">Create post separately</div>
+                  <div class="mt-1 text-xs leading-5 text-slate-500">Publishing has its own page. Your profile stays focused on account details and post history.</div>
                 </div>
-                <a routerLink="/community" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Open community</a>
+                <a routerLink="/community/create" class="btn-primary rounded-full px-4 py-2 text-xs font-semibold">Open create post</a>
               </div>
-
-              <div class="mt-5 grid gap-4 md:grid-cols-2">
-                <label class="block text-sm font-medium text-slate-600">Title
-                  <input [(ngModel)]="postCompose.title" name="postTitle" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
-                </label>
-                <label class="block text-sm font-medium text-slate-600">Share type
-                  <select [(ngModel)]="postCompose.shareType" name="postShareType" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100">
-                    <option value="reflection">Reflection</option>
-                    <option value="progress">Progress</option>
-                    <option value="streak">Streak</option>
-                    <option value="milestone">Milestone</option>
-                  </select>
-                </label>
+              <div class="mt-5 rounded-[1.75rem] bg-slate-50/80 px-4 py-4 text-sm leading-7 text-slate-600">
+                Use the dedicated create-post page when you want to publish. Posts will still appear here on your account once they are live.
               </div>
-
-              <label class="mt-4 block text-sm font-medium text-slate-600">Content
-                <textarea [(ngModel)]="postCompose.content" name="postContent" rows="4" class="mt-2 w-full resize-none rounded-[1.75rem] border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"></textarea>
-              </label>
-
-              <div class="mt-4 grid gap-4 md:grid-cols-2">
-                <label class="block text-sm font-medium text-slate-600">Mental state
-                  <select [(ngModel)]="postCompose.mentalStateTag" name="postMentalState" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100">
-                    <option value="Overthinker">Overthinker</option>
-                    <option value="Stressed">Stressed</option>
-                    <option value="Depressed">Depressed</option>
-                    <option value="FOMO">FOMO</option>
-                    <option value="Balanced">Balanced</option>
-                  </select>
-                </label>
-                <label class="block text-sm font-medium text-slate-600">Tags
-                  <input [(ngModel)]="postCompose.tags" name="postTags" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" placeholder="sleep, journaling, recovery" />
-                </label>
-              </div>
-
-              <div *ngIf="postError" class="mt-4 rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700">{{ postError }}</div>
-
-              <button type="button" (click)="createProfilePost()" [disabled]="postPending" class="btn-primary mt-5 rounded-2xl px-5 py-3 text-sm font-semibold disabled:opacity-60">
-                {{ postPending ? 'Publishing...' : 'Publish post' }}
-              </button>
             </div>
 
             <div class="glass-card rounded-[2rem] p-6">
@@ -338,15 +303,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   profilePostsLoadingMore = false;
   profilePostsError = "";
   profilePostsFilter: CommunityShareType = "all";
-  postPending = false;
-  postError = "";
-  postCompose = {
-    title: "",
-    content: "",
-    shareType: "reflection" as Exclude<CommunityShareType, "all">,
-    mentalStateTag: "Balanced",
-    tags: ""
-  };
 
   form: {
     name: string;
@@ -487,59 +443,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.loadProfilePosts(this.profileData.profile.id, true);
   }
 
-  createProfilePost(): void {
-    if (this.postPending) {
-      return;
-    }
-
-    this.postPending = true;
-    this.postError = "";
-
-    this.communityService
-      .createPost({
-        title: this.postCompose.title,
-        content: this.postCompose.content,
-        shareType: this.postCompose.shareType,
-        mentalStateTag: this.postCompose.mentalStateTag,
-        tags: splitList(this.postCompose.tags),
-        isAnonymous: false,
-        progressSnapshot: null
-      })
-      .subscribe({
-        next: (post) => {
-          this.postPending = false;
-          if (this.profileData && (this.profilePostsFilter === "all" || post.shareType === this.profilePostsFilter)) {
-            this.profilePosts = [post, ...this.profilePosts];
-          } else if (this.profileData) {
-            this.loadProfilePosts(this.profileData.profile.id, true);
-          }
-          this.postCompose = {
-            title: "",
-            content: "",
-            shareType: "reflection",
-            mentalStateTag: this.profileData?.currentMentalState || "Balanced",
-            tags: ""
-          };
-
-          if (this.profileData) {
-            this.profileData = {
-              ...this.profileData,
-              social: {
-                ...this.profileData.social,
-                posts: this.profileData.social.posts + 1,
-                progressShares:
-                  post.shareType === "reflection" ? this.profileData.social.progressShares : this.profileData.social.progressShares + 1
-              }
-            };
-          }
-        },
-        error: (err) => {
-          this.postPending = false;
-          this.postError = err?.error?.error || "Unable to publish this post right now.";
-        }
-      });
-  }
-
   loadMorePosts(): void {
     if (!this.profileData || this.profilePostsLoadingMore || !this.profilePostsHasMore) {
       return;
@@ -595,7 +498,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       next: (profile) => {
         this.profileData = profile;
         this.loadingProfile = false;
-        this.postCompose.mentalStateTag = profile.currentMentalState || "Balanced";
         this.loadProfilePosts(profile.profile.id, true);
 
         if (profile.isOwnProfile) {
