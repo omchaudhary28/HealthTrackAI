@@ -3,6 +3,7 @@ import { Component, Input } from "@angular/core";
 
 export type MindtrackIconName =
   | "dashboard"
+  | "insights"
   | "tests"
   | "mood"
   | "journal"
@@ -34,6 +35,13 @@ export type MindtrackIconName =
           <rect x="13" y="3" width="8" height="8" rx="2"></rect>
           <rect x="3" y="13" width="8" height="8" rx="2"></rect>
           <rect x="13" y="13" width="8" height="8" rx="2"></rect>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'insights'">
+          <path d="M12 3c4.8 0 8.5 3.8 8.5 8.5S16.8 20 12 20 3.5 16.2 3.5 11.5 7.2 3 12 3z"></path>
+          <path d="M9 12c.9-1.4 2-2.1 3-2.1s2.1.7 3 2.1"></path>
+          <path d="M10 8.5h.01"></path>
+          <path d="M14 8.5h.01"></path>
         </ng-container>
 
         <ng-container *ngSwitchCase="'tests'">
@@ -97,4 +105,3 @@ export class IconComponent {
   @Input() title?: string;
   @Input() className = "h-5 w-5";
 }
-

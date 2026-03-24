@@ -34,6 +34,13 @@ import { AuthService } from "../../core/services/auth.service";
         </div>
 
         <div class="flex items-center gap-2 sm:gap-3">
+          <a
+            *ngIf="publicMode"
+            routerLink="/about"
+            class="btn-outline hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex">
+            About
+          </a>
+
           <div class="hidden rounded-full border border-[var(--line)] bg-white/80 px-4 py-2 text-xs text-slate-500 md:block">
             Private assessment, journaling, and progress tracking
           </div>

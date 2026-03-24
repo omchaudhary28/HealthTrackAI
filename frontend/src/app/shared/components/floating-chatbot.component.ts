@@ -119,17 +119,12 @@ interface ChatMessage {
 export class FloatingChatbotComponent implements AfterViewChecked {
   @ViewChild("scrollViewport") scrollViewport?: ElementRef<HTMLDivElement>;
 
+  private readonly storageKey = "mindtrack-chat-memory";
   open = false;
   draft = "";
   pending = false;
-  messages: ChatMessage[] = [
-    {
-      role: "assistant",
-      content: "Would you like help understanding a result, choosing an exercise, or writing a journal prompt?",
-      timestamp: Date.now()
-    }
-  ];
-  quickChips = ["Try a 5 minute breathing reset", "Give me a journaling prompt", "Explain my latest mental state"];
+  messages: ChatMessage[] = [];
+  quickChips = ["I feel lost", "Give me a journaling prompt", "Explain my latest mental state"];
 
   private shouldAutoScroll = true;
   private requestId = 0;
@@ -139,7 +134,9 @@ export class FloatingChatbotComponent implements AfterViewChecked {
     private readonly chatbotService: ChatbotService,
     private readonly authService: AuthService,
     private readonly cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    this.messages = this.readSavedMessages();
+  }
 
   ngAfterViewChecked(): void {
     if (!this.shouldAutoScroll) {
@@ -183,6 +180,8 @@ export class FloatingChatbotComponent implements AfterViewChecked {
 
   clear(): void {
     this.draft = "";
+    this.messages = [this.buildInitialMessage()];
+    this.persistMessages();
   }
 
   send(): void {
@@ -203,6 +202,7 @@ export class FloatingChatbotComponent implements AfterViewChecked {
     this.requestId += 1;
     const activeRequest = this.requestId;
     const userId = this.authService.currentUser()?.id;
+    this.persistMessages();
 
     this.chatbotService.sendMessage(message, this.messages, userId).subscribe({
       next: (reply) => {
@@ -218,6 +218,7 @@ export class FloatingChatbotComponent implements AfterViewChecked {
         this.messages = [...this.messages, { role: "assistant", content: reply, timestamp: Date.now() }];
         this.pending = false;
         this.shouldAutoScroll = true;
+        this.persistMessages();
         this.cdr.markForCheck();
       },
       error: () => {
@@ -241,6 +242,7 @@ export class FloatingChatbotComponent implements AfterViewChecked {
         ];
         this.pending = false;
         this.shouldAutoScroll = true;
+        this.persistMessages();
         this.cdr.markForCheck();
       }
     });
@@ -248,5 +250,38 @@ export class FloatingChatbotComponent implements AfterViewChecked {
 
   trackByTimestamp(_index: number, item: ChatMessage): number {
     return item.timestamp;
+  }
+
+  private readSavedMessages(): ChatMessage[] {
+    try {
+      const raw = localStorage.getItem(this.storageKey);
+      if (!raw) {
+        return [this.buildInitialMessage()];
+      }
+
+      const parsed = JSON.parse(raw) as ChatMessage[];
+      if (!Array.isArray(parsed) || !parsed.length) {
+        return [this.buildInitialMessage()];
+      }
+
+      return parsed;
+    } catch {
+      return [this.buildInitialMessage()];
+    }
+  }
+
+  private persistMessages(): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(this.messages.slice(-14)));
+  }
+
+  private buildInitialMessage(): ChatMessage {
+    const name = this.authService.currentUser()?.name?.split(" ")?.[0];
+    return {
+      role: "assistant",
+      content: name
+        ? `Hi ${name}. If something feels off today, tell me what feels heaviest and I’ll keep the next step small.`
+        : "Tell me what feels hardest right now, and I’ll help you narrow it down into one calmer next step.",
+      timestamp: Date.now()
+    };
   }
 }

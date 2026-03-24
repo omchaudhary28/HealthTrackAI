@@ -1,23 +1,33 @@
 import { ForumPost } from "../models/forum-post.model.js";
-import { JournalEntry } from "../models/journal-entry.model.js";
-import { MentalState } from "../models/mental-state.model.js";
-import { MoodLog } from "../models/mood-log.model.js";
-import { TestResult } from "../models/test-result.model.js";
+import { refreshMentalStateSnapshot } from "../services/wellness-profile.service.js";
 
 export async function getDashboardSummary(req, res) {
-  const [latestBaseline, recentMoodLogs, recentJournalEntries, mentalStates, forumCount] = await Promise.all([
-    TestResult.findOne({ userId: req.user.sub, testKey: "baseline" }).sort({ createdAt: -1 }).lean(),
-    MoodLog.find({ userId: req.user.sub }).sort({ date: -1 }).limit(30).lean(),
-    JournalEntry.find({ userId: req.user.sub }).sort({ createdAt: -1 }).limit(5).lean(),
-    MentalState.find({ userId: req.user.sub }).sort({ createdAt: -1 }).limit(6).lean(),
+  const [{ snapshot, savedMentalState }, communityVisiblePosts] = await Promise.all([
+    refreshMentalStateSnapshot(req.user.sub),
     ForumPost.countDocuments({ status: "visible" })
   ]);
 
   res.json({
-    latestBaseline,
-    recentMoodLogs,
-    recentJournalEntries,
-    mentalStates,
-    communityVisiblePosts: forumCount
+    latestBaseline: snapshot.latestBaseline,
+    recentMoodLogs: snapshot.recentMoodLogs,
+    recentJournalEntries: snapshot.recentJournalEntries,
+    mentalStates: snapshot.mentalStates,
+    communityVisiblePosts,
+    currentMentalState: savedMentalState || snapshot.mentalStates?.[0] || null,
+    suggestedAction: snapshot.suggestedAction,
+    recommendationCards: snapshot.recommendationCards,
+    analytics: snapshot.analytics,
+    activitySummary: snapshot.activitySummary,
+    user: snapshot.user
+      ? {
+          id: String(snapshot.user._id || snapshot.user.id),
+          name: snapshot.user.name,
+          email: snapshot.user.email,
+          profile: snapshot.user.profile || {}
+        }
+      : null,
+    aiInsightsHistory: snapshot.aiInsightsHistory,
+    journalSignals: snapshot.journalSignals,
+    exerciseHistory: snapshot.exerciseHistory
   });
 }

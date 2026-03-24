@@ -38,13 +38,14 @@ export class ChatbotService {
 
 function buildChatUrl(apiBaseUrl: string): string {
   if (!apiBaseUrl) {
-    return "/api/chat";
+    return "/api/v1/chatbot/message";
   }
 
   const normalized = apiBaseUrl.replace(/\/$/, "");
+
   if (normalized.endsWith("/api/v1")) {
-    return `${normalized.replace(/\/api\/v1$/, "")}/api/chat`;
+    return `${normalized}/chatbot/message`;
   }
 
-  return `${normalized}/api/chat`;
+  return `${normalized}/chatbot/message`;
 }

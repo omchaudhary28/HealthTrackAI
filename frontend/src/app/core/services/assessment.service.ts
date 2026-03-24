@@ -6,6 +6,9 @@ import { API_BASE_URL } from "../api/api.config";
 export interface LatestAssessmentState {
   mentalState: any | null;
   latestBaseline: any | null;
+  suggestedAction?: any | null;
+  recommendationCards?: any[];
+  activitySummary?: any | null;
 }
 
 @Injectable({ providedIn: "root" })
@@ -17,4 +20,3 @@ export class AssessmentService {
     return this.http.get<LatestAssessmentState>(`${this.apiBaseUrl}/assessment/state/latest`);
   }
 }
-

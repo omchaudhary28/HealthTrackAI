@@ -1,4 +1,6 @@
 import { generateChatbotReply, generateContextualReply } from "../services/chatbot.service.js";
+import { predictExerciseRecommendation } from "../services/ml.service.js";
+import { buildWellnessSnapshot } from "../services/wellness-profile.service.js";
 import {
   buildEmotionReply,
   buildConversationState,
@@ -14,7 +16,6 @@ export async function sendChatbotMessage(req, res) {
     return res.status(400).json({ error: "Message is required." });
   }
 
-  const context = req.body?.context || {};
   const history = Array.isArray(req.body?.messages)
     ? req.body.messages
     : Array.isArray(req.body?.history)
@@ -23,14 +24,13 @@ export async function sendChatbotMessage(req, res) {
   const lastAssistant = extractLastAssistantMessage(history);
   const state = buildConversationState(history);
   const intent = classifyIntent(message);
+  const userId = req.body?.userId || null;
+
+  const snapshot = userId ? await safelyBuildSnapshot(userId) : null;
+  const context = buildChatContext(snapshot);
 
   if (intent === "affirmative_response" || intent === "negative_response" || intent === "maybe_response") {
-    const followUpReply = await handleFollowUp({
-      intent,
-      state,
-      history,
-      context
-    });
+    const followUpReply = await handleFollowUp({ intent, state, history, context });
 
     if (followUpReply) {
       const reply = await ensureNonRepeating({
@@ -40,65 +40,65 @@ export async function sendChatbotMessage(req, res) {
         regenerate: async () =>
           generateChatbotReply(
             message,
-            {},
+            context,
             history,
             "Avoid repeating the last response. Provide a short, supportive follow-up."
           )
       });
 
-      return res.json({
-        reply,
-        provider: "local-followup",
-        disclaimer:
-          "MindTrack AI provides supportive wellness guidance only and is not a clinical service."
-      });
+      return res.json(responsePayload(reply, "local-followup", context));
     }
   }
 
   if (intent === "greeting") {
+    const greeting = snapshot?.user?.name
+      ? `Hey ${snapshot.user.name.split(" ")[0]}. How are you feeling today?`
+      : "Hello. How are you feeling today?";
+
     const reply = await ensureNonRepeating({
-      reply: "Hello! How are you feeling today?",
+      reply: greeting,
       intent,
       lastAssistant,
       regenerate: async () =>
         generateChatbotReply(
           message,
-          {},
+          context,
           history,
-          "Provide a friendly greeting and a short check-in question. Avoid repeating the last response."
+          "Provide a warm greeting, acknowledge the user gently, and ask one short check-in question."
         )
     });
-    return res.json({
-      reply,
-      provider: "local-greeting",
-      disclaimer:
-        "MindTrack AI provides supportive wellness guidance only and is not a clinical service."
-    });
+
+    return res.json(responsePayload(reply, "local-greeting", context));
   }
 
   if (intent === "negative_response") {
     const reply = await ensureNonRepeating({
-      reply: "That's completely okay. I'm here whenever you need.",
+      reply: "That is completely okay. We can keep it simple, or pause here if that feels better.",
       intent,
       lastAssistant,
       regenerate: async () =>
         generateChatbotReply(
           message,
-          {},
+          context,
           history,
           "Respond briefly and kindly acknowledging the user's no. Avoid repeating the last response."
         )
     });
-    return res.json({
-      reply,
-      provider: "local-negative",
-      disclaimer:
-        "MindTrack AI provides supportive wellness guidance only and is not a clinical service."
-    });
+
+    return res.json(responsePayload(reply, "local-negative", context));
   }
 
   if (intent === "emotion" || intent === "exercise_request") {
-    const baseReply = buildEmotionReply(message, "breathing", intent);
+    const personalizedExercise =
+      snapshot?.recommendationCards?.[0] || (await buildMlRecommendation(snapshot, message));
+    const baseReply = personalizedExercise
+      ? `${buildEmotionReply(message, personalizedExercise.title || personalizedExercise.key, intent)} ${
+          personalizedExercise.whyRecommended
+            ? `I’d start with ${personalizedExercise.title} because ${lowerCaseFirst(personalizedExercise.whyRecommended)}`
+            : ""
+        }`.trim()
+      : buildEmotionReply(message, "breathing reset", intent);
+
     const reply = await ensureNonRepeating({
       reply: baseReply,
       intent,
@@ -106,71 +106,56 @@ export async function sendChatbotMessage(req, res) {
       regenerate: async () =>
         generateChatbotReply(
           message,
-          {},
+          context,
           history,
           `Respond with empathy and suggest a ${formatExercise(
-            "breathing"
-          )} exercise. Avoid repeating the last response.`
+            personalizedExercise?.title || "breathing reset"
+          )}. Keep it supportive and non-medical.`
         )
     });
 
-    return res.json({
-      reply,
-      provider: "local-support",
-      disclaimer:
-        "MindTrack AI provides supportive wellness guidance only and is not a clinical service."
-    });
+    return res.json(responsePayload(reply, personalizedExercise ? "personalized-support" : "ml-recommendation", context));
   }
 
   if (intent === "mental_state_question") {
-    if (context?.mental_state || context?.stress_score || context?.anxiety_score) {
-      const response = await generateContextualReply(message, context, history);
+    if (!context?.mental_state || context.mental_state === "Unknown") {
       const reply = await ensureNonRepeating({
-        reply: response.reply,
+        reply: "I do not have enough recent data to explain your latest pattern yet. A quick check-in or baseline assessment would give me more to work with.",
         intent,
         lastAssistant,
         regenerate: async () =>
-          generateContextualReply(
+          generateChatbotReply(
             message,
-            context,
+            {},
             history,
-            "Avoid repeating the last response. Provide a fresh explanation and one gentle next step."
+            "Let the user know you do not have their latest mental-state snapshot and invite a check-in."
           )
       });
 
-      return res.json({
-        reply,
-        provider: response.provider,
-        disclaimer:
-          "MindTrack AI provides supportive wellness guidance only and is not a clinical service."
-      });
+      return res.json(responsePayload(reply, "local-missing-context", context));
     }
 
+    const response = await generateContextualReply(message, context, history);
     const reply = await ensureNonRepeating({
-      reply: "I don't have your latest mental state yet. If you complete a check-in, I can explain it.",
+      reply: response.reply,
       intent,
       lastAssistant,
       regenerate: async () =>
-        generateChatbotReply(
+        generateContextualReply(
           message,
-          {},
+          context,
           history,
-          "Let the user know you don't have their latest mental state and invite them to complete a check-in."
+          "Avoid repeating the last response. Explain the state in a fresh way and offer one gentle next step."
         )
     });
 
-    return res.json({
-      reply,
-      provider: "local-missing-context",
-      disclaimer:
-        "MindTrack AI provides supportive wellness guidance only and is not a clinical service."
-    });
+    return res.json(responsePayload(reply, response.provider, context));
   }
 
   if (intent === "unknown") {
     const response = await generateChatbotReply(
       message,
-      {},
+      context,
       history,
       "The user input is minimal or unclear. Respond with a gentle, supportive clarifying question."
     );
@@ -181,18 +166,13 @@ export async function sendChatbotMessage(req, res) {
       regenerate: async () =>
         generateChatbotReply(
           message,
-          {},
+          context,
           history,
-          "Provide a different short prompt inviting the user to share how they're feeling."
+          "Provide a different short prompt inviting the user to share how they feel or what feels hardest right now."
         )
     });
 
-    return res.json({
-      reply,
-      provider: response.provider,
-      disclaimer:
-        "MindTrack AI provides supportive wellness guidance only and is not a clinical service."
-    });
+    return res.json(responsePayload(reply, response.provider, context));
   }
 
   const response = await generateChatbotReply(message, context, history);
@@ -209,12 +189,7 @@ export async function sendChatbotMessage(req, res) {
       )
   });
 
-  res.json({
-    reply,
-    provider: response.provider,
-    disclaimer:
-      "MindTrack AI provides supportive wellness guidance only and is not a clinical service."
-  });
+  return res.json(responsePayload(reply, response.provider, context));
 }
 
 async function handleFollowUp({ intent, state, history, context }) {
@@ -223,43 +198,31 @@ async function handleFollowUp({ intent, state, history, context }) {
   }
 
   if (state.lastQuestion === "mental_state" && intent === "affirmative_response") {
-    if (context?.mental_state || context?.stress_score || context?.anxiety_score) {
-      const response = await generateContextualReply(
-        "Please explain my latest mental state.",
-        context,
-        history,
-        "The user said yes to your offer to explain their mental state. Provide the explanation."
-      );
-      return response.reply;
+    if (!context?.mental_state || context.mental_state === "Unknown") {
+      return "I do not have your latest pattern yet. A quick check-in would help me personalize that.";
     }
 
-    return "I don't have your latest mental state yet. If you complete a check-in, I can explain it.";
+    const response = await generateContextualReply(
+      "Please explain my latest mental state.",
+      context,
+      history,
+      "The user said yes to your offer to explain their mental state. Provide the explanation."
+    );
+    return response.reply;
   }
 
   if (intent === "affirmative_response") {
     switch (state.lastQuestion) {
       case "gratitude_exercise":
-        return [
-          "Great! Let's try a quick gratitude exercise.",
-          "Step 1: Think of one small thing you're grateful for today.",
-          "Step 2: Take a slow breath and focus on that thought.",
-          "Step 3: Write it in your journal if you'd like."
-        ].join("\n");
+        return "Good. Start with one small thing that felt supportive today, even if it was brief.";
       case "breathing_exercise":
-        return [
-          "Great. Try this box-breathing reset:",
-          "Inhale for 4 seconds.",
-          "Hold for 4 seconds.",
-          "Exhale for 4 seconds.",
-          "Hold for 4 seconds.",
-          "Repeat for 1 minute."
-        ].join("\n");
+        return "Try this: inhale for 4, hold for 4, exhale for 4, pause for 4. Repeat for one minute.";
       case "journaling_prompt":
-        return "Here is a gentle prompt: What emotion showed up most today, and what seemed to trigger it?";
+        return "Try this prompt: what felt most difficult today, and what would help you feel 5 percent steadier?";
       case "grounding_exercise":
-        return "Try this grounding: notice 5 things you see, 4 you feel, 3 you hear, 2 you smell, and 1 you taste.";
+        return "Let’s ground first: name 5 things you can see, 4 you can feel, 3 you can hear, 2 you can smell, and 1 you can taste.";
       case "exercise_offer":
-        return "Sure. Would you like a breathing reset or a short journaling prompt?";
+        return "Sure. Would you prefer breathing, grounding, or a short journal prompt?";
       default:
         return null;
     }
@@ -267,37 +230,114 @@ async function handleFollowUp({ intent, state, history, context }) {
 
   if (intent === "negative_response") {
     switch (state.lastQuestion) {
-      case "gratitude_exercise":
-        return "That's okay. Would you prefer a breathing exercise instead?";
       case "breathing_exercise":
-        return "No problem. Would a short journaling prompt feel better?";
+        return "No problem. A short journal prompt may feel lighter if you want that instead.";
       case "journaling_prompt":
-        return "That's okay. Would you like a breathing reset instead?";
+        return "That is okay. We can keep it verbal and just identify what feels most urgent.";
       case "grounding_exercise":
-        return "No worries. If you'd like, we can try a breathing reset instead.";
+        return "Understood. We can slow it down another way if you want.";
       case "exercise_offer":
-        return "That's okay. If you'd like something later, I'm here.";
       case "mental_state":
-        return "That's okay. If you want to review it later, just ask.";
+        return "That is okay. If you want to return to it later, I’ll pick it up from there.";
       default:
         return null;
     }
   }
 
   if (intent === "maybe_response") {
-    switch (state.lastQuestion) {
-      case "gratitude_exercise":
-        return "We can keep it small. Want a one-sentence gratitude prompt?";
-      case "breathing_exercise":
-        return "We can try a 30-second breathing reset if that feels easier.";
-      case "journaling_prompt":
-        return "We can keep it light. Want a one-line journaling prompt?";
-      case "exercise_offer":
-        return "No rush. If you want, we can start with something small like one deep breath.";
-      default:
-        return null;
-    }
+    return "We can keep it very small. One calmer breath or one sentence is enough to start.";
   }
 
   return null;
+}
+
+async function safelyBuildSnapshot(userId) {
+  try {
+    return await buildWellnessSnapshot(userId);
+  } catch {
+    return null;
+  }
+}
+
+function buildChatContext(snapshot) {
+  if (!snapshot) {
+    return {};
+  }
+
+  return {
+    mental_state: snapshot.classification?.mental_state || snapshot.mentalStates?.[0]?.mentalState || "Unknown",
+    stress_score: snapshot.metrics?.stress_score ?? null,
+    anxiety_score: snapshot.metrics?.anxiety ?? null,
+    suggested_action: snapshot.suggestedAction || null,
+    recommendation_titles: (snapshot.recommendationCards || []).map((item) => item.title).slice(0, 3),
+    journal_patterns: snapshot.journalSignals?.patterns || []
+  };
+}
+
+async function buildMlRecommendation(snapshot, message) {
+  try {
+    const response = await predictExerciseRecommendation({
+      stressScore: snapshot?.metrics?.stress_score ?? 60,
+      recentMood: snapshot ? moodLabel(snapshot.metrics?.mood_avg) : moodFromMessage(message) || "stressed",
+      sleepQuality: snapshot?.metrics?.sleep_quality ?? 3
+    });
+
+    return response?.recommendedExercise
+      ? { key: response.recommendedExercise, title: formatExercise(response.recommendedExercise) }
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function responsePayload(reply, provider, context) {
+  return {
+    reply,
+    provider,
+    context,
+    disclaimer:
+      "MindTrack AI provides supportive wellness guidance only and is not a clinical or medical service."
+  };
+}
+
+function moodFromMessage(message) {
+  const normalized = String(message || "").toLowerCase();
+  if (normalized.includes("overwhelmed") || normalized.includes("panic")) {
+    return "overwhelmed";
+  }
+  if (normalized.includes("anxious") || normalized.includes("anxiety")) {
+    return "anxious";
+  }
+  if (normalized.includes("sad") || normalized.includes("down")) {
+    return "low";
+  }
+  return "stressed";
+}
+
+function moodLabel(value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    return "neutral";
+  }
+
+  if (numeric <= 2.4) {
+    return "low";
+  }
+  if (numeric <= 3.2) {
+    return "neutral";
+  }
+  if (numeric <= 4) {
+    return "calm";
+  }
+
+  return "good";
+}
+
+function lowerCaseFirst(value) {
+  const text = String(value || "").trim();
+  if (!text) {
+    return "";
+  }
+
+  return text.charAt(0).toLowerCase() + text.slice(1);
 }

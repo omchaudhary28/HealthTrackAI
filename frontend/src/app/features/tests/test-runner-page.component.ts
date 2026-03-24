@@ -21,17 +21,26 @@ const CHOICES = [
   template: `
     <section appScrollReveal class="space-y-6">
       <div class="rounded-[2.5rem] border border-white/70 bg-white/80 p-7 shadow-[0_25px_70px_-45px_rgba(32,50,71,0.55)] backdrop-blur">
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">{{ test()?.category || 'Assessment' }}</div>
-            <h1 class="mt-2 text-3xl font-semibold text-slate-900">{{ test()?.title || 'Loading test...' }}</h1>
-            <p class="mt-3 max-w-3xl text-base leading-8 text-slate-600">
-              {{ test()?.description || 'This questionnaire supports self-reflection only and is not a medical diagnosis.' }}
-            </p>
+          <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">{{ test()?.category || 'Assessment' }}</div>
+              <h1 class="mt-2 text-3xl font-semibold text-slate-900">{{ test()?.title || 'Loading test...' }}</h1>
+              <p class="mt-3 max-w-3xl text-base leading-8 text-slate-600">
+                {{ test()?.description || 'This questionnaire supports self-reflection only and is not a medical diagnosis.' }}
+              </p>
+            </div>
+            <a routerLink="/tests" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Back to tests</a>
           </div>
-          <a routerLink="/tests" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Back to tests</a>
+          <div *ngIf="test()" class="mt-6">
+            <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+              <span>Progress</span>
+              <span>{{ progressPercent() }}%</span>
+            </div>
+            <div class="mt-3 h-3 overflow-hidden rounded-full bg-slate-200/70">
+              <div class="h-full rounded-full bg-[linear-gradient(90deg,var(--mt-accent-strong),var(--mt-accent),#2dd4bf)] transition-all duration-300" [style.width.%]="progressPercent()"></div>
+            </div>
+          </div>
         </div>
-      </div>
 
       <div *ngIf="error()" class="rounded-[2rem] border border-rose-100 bg-rose-50 p-6 text-sm text-rose-700">
         {{ error() }}
@@ -129,6 +138,10 @@ const CHOICES = [
               </button>
             </div>
 
+            <div class="mt-4 rounded-3xl bg-slate-50 px-4 py-4 text-sm leading-7 text-slate-600">
+              {{ answerHint() }}
+            </div>
+
             <div class="mt-6 flex flex-wrap gap-3">
               <button type="button" (click)="back()" [disabled]="index() === 0 || pending()" class="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 disabled:opacity-50">
                 Back
@@ -179,6 +192,14 @@ export class TestRunnerPageComponent implements OnInit, OnDestroy {
 
   totalQuestions = computed(() => this.test()?.questions?.length || 0);
   currentQuestion = computed(() => this.test()?.questions?.[this.index()] || null);
+  progressPercent = computed(() => {
+    const total = this.totalQuestions();
+    if (!total) {
+      return 0;
+    }
+
+    return Math.round(((this.index() + (this.hasAnswer() ? 1 : 0)) / total) * 100);
+  });
   displayedScore = computed(() => {
     const payload = this.result();
     if (!payload) {
@@ -269,6 +290,23 @@ export class TestRunnerPageComponent implements OnInit, OnDestroy {
     }
 
     this.answers.set({ ...this.answers(), [question.id]: value });
+  }
+
+  answerHint(): string {
+    switch (this.currentAnswerValue()) {
+      case 1:
+        return "This answer signals that the statement rarely fits your recent experience.";
+      case 2:
+        return "This suggests the pattern shows up occasionally but not strongly.";
+      case 3:
+        return "Neutral answers are useful when the pattern feels mixed or unclear.";
+      case 4:
+        return "This suggests the pattern shows up fairly often in your recent experience.";
+      case 5:
+        return "This signals the pattern feels strong or frequent lately.";
+      default:
+        return "Answer based on the last 7 to 14 days rather than one unusually good or bad moment.";
+    }
   }
 
   next(): void {

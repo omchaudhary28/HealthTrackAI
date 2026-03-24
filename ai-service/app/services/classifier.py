@@ -6,115 +6,81 @@ import math
 
 
 STATE_LIBRARY = {
-    "Stress_Overloaded": {
-        "name": "Stress Overloaded",
-        "description": "Stress levels are running high and recovery space feels limited.",
+    "Stressed": {
+        "description": "Recent signals suggest elevated stress and reduced recovery space. This is supportive pattern recognition, not diagnosis.",
         "signs": [
             "feeling on edge most days",
             "trouble unwinding after work",
-            "short temper or irritability",
+            "shorter patience than usual",
         ],
         "recommended_exercises": [
-            "box_breathing",
-            "grounding_5_4_3_2_1",
+            "breathing_reset",
+            "grounding_reset",
             "stress_release_walk",
         ],
     },
-    "Low_Mood": {
-        "name": "Low Mood",
-        "description": "Energy and motivation feel lower, and mood may dip more often.",
+    "Depressed": {
+        "description": "Recent signals suggest heavier mood and lower energy right now. This is supportive pattern recognition, not diagnosis.",
         "signs": [
             "low motivation",
-            "sad or heavy mood",
-            "withdrawing from activities",
+            "heavy or flat mood",
+            "pulling back from effortful tasks",
         ],
         "recommended_exercises": [
             "self_compassion_reflection",
-            "small_wins_list",
             "gratitude_practice",
+            "journal_dump",
         ],
     },
-    "FOMO_Pattern": {
-        "name": "FOMO Pattern",
-        "description": "Frequent worry about missing out on experiences or opportunities.",
+    "FOMO-driven": {
+        "description": "Recent signals suggest comparison, urgency, or difficulty feeling settled with one path.",
         "signs": [
             "social comparison",
             "restlessness",
-            "checking social media frequently",
+            "difficulty feeling satisfied with one choice",
         ],
         "recommended_exercises": [
-            "digital_detox",
+            "values_reflection",
             "gratitude_practice",
-            "value_reflection",
+            "grounding_reset",
         ],
     },
-    "Social_Anxiety": {
-        "name": "Social Anxiety",
-        "description": "Social situations may feel tense, uncertain, or draining.",
+    "Emotionally overwhelmed": {
+        "description": "Recent signals suggest emotional intensity and overload may be landing heavily right now.",
         "signs": [
-            "anticipating negative judgment",
-            "avoidance of social plans",
-            "replaying conversations afterward",
+            "strong emotional surges",
+            "feeling flooded",
+            "small triggers landing heavily",
         ],
         "recommended_exercises": [
-            "gentle_exposure_steps",
-            "grounding_5_4_3_2_1",
-            "self_compassion_reflection",
-        ],
-    },
-    "Burnout_Risk": {
-        "name": "Burnout Risk",
-        "description": "Sustained stress and low recovery may be pushing you toward burnout.",
-        "signs": [
-            "exhaustion that sleep doesn't fix",
-            "lower focus or productivity",
-            "cynicism or detachment",
-        ],
-        "recommended_exercises": [
-            "sleep_wind_down",
-            "boundary_planning",
-            "micro_breaks",
-        ],
-    },
-    "Emotional_Sensitivity": {
-        "name": "Emotional Sensitivity",
-        "description": "Emotions may shift quickly, and small triggers can feel intense.",
-        "signs": [
-            "strong emotional reactions",
-            "mood swings",
-            "feeling easily overwhelmed",
-        ],
-        "recommended_exercises": [
-            "emotion_labeling",
+            "grounding_reset",
             "breathing_reset",
             "self_compassion_reflection",
         ],
     },
     "Overthinker": {
-        "name": "Overthinker",
-        "description": "Tendency toward repetitive analysis, uncertainty loops, and replaying past situations.",
+        "description": "Recent signals suggest repetitive analysis, uncertainty loops, or difficulty letting thoughts settle.",
         "signs": [
             "rumination",
             "analysis paralysis",
-            "difficulty letting thoughts settle",
+            "replaying situations afterward",
         ],
         "recommended_exercises": [
             "thought_reframing",
             "journal_dump",
-            "box_breathing",
+            "breathing_reset",
         ],
     },
     "Balanced": {
-        "name": "Balanced",
-        "description": "Current patterns appear comparatively steady, though routines still matter for maintenance.",
+        "description": "Current patterns appear comparatively steady, though maintenance habits still matter.",
         "signs": [
-            "steady mood most days",
-            "manageable stress levels",
-            "consistent recovery habits",
+            "manageable stress most days",
+            "steadier mood",
+            "more reliable recovery habits",
         ],
         "recommended_exercises": [
             "gratitude_practice",
-            "light_journaling",
+            "values_reflection",
             "sleep_wind_down",
         ],
     },
@@ -198,7 +164,7 @@ def _extract_exercise_history(metrics: Dict[str, object]) -> Tuple[int, float]:
         except (TypeError, ValueError):
             continue
         total += count
-        if key in {"breathing", "box_breathing", "grounding", "journaling", "gratitude"}:
+        if key in {"breathing_reset", "grounding_reset", "journal_dump", "gratitude_practice"}:
             calming += count
 
     ratio = calming / total if total else 0.0
@@ -220,24 +186,18 @@ def classify_mental_state(metrics: Dict[str, object]) -> Dict[str, object]:
 
     fomo_score = _get_metric(metrics, "fomo_score", "social_comparison", default=0.0)
 
-    if stress >= 85 and sleep_quality <= 2.5 and (mood_avg <= 2.8 or low_mood_ratio >= 0.4):
-        state_key = "Burnout_Risk"
-        confidence = 0.84
-    elif stress >= 75 and (sleep_quality <= 3.0 or focus <= 45):
-        state_key = "Stress_Overloaded"
+    if stress >= 75 and (sleep_quality <= 3.0 or focus <= 45):
+        state_key = "Stressed"
         confidence = 0.8
     elif mood_avg <= 2.5 or journal_sentiment <= -0.45 or low_mood_ratio >= 0.5:
-        state_key = "Low_Mood"
+        state_key = "Depressed"
         confidence = 0.78
-    elif social_comfort <= 40 and anxiety >= 60:
-        state_key = "Social_Anxiety"
-        confidence = 0.74
     elif fomo_score >= 65:
-        state_key = "FOMO_Pattern"
+        state_key = "FOMO-driven"
         confidence = 0.71
-    elif emotional_sensitivity >= 70 or mood_volatility >= 1.1:
-        state_key = "Emotional_Sensitivity"
-        confidence = 0.72
+    elif emotional_sensitivity >= 70 or mood_volatility >= 1.1 or (social_comfort <= 40 and anxiety >= 60):
+        state_key = "Emotionally overwhelmed"
+        confidence = 0.74
     elif anxiety > 70 and rumination > 60:
         state_key = "Overthinker"
         confidence = 0.78
@@ -251,8 +211,8 @@ def classify_mental_state(metrics: Dict[str, object]) -> Dict[str, object]:
 
     definition = STATE_LIBRARY[state_key]
     return {
-        "mental_state": definition["name"],
-        "name": definition["name"],
+        "mental_state": state_key,
+        "name": state_key,
         "description": definition["description"],
         "common_signs": definition["signs"],
         "recommended_exercises": definition["recommended_exercises"],

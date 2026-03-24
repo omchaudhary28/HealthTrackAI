@@ -27,19 +27,15 @@ def build_recommendations(metrics: Dict[str, float], mental_state: Optional[str]
         rationale_parts.append("mood stability appears lower than usual")
 
     if mental_state == "Overthinker":
-        activities.extend(["Thought reframing", "Journaling", "Breathing exercises"])
-    elif mental_state == "Stress Overloaded":
-        activities.extend(["Breathing exercises", "Grounding prompts", "Stress release walk"])
-    elif mental_state == "Low Mood":
-        activities.extend(["Self-compassion reflection", "Gratitude exercise", "Gentle walk"])
-    elif mental_state == "FOMO Pattern":
-        activities.extend(["Digital detox", "Value reflection", "Gratitude exercise"])
-    elif mental_state == "Social Anxiety":
-        activities.extend(["Grounding prompts", "Gentle exposure steps", "Self-compassion"])
-    elif mental_state == "Burnout Risk":
-        activities.extend(["Sleep wind-down checklist", "Boundary planning", "Micro-breaks"])
-    elif mental_state == "Emotional Sensitivity":
-        activities.extend(["Emotion labeling", "Breathing exercises", "Self-compassion"])
+        activities.extend(["Thought reframing", "Mind unload journal", "Breathing reset"])
+    elif mental_state == "Stressed":
+        activities.extend(["Breathing reset", "Grounding prompts", "Stress release walk"])
+    elif mental_state == "Depressed":
+        activities.extend(["Self-compassion reflection", "Gratitude exercise", "Mind unload journal"])
+    elif mental_state == "FOMO-driven":
+        activities.extend(["Values reflection", "Digital detox", "Gratitude exercise"])
+    elif mental_state == "Emotionally overwhelmed":
+        activities.extend(["Grounding prompts", "Breathing reset", "Self-compassion"])
 
     deduped = list(dict.fromkeys(activities))[:6]
     rationale = (

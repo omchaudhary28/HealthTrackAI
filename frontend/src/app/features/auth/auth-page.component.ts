@@ -1,4 +1,4 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 import { FormsModule } from "@angular/forms";
@@ -10,21 +10,70 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, FormsModule],
   template: `
-    <section appScrollReveal class="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-      <div class="rounded-[2.5rem] border border-white/70 bg-[linear-gradient(160deg,rgba(142,184,215,0.26),rgba(159,215,201,0.22),rgba(255,255,255,0.88))] p-8 shadow-[0_25px_70px_-45px_rgba(32,50,71,0.55)]">
-        <div class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Welcome in</div>
-        <h1 class="mt-4 text-3xl font-semibold text-slate-900">Build a private wellness record that evolves with you.</h1>
-        <p class="mt-4 text-base leading-8 text-slate-600">
-          Use a baseline assessment, daily check-ins, progress charts, and journaling prompts to reflect more clearly over time.
+    <section appScrollReveal class="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+      <div class="glass-card rounded-[2.5rem] bg-[linear-gradient(155deg,rgba(255,255,255,0.72),rgba(255,255,255,0.48),rgba(14,165,233,0.08))] p-8">
+        <div class="inline-flex rounded-full bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+          Secure access
+        </div>
+        <h1 class="mt-5 text-3xl font-semibold text-slate-900 sm:text-4xl">
+          Start with a private account that adapts as your patterns change.
+        </h1>
+        <p class="mt-4 max-w-xl text-base leading-8 text-slate-700">
+          MindTrack AI combines check-ins, journals, assessments, and activity patterns into a supportive wellness experience. It does not diagnose mental health conditions.
         </p>
-        <div class="mt-8 rounded-3xl border border-white/70 bg-white/80 p-5 text-sm text-slate-600">
-          Important: MindTrack AI supports self-reflection and wellbeing habits only. It does not diagnose mental health conditions.
+
+        <div class="mt-8 grid gap-4 sm:grid-cols-2">
+          <div class="rounded-3xl border border-white/70 bg-white/72 p-5">
+            <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Fast access</div>
+            <div class="mt-2 text-lg font-semibold text-slate-900">Smart email routing</div>
+            <div class="mt-2 text-sm leading-7 text-slate-600">Enter your email once and MindTrack nudges you toward sign in or account creation automatically.</div>
+          </div>
+          <div class="rounded-3xl border border-white/70 bg-white/72 p-5">
+            <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Private by default</div>
+            <div class="mt-2 text-lg font-semibold text-slate-900">Protected wellness data</div>
+            <div class="mt-2 text-sm leading-7 text-slate-600">Assessment history, journals, and recommendations stay tied to your account session and protected routes.</div>
+          </div>
+        </div>
+
+        <div class="mt-8 rounded-3xl border border-white/70 bg-white/72 p-5 text-sm leading-7 text-slate-600">
+          Important: MindTrack AI supports reflection and habit-building only. It never acts as a clinical or medical authority.
         </div>
       </div>
-      <form class="rounded-[2.5rem] border border-white/70 bg-white/80 p-8 shadow-[0_25px_70px_-45px_rgba(32,50,71,0.55)] backdrop-blur" (ngSubmit)="submit()">
-        <div class="mb-6 flex rounded-full bg-slate-50 p-1 text-sm font-semibold text-slate-600">
-          <button type="button" (click)="mode = 'signup'" [class]="tabClass(mode === 'signup')" class="flex-1 rounded-full px-4 py-2">Create account</button>
-          <button type="button" (click)="mode = 'login'" [class]="tabClass(mode === 'login')" class="flex-1 rounded-full px-4 py-2">Sign in</button>
+
+      <form class="glass-card rounded-[2.5rem] p-8 backdrop-blur" (ngSubmit)="submit()">
+        <div class="mb-6 flex rounded-full bg-slate-100/80 p-1 text-sm font-semibold text-slate-600">
+          <button type="button" (click)="setMode('signup')" [class]="tabClass(mode === 'signup')" class="flex-1 rounded-full px-4 py-2">
+            Create account
+          </button>
+          <button type="button" (click)="setMode('login')" [class]="tabClass(mode === 'login')" class="flex-1 rounded-full px-4 py-2">
+            Sign in
+          </button>
+        </div>
+
+        <div class="mb-6 rounded-3xl border border-slate-200/70 bg-slate-50/80 p-4">
+          <label class="block text-sm font-medium text-slate-700">
+            Email
+            <div class="relative mt-2">
+              <input
+                [(ngModel)]="form.email"
+                (blur)="lookupEmail()"
+                name="email"
+                type="email"
+                autocomplete="email"
+                class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 pr-28 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+              <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-xs font-semibold text-slate-400">
+                {{ lookupPending ? 'Checking...' : 'Email-first' }}
+              </div>
+            </div>
+          </label>
+
+          <div *ngIf="emailHint" class="mt-3 rounded-2xl px-4 py-3 text-sm"
+            [class.bg-emerald-50]="emailHintKind === 'success'"
+            [class.text-emerald-700]="emailHintKind === 'success'"
+            [class.bg-amber-50]="emailHintKind === 'warning'"
+            [class.text-amber-700]="emailHintKind === 'warning'">
+            {{ emailHint }}
+          </div>
         </div>
 
         <div *ngIf="error" class="mb-5 rounded-3xl border border-rose-100 bg-rose-50 px-5 py-4 text-sm text-rose-700">
@@ -34,30 +83,40 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
         <div class="grid gap-5 sm:grid-cols-2">
           <label *ngIf="mode === 'signup'" class="block text-sm font-medium text-slate-600">
             Name
-            <input [(ngModel)]="form.name" name="name" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none" />
+            <input [(ngModel)]="form.name" name="name" autocomplete="name" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
           </label>
           <label *ngIf="mode === 'signup'" class="block text-sm font-medium text-slate-600">
             Age
-            <input [(ngModel)]="form.age" name="age" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none" />
+            <input [(ngModel)]="form.age" name="age" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
           </label>
-          <label class="block text-sm font-medium text-slate-600 sm:col-span-2">
-            Email
-            <input [(ngModel)]="form.email" name="email" type="email" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none" />
-          </label>
-          <label class="block text-sm font-medium text-slate-600 sm:col-span-2">
-            Password
-            <input [(ngModel)]="form.password" name="password" type="password" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none" />
+          <label *ngIf="mode === 'signup'" class="block text-sm font-medium text-slate-600">
+            Gender
+            <input [(ngModel)]="form.gender" name="gender" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
           </label>
           <label *ngIf="mode === 'signup'" class="block text-sm font-medium text-slate-600">
             Occupation
-            <input [(ngModel)]="form.occupation" name="occupation" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none" />
+            <input [(ngModel)]="form.occupation" name="occupation" autocomplete="organization-title" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+          </label>
+          <label class="block text-sm font-medium text-slate-600 sm:col-span-2">
+            Password
+            <input [(ngModel)]="form.password" name="password" type="password" autocomplete="current-password" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
           </label>
           <label *ngIf="mode === 'signup'" class="block text-sm font-medium text-slate-600">
             Sleep habits
-            <input [(ngModel)]="form.sleepHabits" name="sleepHabits" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none" />
+            <input [(ngModel)]="form.sleepHabits" name="sleepHabits" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+          </label>
+          <label *ngIf="mode === 'signup'" class="block text-sm font-medium text-slate-600">
+            Lifestyle indicators
+            <input [(ngModel)]="form.lifestyleIndicators" name="lifestyleIndicators" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+          </label>
+          <label *ngIf="mode === 'signup'" class="block text-sm font-medium text-slate-600 sm:col-span-2">
+            Stress indicators
+            <input [(ngModel)]="form.stressIndicators" name="stressIndicators" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
           </label>
         </div>
-        <button type="submit" [disabled]="pending" class="btn-primary mt-8 w-full rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60">
+
+        <button type="submit" [disabled]="pending || lookupPending" class="btn-primary mt-8 flex w-full items-center justify-center gap-3 rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60">
+          <span *ngIf="pending" class="inline-flex h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin"></span>
           {{ pending ? 'Working...' : mode === 'signup' ? 'Create account' : 'Sign in' }}
         </button>
       </form>
@@ -67,17 +126,20 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
 export class AuthPageComponent {
   mode: "signup" | "login" = "signup";
   pending = false;
+  lookupPending = false;
   error = "";
+  emailHint = "";
+  emailHintKind: "success" | "warning" = "success";
   form = {
-    name: "Avery",
-    age: 27,
-    gender: "Female",
-    email: "avery@example.com",
-    password: "password123",
-    occupation: "Product designer",
-    sleepHabits: "Inconsistent bedtime",
-    lifestyleIndicators: "Remote work, low movement during weekdays",
-    stressIndicators: "Deadline pressure, overthinking, shallow sleep"
+    name: "",
+    age: null as number | null,
+    gender: "",
+    email: "",
+    password: "",
+    occupation: "",
+    sleepHabits: "",
+    lifestyleIndicators: "",
+    stressIndicators: ""
   };
 
   constructor(
@@ -88,6 +150,37 @@ export class AuthPageComponent {
 
   tabClass(active: boolean): string {
     return active ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700";
+  }
+
+  setMode(mode: "signup" | "login"): void {
+    this.mode = mode;
+    this.error = "";
+  }
+
+  lookupEmail(): void {
+    const email = this.form.email.trim();
+    if (!email || !email.includes("@")) {
+      this.emailHint = "";
+      return;
+    }
+
+    this.lookupPending = true;
+    this.authService.lookup(email).subscribe({
+      next: (result) => {
+        this.lookupPending = false;
+        this.mode = result.recommendedMode;
+        if (result.exists) {
+          this.emailHintKind = "success";
+          this.emailHint = `We found an account${result.name ? ` for ${result.name}` : ""}. Sign in to continue.`;
+        } else {
+          this.emailHintKind = "warning";
+          this.emailHint = "No account found for this email yet. Create one to get started.";
+        }
+      },
+      error: () => {
+        this.lookupPending = false;
+      }
+    });
   }
 
   submit(): void {
@@ -112,8 +205,8 @@ export class AuthPageComponent {
     }
 
     const payload: SignupPayload = {
-      name: this.form.name,
-      email: this.form.email,
+      name: this.form.name.trim(),
+      email: this.form.email.trim(),
       password: this.form.password,
       profile: {
         age: Number(this.form.age) || undefined,
@@ -150,5 +243,3 @@ function splitList(value: string): string[] {
     .map((item) => item.trim())
     .filter(Boolean);
 }
-
-

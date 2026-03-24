@@ -53,6 +53,15 @@ import { JournalEditorComponent } from "../../shared/components/journal-editor.c
                 </div>
               </div>
               <div class="mt-2 text-sm leading-7 text-slate-700">{{ snippet(entry.content) }}</div>
+              <div *ngIf="entry.aiInsights?.patterns?.length || entry.aiInsights?.suggestions?.length" class="mt-4 rounded-2xl bg-white px-4 py-4">
+                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">AI insights</div>
+                <div class="mt-2 text-sm text-slate-700">
+                  {{ (entry.aiInsights?.patterns || []).join(', ') || 'reflection' }}
+                </div>
+                <div *ngIf="entry.aiInsights?.suggestions?.length" class="mt-2 text-sm leading-7 text-slate-600">
+                  {{ entry.aiInsights?.suggestions?.[0] }}
+                </div>
+              </div>
             </article>
           </ng-container>
 

@@ -61,13 +61,14 @@ export class SideNavComponent {
 
   items = [
     { label: "Dashboard", link: "/dashboard", icon: "dashboard" as MindtrackIconName, shortcut: "01", exact: true },
-    { label: "Test Center", link: "/tests", icon: "tests" as MindtrackIconName, shortcut: "02", exact: false },
-    { label: "Mood Calendar", link: "/mood", icon: "mood" as MindtrackIconName, shortcut: "03", exact: true },
-    { label: "Journal", link: "/journal", icon: "journal" as MindtrackIconName, shortcut: "04", exact: true },
-    { label: "Exercises", link: "/exercises", icon: "exercises" as MindtrackIconName, shortcut: "05", exact: true },
-    { label: "Community", link: "/community", icon: "community" as MindtrackIconName, shortcut: "06", exact: true },
-    { label: "Progress", link: "/progress", icon: "progress" as MindtrackIconName, shortcut: "07", exact: true },
-    { label: "Profile", link: "/profile", icon: "profile" as MindtrackIconName, shortcut: "08", exact: true }
+    { label: "Mental State", link: "/mental-state", icon: "insights" as MindtrackIconName, shortcut: "02", exact: true },
+    { label: "Test Center", link: "/tests", icon: "tests" as MindtrackIconName, shortcut: "03", exact: false },
+    { label: "Mood Calendar", link: "/mood", icon: "mood" as MindtrackIconName, shortcut: "04", exact: true },
+    { label: "Journal", link: "/journal", icon: "journal" as MindtrackIconName, shortcut: "05", exact: true },
+    { label: "Exercises", link: "/exercises", icon: "exercises" as MindtrackIconName, shortcut: "06", exact: true },
+    { label: "Community", link: "/community", icon: "community" as MindtrackIconName, shortcut: "07", exact: true },
+    { label: "Progress", link: "/progress", icon: "progress" as MindtrackIconName, shortcut: "08", exact: true },
+    { label: "Profile", link: "/profile", icon: "profile" as MindtrackIconName, shortcut: "09", exact: true }
   ];
 
   onNavigate(): void {

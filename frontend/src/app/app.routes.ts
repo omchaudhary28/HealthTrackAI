@@ -1,34 +1,99 @@
 import { Routes } from "@angular/router";
-import { AuthPageComponent } from "./features/auth/auth-page.component";
-import { CommunityForumPageComponent } from "./features/community/community-forum-page.component";
-import { DashboardPageComponent } from "./features/dashboard/dashboard-page.component";
-import { ExerciseLibraryPageComponent } from "./features/exercises/exercise-library-page.component";
-import { JournalPageComponent } from "./features/journal/journal-page.component";
-import { LandingPageComponent } from "./features/landing/landing-page.component";
-import { MentalStatePageComponent } from "./features/mental-state/mental-state-page.component";
-import { MoodCalendarPageComponent } from "./features/mood-calendar/mood-calendar-page.component";
-import { ProfilePageComponent } from "./features/profile/profile-page.component";
-import { ProgressTrackerPageComponent } from "./features/progress/progress-tracker-page.component";
-import { TestCenterPageComponent } from "./features/tests/test-center-page.component";
-import { TestRunnerPageComponent } from "./features/tests/test-runner-page.component";
 import { authGuard } from "./core/guards/auth.guard";
 import { baselineGuard } from "./core/guards/baseline.guard";
 
 export const routes: Routes = [
-  { path: "", component: LandingPageComponent, data: { animation: "landing" } },
+  {
+    path: "",
+    loadComponent: () =>
+      import("./features/landing/landing-page.component").then((m) => m.LandingPageComponent),
+    data: { animation: "landing", themeKey: "landing" }
+  },
   { path: "landing", redirectTo: "", pathMatch: "full" },
-  { path: "auth", component: AuthPageComponent, data: { animation: "auth" } },
-  { path: "dashboard", component: DashboardPageComponent, canActivate: [authGuard, baselineGuard], data: { animation: "dashboard" } },
-  { path: "tests", component: TestCenterPageComponent, data: { animation: "tests" } },
-  { path: "tests/baseline", component: TestRunnerPageComponent, canActivate: [authGuard], data: { animation: "test-runner" } },
-  { path: "tests/:testKey", component: TestRunnerPageComponent, canActivate: [authGuard], data: { animation: "test-runner" } },
-  { path: "mental-state", component: MentalStatePageComponent, canActivate: [authGuard, baselineGuard], data: { animation: "mental-state" } },
-  { path: "exercises", component: ExerciseLibraryPageComponent, canActivate: [authGuard, baselineGuard], data: { animation: "exercises" } },
-  { path: "mood", component: MoodCalendarPageComponent, canActivate: [authGuard, baselineGuard], data: { animation: "mood" } },
+  {
+    path: "about",
+    loadComponent: () => import("./features/about/about-page.component").then((m) => m.AboutPageComponent),
+    data: { animation: "about", themeKey: "about" }
+  },
+  {
+    path: "auth",
+    loadComponent: () => import("./features/auth/auth-page.component").then((m) => m.AuthPageComponent),
+    data: { animation: "auth", themeKey: "auth" }
+  },
+  {
+    path: "dashboard",
+    loadComponent: () =>
+      import("./features/dashboard/dashboard-page.component").then((m) => m.DashboardPageComponent),
+    canActivate: [authGuard, baselineGuard],
+    data: { animation: "dashboard", themeKey: "dashboard" }
+  },
+  {
+    path: "tests",
+    loadComponent: () =>
+      import("./features/tests/test-center-page.component").then((m) => m.TestCenterPageComponent),
+    data: { animation: "tests", themeKey: "tests" }
+  },
+  {
+    path: "tests/baseline",
+    loadComponent: () =>
+      import("./features/tests/test-runner-page.component").then((m) => m.TestRunnerPageComponent),
+    canActivate: [authGuard],
+    data: { animation: "test-runner", themeKey: "tests" }
+  },
+  {
+    path: "tests/:testKey",
+    loadComponent: () =>
+      import("./features/tests/test-runner-page.component").then((m) => m.TestRunnerPageComponent),
+    canActivate: [authGuard],
+    data: { animation: "test-runner", themeKey: "tests" }
+  },
+  {
+    path: "mental-state",
+    loadComponent: () =>
+      import("./features/mental-state/mental-state-page.component").then((m) => m.MentalStatePageComponent),
+    canActivate: [authGuard, baselineGuard],
+    data: { animation: "mental-state", themeKey: "mentalState" }
+  },
+  {
+    path: "exercises",
+    loadComponent: () =>
+      import("./features/exercises/exercise-library-page.component").then((m) => m.ExerciseLibraryPageComponent),
+    canActivate: [authGuard, baselineGuard],
+    data: { animation: "exercises", themeKey: "exercises" }
+  },
+  {
+    path: "mood",
+    loadComponent: () =>
+      import("./features/mood-calendar/mood-calendar-page.component").then((m) => m.MoodCalendarPageComponent),
+    canActivate: [authGuard, baselineGuard],
+    data: { animation: "mood", themeKey: "mood" }
+  },
   { path: "mood-calendar", redirectTo: "mood", pathMatch: "full" },
-  { path: "journal", component: JournalPageComponent, canActivate: [authGuard, baselineGuard], data: { animation: "journal" } },
-  { path: "community", component: CommunityForumPageComponent, canActivate: [authGuard, baselineGuard], data: { animation: "community" } },
-  { path: "progress", component: ProgressTrackerPageComponent, canActivate: [authGuard, baselineGuard], data: { animation: "progress" } },
-  { path: "profile", component: ProfilePageComponent, canActivate: [authGuard], data: { animation: "profile" } },
+  {
+    path: "journal",
+    loadComponent: () => import("./features/journal/journal-page.component").then((m) => m.JournalPageComponent),
+    canActivate: [authGuard, baselineGuard],
+    data: { animation: "journal", themeKey: "journal" }
+  },
+  {
+    path: "community",
+    loadComponent: () =>
+      import("./features/community/community-forum-page.component").then((m) => m.CommunityForumPageComponent),
+    canActivate: [authGuard, baselineGuard],
+    data: { animation: "community", themeKey: "community" }
+  },
+  {
+    path: "progress",
+    loadComponent: () =>
+      import("./features/progress/progress-tracker-page.component").then((m) => m.ProgressTrackerPageComponent),
+    canActivate: [authGuard, baselineGuard],
+    data: { animation: "progress", themeKey: "progress" }
+  },
+  {
+    path: "profile",
+    loadComponent: () => import("./features/profile/profile-page.component").then((m) => m.ProfilePageComponent),
+    canActivate: [authGuard],
+    data: { animation: "profile", themeKey: "profile" }
+  },
   { path: "**", redirectTo: "" }
 ];

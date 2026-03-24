@@ -1,4 +1,5 @@
 import { MoodLog } from "../models/mood-log.model.js";
+import { refreshMentalStateSnapshot } from "../services/wellness-profile.service.js";
 
 export async function listMoodLogs(req, res) {
   const items = await MoodLog.find({ userId: req.user.sub }).sort({ date: -1 }).lean();
@@ -24,6 +25,8 @@ export async function createMoodLog(req, res) {
     payload,
     { upsert: true, new: true }
   );
+
+  await refreshMentalStateSnapshot(req.user.sub, "mood-log");
 
   res.status(201).json(item);
 }

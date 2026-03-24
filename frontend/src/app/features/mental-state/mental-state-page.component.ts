@@ -19,6 +19,10 @@ import { AssessmentService, LatestAssessmentState } from "../../core/services/as
           <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-700">
             {{ latest.mentalState?.description || fallbackDescription }}
           </p>
+          <div *ngIf="latest.suggestedAction" class="mt-5 rounded-3xl bg-white/80 px-5 py-4 text-sm leading-7 text-slate-700">
+            Suggested action: <span class="font-semibold text-slate-900">{{ latest.suggestedAction?.title }}</span>
+            <div class="mt-2 text-slate-600">{{ latest.suggestedAction?.whyRecommended }}</div>
+          </div>
         </div>
 
         <div class="grid gap-6 xl:grid-cols-[1fr_0.9fr]">

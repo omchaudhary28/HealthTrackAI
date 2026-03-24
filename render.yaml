@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: healthtrackai-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: AI_SERVICE_URL
+        sync: false
+      - key: ML_SERVICE_URL
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini

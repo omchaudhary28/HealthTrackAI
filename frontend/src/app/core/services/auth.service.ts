@@ -26,6 +26,13 @@ export interface SignupPayload {
   profile?: UserProfile["profile"];
 }
 
+export interface AuthLookupResponse {
+  exists: boolean;
+  recommendedMode: "login" | "signup";
+  name?: string | null;
+  baselineComplete?: boolean;
+}
+
 interface AuthResponse {
   token: string;
   user: UserProfile;
@@ -83,6 +90,23 @@ export class AuthService {
 
   refreshMe(): Observable<UserProfile> {
     return this.http.get<UserProfile>(`${this.apiBaseUrl}/auth/me`).pipe(
+      tap((user) => {
+        const token = this.tokenSignal();
+        if (token) {
+          this.setSession(token, user);
+        }
+      })
+    );
+  }
+
+  lookup(email: string): Observable<AuthLookupResponse> {
+    return this.http.get<AuthLookupResponse>(`${this.apiBaseUrl}/auth/lookup`, {
+      params: { email: email.trim() }
+    });
+  }
+
+  updateProfile(payload: Partial<Pick<UserProfile, "name" | "profile">>): Observable<UserProfile> {
+    return this.http.patch<UserProfile>(`${this.apiBaseUrl}/auth/me`, payload).pipe(
       tap((user) => {
         const token = this.tokenSignal();
         if (token) {

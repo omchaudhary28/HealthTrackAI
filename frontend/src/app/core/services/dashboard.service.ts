@@ -2,6 +2,20 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { API_BASE_URL } from "../api/api.config";
+import { Exercise } from "./exercises.service";
+
+export interface TrendSeries {
+  labels: string[];
+  values: number[];
+}
+
+export interface ActivitySummary {
+  moodCheckIns30d: number;
+  journalEntries30d: number;
+  exerciseCompleted30d: number;
+  exerciseStreak: number;
+  journalStreak: number;
+}
 
 export interface DashboardSummary {
   latestBaseline: any | null;
@@ -9,6 +23,31 @@ export interface DashboardSummary {
   recentJournalEntries: any[];
   mentalStates: any[];
   communityVisiblePosts: number;
+  currentMentalState?: any | null;
+  suggestedAction?: {
+    title: string;
+    purpose: string;
+    expectedOutcome: string;
+    whyRecommended: string;
+    durationMinutes: number;
+  } | null;
+  recommendationCards?: Exercise[];
+  analytics?: {
+    scoreTrend: TrendSeries;
+    moodTrend: TrendSeries;
+    stressTrend: TrendSeries;
+    exerciseMomentum: TrendSeries;
+  };
+  activitySummary?: ActivitySummary;
+  user?: any | null;
+  aiInsightsHistory?: any[];
+  journalSignals?: {
+    patterns: string[];
+    sentiment: number;
+  };
+  exerciseHistory?: {
+    totalCompleted: number;
+  };
   error?: boolean;
 }
 
@@ -17,16 +56,7 @@ export class DashboardService {
   private readonly http = inject(HttpClient);
   private readonly apiBaseUrl = inject(API_BASE_URL);
 
-  scoreLabels = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"];
-  scoreValues = [58, 61, 64, 69, 72];
-  recommendations = [
-    { title: "5 minute breathing reset", detail: "Strong fit for elevated stress and recurring mental loops." },
-    { title: "Thought reframing loop", detail: "Useful when anxiety and rumination both trend upward." },
-    { title: "Sleep wind-down checklist", detail: "Supports recovery when focus starts to dip." }
-  ];
-
   getSummary(): Observable<DashboardSummary> {
     return this.http.get<DashboardSummary>(`${this.apiBaseUrl}/dashboard/summary`);
   }
 }
-
