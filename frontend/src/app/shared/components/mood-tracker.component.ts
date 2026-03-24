@@ -26,22 +26,22 @@ export interface MoodOption {
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
+      <div class="grid grid-cols-3 gap-2 sm:grid-cols-5">
         <button
           *ngFor="let opt of options"
           type="button"
           [disabled]="disabled"
           (click)="select(opt.value)"
           [attr.aria-pressed]="value === opt.value"
-          class="group rounded-2xl border border-slate-200 bg-white px-3 py-3 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+          class="group h-full rounded-2xl border border-slate-200 bg-white px-2.5 py-3 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 sm:px-3"
           [class.ring-4]="value === opt.value"
           [class.ring-sky-100]="value === opt.value">
           <div class="flex items-center justify-between gap-2">
             <div class="text-2xl leading-none">{{ opt.emoji }}</div>
             <div class="hidden h-2 w-2 rounded-full sm:block" [class]="opt.toneClass"></div>
           </div>
-          <div class="mt-2 text-xs font-semibold text-slate-800">{{ opt.label }}</div>
-          <div class="mt-1 text-[11px] leading-4 text-slate-500">{{ opt.hint }}</div>
+          <div class="mt-2 text-[11px] font-semibold text-slate-800 sm:text-xs">{{ opt.label }}</div>
+          <div class="mt-1 text-[10px] leading-4 text-slate-500 sm:text-[11px]">{{ opt.hint }}</div>
         </button>
       </div>
     </div>
@@ -65,4 +65,3 @@ export class MoodTrackerComponent {
     this.valueChange.emit(value);
   }
 }
-
