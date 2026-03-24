@@ -83,6 +83,13 @@ export const routes: Routes = [
     data: { animation: "community", themeKey: "community" }
   },
   {
+    path: "feedback",
+    loadComponent: () =>
+      import("./features/feedback/feedback-page.component").then((m) => m.FeedbackPageComponent),
+    canActivate: [authGuard],
+    data: { animation: "feedback", themeKey: "feedback" }
+  },
+  {
     path: "progress",
     loadComponent: () =>
       import("./features/progress/progress-tracker-page.component").then((m) => m.ProgressTrackerPageComponent),
@@ -91,6 +98,12 @@ export const routes: Routes = [
   },
   {
     path: "profile",
+    loadComponent: () => import("./features/profile/profile-page.component").then((m) => m.ProfilePageComponent),
+    canActivate: [authGuard],
+    data: { animation: "profile", themeKey: "profile" }
+  },
+  {
+    path: "profile/:userId",
     loadComponent: () => import("./features/profile/profile-page.component").then((m) => m.ProfilePageComponent),
     canActivate: [authGuard],
     data: { animation: "profile", themeKey: "profile" }

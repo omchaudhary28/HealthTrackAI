@@ -1,157 +1,306 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
-import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { Subscription } from "rxjs";
 import { AuthService, UserProfile } from "../../core/services/auth.service";
+import { CommunityProfileResponse, CommunityService } from "../../core/services/community.service";
 import { DashboardService, DashboardSummary } from "../../core/services/dashboard.service";
+import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 @Component({
   selector: "app-profile-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, FormsModule],
+  imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink],
   template: `
     <section appScrollReveal class="space-y-6">
-      <div class="glass-card rounded-[2.75rem] bg-[linear-gradient(150deg,rgba(255,255,255,0.78),rgba(255,255,255,0.52),rgba(37,99,235,0.08))] p-8">
-        <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">Profile</div>
-        <h1 class="mt-3 text-3xl font-semibold text-slate-900 sm:text-4xl">Your account context, activity summary, and AI insight history.</h1>
-        <p class="mt-3 max-w-3xl text-base leading-8 text-slate-700">
-          Update the context that shapes personalized recommendations and review how your recent activity is trending.
-        </p>
-      </div>
+      <div *ngIf="loadingProfile" class="glass-card rounded-[2.75rem] p-8 text-sm text-slate-500">Loading profile...</div>
 
-      <div class="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-        <form class="glass-card rounded-[2rem] p-6" (ngSubmit)="save()">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <div class="text-sm font-semibold text-slate-900">Account details</div>
-              <div class="mt-1 text-xs leading-5 text-slate-500">These fields help the AI system contextualize trends and next-step suggestions.</div>
+      <ng-container *ngIf="!loadingProfile">
+      <ng-container *ngIf="profileData as profile">
+        <div class="glass-card rounded-[2.75rem] bg-[linear-gradient(150deg,rgba(255,255,255,0.8),rgba(255,255,255,0.52),rgba(37,99,235,0.08))] p-8">
+          <div class="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+            <div class="min-w-0">
+              <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">Profile</div>
+              <div class="mt-4 flex items-start gap-4">
+                <div class="grid h-16 w-16 shrink-0 place-items-center rounded-[1.75rem] bg-slate-900 text-lg font-semibold text-white">
+                  {{ profile.profile.initials }}
+                </div>
+                <div class="min-w-0">
+                  <h1 class="text-3xl font-semibold text-slate-900 sm:text-4xl">{{ profile.profile.name }}</h1>
+                  <div class="mt-2 text-base font-medium text-[var(--mt-accent-strong)]">{{ profile.profile.headline }}</div>
+                  <p class="mt-3 max-w-3xl text-sm leading-8 text-slate-600">
+                    {{ profile.profile.bio || 'This profile is still quiet, but the support stats below are live.' }}
+                  </p>
+                </div>
+              </div>
             </div>
-            <span *ngIf="saved" class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Saved</span>
-          </div>
 
-          <div class="mt-5 grid gap-5 md:grid-cols-2">
-            <label class="block text-sm font-medium text-slate-600">Name
-              <input [(ngModel)]="profile.name" name="name" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
-            </label>
-            <label class="block text-sm font-medium text-slate-600">Email
-              <input [ngModel]="email" name="email" disabled class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-100 px-4 py-3 text-slate-500 outline-none" />
-            </label>
-            <label class="block text-sm font-medium text-slate-600">Age
-              <input [(ngModel)]="profile.age" name="age" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
-            </label>
-            <label class="block text-sm font-medium text-slate-600">Gender
-              <input [(ngModel)]="profile.gender" name="gender" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
-            </label>
-            <label class="block text-sm font-medium text-slate-600">Occupation
-              <input [(ngModel)]="profile.occupation" name="occupation" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
-            </label>
-            <label class="block text-sm font-medium text-slate-600">Sleep habits
-              <input [(ngModel)]="profile.sleepHabits" name="sleepHabits" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
-            </label>
-            <label class="block text-sm font-medium text-slate-600 md:col-span-2">Lifestyle indicators
-              <input [(ngModel)]="lifestyleIndicators" name="lifestyleIndicators" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
-            </label>
-            <label class="block text-sm font-medium text-slate-600 md:col-span-2">Stress indicators
-              <input [(ngModel)]="stressIndicators" name="stressIndicators" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
-            </label>
-          </div>
-
-          <div *ngIf="error" class="mt-4 rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-            {{ error }}
-          </div>
-
-          <button type="submit" [disabled]="pending" class="btn-primary mt-6 rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60">
-            {{ pending ? 'Saving...' : 'Save changes' }}
-          </button>
-        </form>
-
-        <div class="space-y-6">
-          <div class="glass-card rounded-[2rem] p-6">
-            <div class="text-sm font-semibold text-slate-900">Activity summary</div>
-            <div class="mt-5 grid gap-4 sm:grid-cols-2">
-              <div class="rounded-3xl bg-slate-50/80 p-5">
-                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Mood logs</div>
-                <div class="mt-3 text-2xl font-semibold text-slate-900">{{ summary?.activitySummary?.moodCheckIns30d || 0 }}</div>
-                <div class="mt-2 text-sm text-slate-600">Last 30 days</div>
+            <div class="flex flex-wrap gap-3">
+              <div *ngIf="profile.currentMentalState" class="rounded-full bg-[var(--mt-accent-soft)] px-4 py-2 text-xs font-semibold text-[var(--mt-accent-strong)]">
+                {{ profile.currentMentalState }}
               </div>
-              <div class="rounded-3xl bg-slate-50/80 p-5">
-                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Exercises completed</div>
-                <div class="mt-3 text-2xl font-semibold text-slate-900">{{ summary?.activitySummary?.exerciseCompleted30d || 0 }}</div>
-                <div class="mt-2 text-sm text-slate-600">Last 30 days</div>
-              </div>
-              <div class="rounded-3xl bg-slate-50/80 p-5">
-                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Exercise streak</div>
-                <div class="mt-3 text-2xl font-semibold text-slate-900">{{ summary?.activitySummary?.exerciseStreak || 0 }}d</div>
-                <div class="mt-2 text-sm text-slate-600">Current streak</div>
-              </div>
-              <div class="rounded-3xl bg-slate-50/80 p-5">
-                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Current state</div>
-                <div class="mt-3 text-2xl font-semibold text-slate-900">{{ summary?.currentMentalState?.mentalState || summary?.currentMentalState?.mental_state || 'Balanced' }}</div>
-                <div class="mt-2 text-sm text-slate-600">Latest AI snapshot</div>
-              </div>
+              <button type="button" (click)="shareProfile()" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Share</button>
+              <button *ngIf="!profile.isOwnProfile" type="button" (click)="toggleFollow()" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">
+                {{ profile.isFollowing ? 'Following' : 'Follow' }}
+              </button>
+              <button *ngIf="!profile.isOwnProfile && profile.canMessage" type="button" (click)="messageUser()" class="btn-primary rounded-full px-5 py-3 text-sm font-semibold">
+                Message
+              </button>
             </div>
           </div>
 
-          <div class="glass-card rounded-[2rem] p-6">
-            <div class="text-sm font-semibold text-slate-900">AI insights history</div>
-            <div class="mt-4 space-y-3">
-              <div *ngFor="let insight of (summary?.aiInsightsHistory || []).slice(0, 4)" class="rounded-3xl border border-slate-100 bg-white/80 px-4 py-4">
-                <div class="text-sm font-semibold text-slate-900">{{ insight.title }}</div>
-                <div class="mt-2 text-sm leading-7 text-slate-600">{{ insight.description }}</div>
-                <div *ngIf="insight.suggestedAction" class="mt-3 rounded-2xl bg-slate-50 px-3 py-3 text-sm text-slate-700">
-                  Suggested action: {{ insight.suggestedAction }}
+          <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-5">
+              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Followers</div>
+              <div class="mt-3 text-3xl font-semibold text-slate-900">{{ profile.social.followers }}</div>
+            </div>
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-5">
+              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Following</div>
+              <div class="mt-3 text-3xl font-semibold text-slate-900">{{ profile.social.following }}</div>
+            </div>
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-5">
+              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Posts shared</div>
+              <div class="mt-3 text-3xl font-semibold text-slate-900">{{ profile.social.posts }}</div>
+            </div>
+            <div class="rounded-[2rem] border border-white/70 bg-white/80 p-5">
+              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Progress shares</div>
+              <div class="mt-3 text-3xl font-semibold text-slate-900">{{ profile.social.progressShares }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="profile.isOwnProfile; else publicView" class="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+          <form class="glass-card rounded-[2rem] p-6" (ngSubmit)="save()">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div class="text-sm font-semibold text-slate-900">Account and social profile</div>
+                <div class="mt-1 text-xs leading-5 text-slate-500">Shape how you appear in the community and what context AI recommendations can use.</div>
+              </div>
+              <span *ngIf="saved" class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Saved</span>
+            </div>
+
+            <div class="mt-5 grid gap-5 md:grid-cols-2">
+              <label class="block text-sm font-medium text-slate-600">Name
+                <input [(ngModel)]="form.name" name="name" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+              </label>
+              <label class="block text-sm font-medium text-slate-600">Email
+                <input [ngModel]="email" name="email" disabled class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-100 px-4 py-3 text-slate-500 outline-none" />
+              </label>
+              <label class="block text-sm font-medium text-slate-600 md:col-span-2">Headline
+                <input [(ngModel)]="form.headline" name="headline" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" placeholder="Example: Learning how to recover more gently" />
+              </label>
+              <label class="block text-sm font-medium text-slate-600 md:col-span-2">Bio
+                <textarea [(ngModel)]="form.bio" name="bio" rows="4" class="mt-2 w-full resize-none rounded-[1.75rem] border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"></textarea>
+              </label>
+              <label class="block text-sm font-medium text-slate-600">Age
+                <input [(ngModel)]="form.age" name="age" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+              </label>
+              <label class="block text-sm font-medium text-slate-600">Occupation
+                <input [(ngModel)]="form.occupation" name="occupation" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+              </label>
+              <label class="block text-sm font-medium text-slate-600">Sleep habits
+                <input [(ngModel)]="form.sleepHabits" name="sleepHabits" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+              </label>
+              <label class="block text-sm font-medium text-slate-600">Gender
+                <input [(ngModel)]="form.gender" name="gender" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+              </label>
+              <label class="block text-sm font-medium text-slate-600 md:col-span-2">Lifestyle indicators
+                <input [(ngModel)]="lifestyleIndicators" name="lifestyleIndicators" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+              </label>
+              <label class="block text-sm font-medium text-slate-600 md:col-span-2">Stress indicators
+                <input [(ngModel)]="stressIndicators" name="stressIndicators" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+              </label>
+            </div>
+
+            <div class="mt-5 grid gap-3">
+              <label class="inline-flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600">
+                <input [(ngModel)]="form.allowDirectMessages" name="allowDirectMessages" type="checkbox" class="rounded border-slate-300 text-slate-900 focus:ring-slate-200" />
+                Allow direct messages from the community
+              </label>
+              <label class="inline-flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600">
+                <input [(ngModel)]="form.shareProgressPublicly" name="shareProgressPublicly" type="checkbox" class="rounded border-slate-300 text-slate-900 focus:ring-slate-200" />
+                Allow public progress stats on your profile
+              </label>
+            </div>
+
+            <div *ngIf="error" class="mt-4 rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700">{{ error }}</div>
+
+            <button type="submit" [disabled]="pending" class="btn-primary mt-6 rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60">
+              {{ pending ? 'Saving...' : 'Save changes' }}
+            </button>
+          </form>
+
+          <div class="space-y-6">
+            <div class="glass-card rounded-[2rem] p-6">
+              <div class="text-sm font-semibold text-slate-900">Shared progress stats</div>
+              <div class="mt-5 grid gap-4 sm:grid-cols-3" *ngIf="profile.activitySummary as activity">
+                <div class="rounded-3xl bg-slate-50/80 p-5">
+                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Mood logs</div>
+                  <div class="mt-3 text-2xl font-semibold text-slate-900">{{ activity.moodCheckIns30d }}</div>
+                </div>
+                <div class="rounded-3xl bg-slate-50/80 p-5">
+                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Exercises</div>
+                  <div class="mt-3 text-2xl font-semibold text-slate-900">{{ activity.exerciseCompleted30d }}</div>
+                </div>
+                <div class="rounded-3xl bg-slate-50/80 p-5">
+                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Journal entries</div>
+                  <div class="mt-3 text-2xl font-semibold text-slate-900">{{ activity.journalEntries30d }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-card rounded-[2rem] p-6">
+              <div class="text-sm font-semibold text-slate-900">AI insights history</div>
+              <div class="mt-4 space-y-3">
+                <div *ngFor="let insight of (summary?.aiInsightsHistory || []).slice(0, 4)" class="rounded-3xl border border-slate-100 bg-white/80 px-4 py-4">
+                  <div class="text-sm font-semibold text-slate-900">{{ insight.title }}</div>
+                  <div class="mt-2 text-sm leading-7 text-slate-600">{{ insight.description }}</div>
+                  <div *ngIf="insight.suggestedAction" class="mt-3 rounded-2xl bg-slate-50 px-3 py-3 text-sm text-slate-700">
+                    Suggested action: {{ insight.suggestedAction }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-card rounded-[2rem] p-6">
+              <div class="flex items-center justify-between gap-3">
+                <div class="text-sm font-semibold text-slate-900">Recent community posts</div>
+                <a routerLink="/community" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Open feed</a>
+              </div>
+              <div class="mt-4 space-y-3">
+                <div *ngFor="let post of profile.recentPosts" class="rounded-3xl border border-slate-100 bg-white/80 px-4 py-4">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <div class="text-sm font-semibold text-slate-900">{{ post.title }}</div>
+                    <span class="rounded-full bg-[var(--mt-accent-soft)] px-3 py-1 text-[11px] font-semibold text-[var(--mt-accent-strong)]">{{ post.mentalStateTag }}</span>
+                  </div>
+                  <div class="mt-2 text-sm leading-7 text-slate-600">{{ post.content }}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+
+        <ng-template #publicView>
+          <div class="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+            <div class="glass-card rounded-[2rem] p-6">
+              <div class="text-sm font-semibold text-slate-900">Public progress snapshot</div>
+              <div *ngIf="profile.activitySummary as activity; else privateStats" class="mt-5 grid gap-4 sm:grid-cols-3">
+                <div class="rounded-3xl bg-slate-50/80 p-5">
+                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Mood logs</div>
+                  <div class="mt-3 text-2xl font-semibold text-slate-900">{{ activity.moodCheckIns30d }}</div>
+                </div>
+                <div class="rounded-3xl bg-slate-50/80 p-5">
+                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Exercises</div>
+                  <div class="mt-3 text-2xl font-semibold text-slate-900">{{ activity.exerciseCompleted30d }}</div>
+                </div>
+                <div class="rounded-3xl bg-slate-50/80 p-5">
+                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Journal</div>
+                  <div class="mt-3 text-2xl font-semibold text-slate-900">{{ activity.journalEntries30d }}</div>
+                </div>
+              </div>
+
+              <ng-template #privateStats>
+                <div class="mt-4 rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-4 py-5 text-sm text-slate-500">
+                  This user is keeping their personal progress metrics private.
+                </div>
+              </ng-template>
+            </div>
+
+            <div class="glass-card rounded-[2rem] p-6">
+              <div class="text-sm font-semibold text-slate-900">Recent visible posts</div>
+              <div class="mt-4 space-y-3">
+                <div *ngIf="!profile.recentPosts.length" class="rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-4 py-5 text-sm text-slate-500">
+                  No public posts yet.
+                </div>
+                <div *ngFor="let post of profile.recentPosts" class="rounded-3xl border border-slate-100 bg-white/80 px-4 py-4">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <div class="text-sm font-semibold text-slate-900">{{ post.title }}</div>
+                    <span class="rounded-full bg-[var(--mt-accent-soft)] px-3 py-1 text-[11px] font-semibold text-[var(--mt-accent-strong)]">{{ post.mentalStateTag }}</span>
+                  </div>
+                  <div class="mt-2 text-sm leading-7 text-slate-600">{{ post.content }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+      </ng-container>
     </section>
   `
 })
-export class ProfilePageComponent {
+export class ProfilePageComponent implements OnInit, OnDestroy {
   pending = false;
   saved = false;
   error = "";
-
+  loadingProfile = true;
   email = "";
-  profile: {
+  lifestyleIndicators = "";
+  stressIndicators = "";
+  summary: DashboardSummary | null = null;
+  profileData: CommunityProfileResponse | null = null;
+
+  form: {
     name: string;
     age?: number;
     gender?: string;
     occupation?: string;
     sleepHabits?: string;
+    headline?: string;
+    bio?: string;
+    allowDirectMessages: boolean;
+    shareProgressPublicly: boolean;
   } = {
-    name: ""
+    name: "",
+    allowDirectMessages: true,
+    shareProgressPublicly: true
   };
-  lifestyleIndicators = "";
-  stressIndicators = "";
-  summary: DashboardSummary | null = null;
+
+  private readonly subs = new Subscription();
 
   constructor(
     private readonly authService: AuthService,
-    private readonly dashboardService: DashboardService
-  ) {
-    this.prefill(this.authService.currentUser());
-    this.dashboardService.getSummary().subscribe({
-      next: (summary) => (this.summary = summary),
-      error: () => (this.summary = null)
-    });
+    private readonly dashboardService: DashboardService,
+    private readonly communityService: CommunityService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.subs.add(
+      this.route.paramMap.subscribe((params) => {
+        const currentUser = this.authService.currentUser();
+        const targetUserId = params.get("userId") || currentUser?.id || "";
+        this.loadProfile(targetUserId);
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   save(): void {
+    if (this.pending) {
+      return;
+    }
+
     this.pending = true;
     this.saved = false;
     this.error = "";
 
     this.authService
       .updateProfile({
-        name: this.profile.name,
+        name: this.form.name,
         profile: {
-          age: this.profile.age,
-          gender: this.profile.gender,
-          occupation: this.profile.occupation,
-          sleepHabits: this.profile.sleepHabits,
+          age: this.form.age,
+          gender: this.form.gender,
+          occupation: this.form.occupation,
+          sleepHabits: this.form.sleepHabits,
+          headline: this.form.headline,
+          bio: this.form.bio,
+          allowDirectMessages: this.form.allowDirectMessages,
+          shareProgressPublicly: this.form.shareProgressPublicly,
           lifestyleIndicators: splitList(this.lifestyleIndicators),
           stressIndicators: splitList(this.stressIndicators)
         }
@@ -161,6 +310,9 @@ export class ProfilePageComponent {
           this.prefill(user);
           this.saved = true;
           this.pending = false;
+          if (this.profileData?.profile.id) {
+            this.loadProfile(this.profileData.profile.id);
+          }
         },
         error: (err) => {
           this.error = err?.error?.error || "Unable to save profile right now.";
@@ -169,14 +321,93 @@ export class ProfilePageComponent {
       });
   }
 
+  toggleFollow(): void {
+    if (!this.profileData || this.profileData.isOwnProfile) {
+      return;
+    }
+
+    const request = this.profileData.isFollowing
+      ? this.communityService.unfollow(this.profileData.profile.id)
+      : this.communityService.follow(this.profileData.profile.id);
+
+    request.subscribe({
+      next: (state) => {
+        if (!this.profileData) {
+          return;
+        }
+
+        this.profileData = {
+          ...this.profileData,
+          isFollowing: state.isFollowing,
+          social: {
+            ...this.profileData.social,
+            followers: state.followers,
+            following: state.following
+          }
+        };
+      }
+    });
+  }
+
+  messageUser(): void {
+    if (!this.profileData || this.profileData.isOwnProfile) {
+      return;
+    }
+
+    void this.router.navigate(["/community"], {
+      queryParams: { chatUser: this.profileData.profile.id }
+    });
+  }
+
+  shareProfile(): void {
+    const text = "I'm improving my mental health with MindTrack AI \ud83d\udc99";
+
+    if (navigator.share) {
+      void navigator.share({ title: "MindTrack AI", text });
+      return;
+    }
+
+    void navigator.clipboard?.writeText(text);
+  }
+
+  private loadProfile(userId: string): void {
+    this.loadingProfile = true;
+    this.profileData = null;
+    this.summary = null;
+    const currentUser = this.authService.currentUser();
+    this.prefill(currentUser);
+
+    this.communityService.getProfile(userId).subscribe({
+      next: (profile) => {
+        this.profileData = profile;
+        this.loadingProfile = false;
+
+        if (profile.isOwnProfile) {
+          this.dashboardService.getSummary().subscribe({
+            next: (summary) => (this.summary = summary),
+            error: () => (this.summary = null)
+          });
+        }
+      },
+      error: () => {
+        this.loadingProfile = false;
+        this.profileData = null;
+      }
+    });
+  }
+
   private prefill(user: UserProfile | null): void {
     this.email = user?.email || "";
-    this.profile = {
+    this.form = {
       name: user?.name || "",
       age: user?.profile?.age,
       gender: user?.profile?.gender,
       occupation: user?.profile?.occupation,
-      sleepHabits: user?.profile?.sleepHabits
+      sleepHabits: user?.profile?.sleepHabits,
+      headline: user?.profile?.headline,
+      bio: user?.profile?.bio,
+      allowDirectMessages: user?.profile?.allowDirectMessages ?? true,
+      shareProgressPublicly: user?.profile?.shareProgressPublicly ?? true
     };
     this.lifestyleIndicators = (user?.profile?.lifestyleIndicators || []).join(", ");
     this.stressIndicators = (user?.profile?.stressIndicators || []).join(", ");

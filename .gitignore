@@ -1,6 +1,8 @@
 node_modules/
 dist/
 .angular/
+.firebase/
+frontend/.firebase/
 .env
 .env.local
 backend/.env

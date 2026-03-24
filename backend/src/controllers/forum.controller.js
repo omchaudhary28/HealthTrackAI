@@ -1,46 +1,92 @@
-import { ForumPost } from "../models/forum-post.model.js";
+import {
+  addCommunityComment,
+  createCommunityPost,
+  createDirectMessage,
+  createOrGetDirectConversation,
+  followCommunityUser,
+  getCommunityProfile,
+  listCommunityFeed,
+  listDirectConversations,
+  listDirectMessages,
+  listPresence,
+  reportCommunityPost,
+  toggleCommunityReaction,
+  unfollowCommunityUser
+} from "../services/community.service.js";
 
-export async function listForumPosts(_req, res) {
-  const items = await ForumPost.find({ status: "visible" }).sort({ createdAt: -1 }).lean();
-  res.json({ items });
+export async function listForumPosts(req, res) {
+  const result = await listCommunityFeed({
+    viewerId: req.user?.sub,
+    scope: req.query.scope,
+    page: req.query.page,
+    limit: req.query.limit
+  });
+
+  res.json(result);
 }
 
 export async function createForumPost(req, res) {
-  const post = await ForumPost.create({
-    anonymousAlias: req.body.anonymousAlias || "Quiet Lantern",
-    title: req.body.title,
-    content: req.body.content,
-    tags: req.body.tags || []
-  });
-
+  const post = await createCommunityPost(req.user.sub, req.body);
   res.status(201).json(post);
 }
 
 export async function addComment(req, res) {
-  const post = await ForumPost.findById(req.params.postId);
-  if (!post) {
-    return res.status(404).json({ error: "Post not found" });
-  }
-
-  post.comments.push({
-    anonymousAlias: req.body.anonymousAlias || "Kind Voice",
-    content: req.body.content
-  });
-  await post.save();
-
+  const post = await addCommunityComment(req.user.sub, req.params.postId, req.body);
   res.status(201).json(post);
 }
 
 export async function addReaction(req, res) {
-  const post = await ForumPost.findById(req.params.postId);
-  if (!post) {
-    return res.status(404).json({ error: "Post not found" });
-  }
-
-  const reactionKey = req.body.reaction || "support";
-  const currentCount = Number(post.reactions?.[reactionKey] || 0);
-  post.reactions = { ...(post.reactions || {}), [reactionKey]: currentCount + 1 };
-  await post.save();
-
+  const post = await toggleCommunityReaction(req.user.sub, req.params.postId, req.body.reaction);
   res.status(200).json(post);
+}
+
+export async function reportPost(req, res) {
+  const result = await reportCommunityPost(req.user.sub, req.params.postId, req.body);
+  res.status(200).json(result);
+}
+
+export async function getProfile(req, res) {
+  const profile = await getCommunityProfile(req.user?.sub, req.params.userId);
+  res.status(200).json(profile);
+}
+
+export async function followUser(req, res) {
+  const state = await followCommunityUser(req.user.sub, req.params.userId);
+  res.status(200).json(state);
+}
+
+export async function unfollowUser(req, res) {
+  const state = await unfollowCommunityUser(req.user.sub, req.params.userId);
+  res.status(200).json(state);
+}
+
+export async function listConversations(req, res) {
+  const result = await listDirectConversations(req.user.sub);
+  res.status(200).json(result);
+}
+
+export async function createConversation(req, res) {
+  const result = await createOrGetDirectConversation(req.user.sub, req.body.userId);
+  res.status(200).json(result);
+}
+
+export async function getConversationMessages(req, res) {
+  const result = await listDirectMessages(req.user.sub, req.params.conversationId, req.query.limit);
+  res.status(200).json(result);
+}
+
+export async function createConversationMessage(req, res) {
+  const result = await createDirectMessage(req.user.sub, req.params.conversationId, req.body);
+  res.status(201).json(result);
+}
+
+export async function getPresence(req, res) {
+  const result = await listPresence(
+    String(req.query.userIds || "")
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean)
+  );
+
+  res.status(200).json(result);
 }

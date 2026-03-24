@@ -10,7 +10,8 @@ export type MindtrackIconName =
   | "exercises"
   | "community"
   | "progress"
-  | "profile";
+  | "profile"
+  | "feedback";
 
 @Component({
   selector: "app-icon",
@@ -90,6 +91,12 @@ export type MindtrackIconName =
           <path d="M12 21a9 9 0 1 0-0.01 0z"></path>
           <path d="M8 19a4.8 4.8 0 0 1 8 0"></path>
           <path d="M12 12a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4z"></path>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'feedback'">
+          <path d="M5 5.5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H11l-4.5 4v-4H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2z"></path>
+          <path d="M8 10h8"></path>
+          <path d="M8 13h5"></path>
         </ng-container>
 
         <ng-container *ngSwitchDefault>

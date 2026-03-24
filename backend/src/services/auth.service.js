@@ -100,7 +100,11 @@ export async function updateUserProfile(userId, payload = {}) {
             stressIndicators: Array.isArray(payload.profile.stressIndicators)
               ? payload.profile.stressIndicators
               : existing.profile?.stressIndicators,
-            sleepHabits: payload.profile.sleepHabits ?? existing.profile?.sleepHabits
+            sleepHabits: payload.profile.sleepHabits ?? existing.profile?.sleepHabits,
+            headline: payload.profile.headline ?? existing.profile?.headline,
+            bio: payload.profile.bio ?? existing.profile?.bio,
+            allowDirectMessages: payload.profile.allowDirectMessages ?? existing.profile?.allowDirectMessages,
+            shareProgressPublicly: payload.profile.shareProgressPublicly ?? existing.profile?.shareProgressPublicly
           }
         }
       : {})

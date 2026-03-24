@@ -16,6 +16,10 @@ export interface UserProfile {
     lifestyleIndicators?: string[];
     stressIndicators?: string[];
     sleepHabits?: string;
+    headline?: string;
+    bio?: string;
+    allowDirectMessages?: boolean;
+    shareProgressPublicly?: boolean;
   };
 }
 

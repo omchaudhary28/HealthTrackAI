@@ -143,6 +143,17 @@ export const ROUTE_THEMES: Record<string, RouteTheme> = {
     orbB: "rgba(16, 185, 129, 0.12)",
     tabGradient: "linear-gradient(90deg, rgba(234,88,12,0.95), rgba(16,185,129,0.88))"
   },
+  feedback: {
+    key: "feedback",
+    shellGradient: "linear-gradient(140deg, #fff7fb 0%, #f7fbff 50%, #effff7 100%)",
+    accent: "#db2777",
+    accentStrong: "#9d174d",
+    accentSoft: "rgba(219, 39, 119, 0.14)",
+    activeSurface: "rgba(253, 242, 248, 0.9)",
+    orbA: "rgba(244, 114, 182, 0.18)",
+    orbB: "rgba(45, 212, 191, 0.12)",
+    tabGradient: "linear-gradient(90deg, rgba(219,39,119,0.95), rgba(45,212,191,0.88))"
+  },
   default: {
     key: "default",
     shellGradient: "linear-gradient(140deg, #f8fafc 0%, #f7fbff 52%, #f2fbf7 100%)",

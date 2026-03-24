@@ -7,7 +7,11 @@ const profileSchema = new mongoose.Schema(
     occupation: String,
     lifestyleIndicators: [String],
     stressIndicators: [String],
-    sleepHabits: String
+    sleepHabits: String,
+    headline: String,
+    bio: String,
+    allowDirectMessages: { type: Boolean, default: true },
+    shareProgressPublicly: { type: Boolean, default: true }
   },
   { _id: false }
 );
