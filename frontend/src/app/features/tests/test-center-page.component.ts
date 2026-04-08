@@ -10,11 +10,11 @@ import { TestSummary, TestsService } from "../../core/services/tests.service";
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, RouterLink],
   template: `
-    <section appScrollReveal class="space-y-6">
-      <div class="rounded-[2.5rem] border border-white/70 bg-white/80 p-7 shadow-[0_25px_70px_-45px_rgba(32,50,71,0.55)] backdrop-blur">
+    <section appScrollReveal class="page-stack">
+      <div class="glass-card theme-hero-card page-hero">
         <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">Test Center</div>
-        <h1 class="mt-2 text-3xl font-semibold text-slate-900">Structured self-assessment for multiple mental wellness angles.</h1>
-        <p class="mt-3 max-w-3xl text-base leading-8 text-slate-600">
+        <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">Structured self-assessment for multiple mental wellness angles.</h1>
+        <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
           Each test returns reflective interpretation, improvement suggestions, and optional population comparison. Results are not medical diagnoses.
         </p>
       </div>

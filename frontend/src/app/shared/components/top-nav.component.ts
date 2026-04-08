@@ -9,7 +9,7 @@ import { AuthService } from "../../core/services/auth.service";
   imports: [CommonModule, RouterLink],
   template: `
     <header class="sticky top-0 z-30 border-b border-black/5 bg-white/84 backdrop-blur-2xl">
-      <div class="mx-auto flex max-w-[1340px] items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
+      <div class="mx-auto flex max-w-[1340px] items-center gap-2 px-3 py-2.5 sm:gap-3 sm:px-6 sm:py-3 lg:px-8">
         <div class="flex min-w-0 items-center gap-3">
           <button
             *ngIf="!publicMode"
@@ -24,13 +24,13 @@ import { AuthService } from "../../core/services/auth.service";
             </svg>
           </button>
 
-          <a routerLink="/" class="flex min-w-0 items-center gap-3 rounded-full px-1 py-1 transition hover:bg-white/70">
-            <div class="grid h-11 w-11 shrink-0 place-items-center rounded-[1.25rem] bg-[linear-gradient(135deg,#f58529,#dd2a7b,#8134af)] text-sm font-black text-white shadow-[0_20px_40px_-24px_rgba(129,52,175,0.6)]">
+          <a routerLink="/" class="flex min-w-0 items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/70 sm:gap-3">
+            <div class="grid h-10 w-10 shrink-0 place-items-center rounded-[1.1rem] bg-[linear-gradient(135deg,#f58529,#dd2a7b,#8134af)] text-sm font-black text-white shadow-[0_20px_40px_-24px_rgba(129,52,175,0.6)] sm:h-11 sm:w-11 sm:rounded-[1.25rem]">
               MT
             </div>
             <div class="min-w-0">
-              <div class="truncate text-lg font-extrabold tracking-[-0.04em] text-slate-950">MindTrack</div>
-              <div class="truncate text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+              <div class="truncate text-base font-extrabold tracking-[-0.04em] text-slate-950 sm:text-lg">MindTrack</div>
+              <div class="hidden truncate text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400 min-[380px]:block">
                 {{ publicMode ? "wellness tracking" : "tracking first workspace" }}
               </div>
             </div>
@@ -50,17 +50,17 @@ import { AuthService } from "../../core/services/auth.service";
 
         <div class="ml-auto flex items-center gap-2 sm:gap-3">
           <ng-container *ngIf="publicMode; else signedInActions">
-            <a routerLink="/about" class="btn-outline hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex">About</a>
+            <a routerLink="/about" class="btn-outline hidden rounded-full px-4 py-2.5 text-sm font-semibold md:inline-flex">About</a>
             <a
               *ngIf="!isAuthenticated()"
               routerLink="/auth"
-              class="btn-primary rounded-full px-5 py-2.5 text-sm font-semibold">
+              class="btn-primary rounded-full px-4 py-2.5 text-sm font-semibold sm:px-5">
               Start
             </a>
             <a
               *ngIf="isAuthenticated()"
               routerLink="/dashboard"
-              class="btn-primary rounded-full px-5 py-2.5 text-sm font-semibold">
+              class="btn-primary rounded-full px-4 py-2.5 text-sm font-semibold sm:px-5">
               Open app
             </a>
           </ng-container>
@@ -71,11 +71,11 @@ import { AuthService } from "../../core/services/auth.service";
             </a>
             <a
               routerLink="/profile"
-              class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-2 pr-4 text-sm font-semibold text-slate-800 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.35)] transition hover:border-slate-300">
+              class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-2 pr-3 text-sm font-semibold text-slate-800 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.35)] transition hover:border-slate-300 sm:pr-4">
               <span class="grid h-8 w-8 place-items-center rounded-full bg-slate-950 text-[11px] font-bold text-white">{{ initials() }}</span>
               <span class="hidden sm:inline">{{ displayName() }}</span>
             </a>
-            <button type="button" (click)="logout()" class="btn-outline rounded-full px-4 py-2.5 text-sm font-semibold">
+            <button type="button" (click)="logout()" class="btn-outline rounded-full px-3 py-2.5 text-sm font-semibold sm:px-4">
               Sign out
             </button>
           </ng-template>

@@ -10,17 +10,17 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink],
   template: `
-    <section appScrollReveal class="space-y-6">
+    <section appScrollReveal class="page-stack">
       <div class="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-        <div class="glass-card rounded-[2.5rem] p-6 sm:p-8">
+        <div class="glass-card page-hero">
           <div class="min-w-0">
             <div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Create Post</div>
-            <h1 class="mt-3 text-3xl font-semibold text-slate-900 sm:text-4xl">Share one clear update.</h1>
-            <p class="mt-3 max-w-3xl text-sm leading-8 text-slate-600 sm:text-base">
+            <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Share one clear update.</h1>
+            <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
               Keep posting lightweight. If you need deeper reflection, start in journal or mood tracking and only bring the useful summary here.
             </p>
 
-            <div class="mt-6 flex flex-wrap gap-3">
+            <div class="cluster-actions mt-6">
               <a routerLink="/mood" class="btn-primary rounded-full px-5 py-3 text-sm font-semibold">Log mood first</a>
               <a routerLink="/journal" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Open journal</a>
               <a routerLink="/community" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Back to community</a>
@@ -28,7 +28,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           </div>
         </div>
 
-        <div class="glass-card rounded-[2.5rem] p-6">
+        <div class="glass-card rounded-[2rem] p-5 sm:rounded-[2.5rem] sm:p-6">
           <div class="text-sm font-semibold text-slate-900">Before you post</div>
           <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
             <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">Say what changed, not your whole history.</div>
@@ -39,8 +39,8 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
       </div>
 
       <div class="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-        <form class="glass-card rounded-[2rem] p-6" (ngSubmit)="createPost()">
-          <div class="flex items-start justify-between gap-4">
+        <form class="glass-card rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6" (ngSubmit)="createPost()">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <div class="text-sm font-semibold text-slate-900">Simple composer</div>
               <div class="mt-1 text-xs leading-5 text-slate-500">Start with a title and a short description. Add progress details only if they matter.</div>
@@ -128,7 +128,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             {{ createError }}
           </div>
 
-          <button type="submit" [disabled]="creatingPost" class="btn-primary mt-5 rounded-2xl px-5 py-3 text-sm font-semibold disabled:opacity-60">
+          <button type="submit" [disabled]="creatingPost" class="btn-primary mt-5 w-full rounded-2xl px-5 py-3 text-sm font-semibold disabled:opacity-60 sm:w-auto">
             {{ creatingPost ? "Publishing..." : "Publish post" }}
           </button>
         </form>

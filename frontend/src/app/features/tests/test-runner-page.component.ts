@@ -19,13 +19,13 @@ const CHOICES = [
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, RouterLink],
   template: `
-    <section appScrollReveal class="space-y-6">
-      <div class="rounded-[2.5rem] border border-white/70 bg-white/80 p-7 shadow-[0_25px_70px_-45px_rgba(32,50,71,0.55)] backdrop-blur">
+    <section appScrollReveal class="page-stack">
+      <div class="glass-card theme-hero-card page-hero">
           <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">{{ test()?.category || 'Assessment' }}</div>
-              <h1 class="mt-2 text-3xl font-semibold text-slate-900">{{ test()?.title || 'Loading test...' }}</h1>
-              <p class="mt-3 max-w-3xl text-base leading-8 text-slate-600">
+              <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">{{ test()?.title || 'Loading test...' }}</h1>
+              <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
                 {{ test()?.description || 'This questionnaire supports self-reflection only and is not a medical diagnosis.' }}
               </p>
             </div>
@@ -47,7 +47,7 @@ const CHOICES = [
       </div>
 
       <div *ngIf="result(); else questionnaire" class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur">
+        <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
           <div class="text-sm font-medium text-slate-500">Results</div>
           <div class="mt-4 flex flex-wrap gap-3">
             <div class="rounded-3xl bg-slate-50 px-5 py-4">
@@ -107,7 +107,7 @@ const CHOICES = [
           </div>
         </div>
 
-        <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur">
+        <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
           <div class="text-sm font-medium text-slate-500">Next steps</div>
           <div class="mt-4 space-y-3">
             <a routerLink="/dashboard" class="btn-primary block rounded-2xl px-4 py-4 text-center text-sm font-semibold">Open dashboard</a>
@@ -120,20 +120,20 @@ const CHOICES = [
 
       <ng-template #questionnaire>
         <div *ngIf="test()" class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-          <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur">
+          <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
             <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
               <span>Question {{ index() + 1 }} of {{ totalQuestions() }}</span>
               <span *ngIf="test()?.scoringScale">{{ test()?.scoringScale }}</span>
             </div>
 
-            <div class="mt-4 text-xl font-semibold text-slate-900">{{ currentQuestion()?.text }}</div>
+            <div class="mt-4 text-lg font-semibold text-slate-900 sm:text-xl">{{ currentQuestion()?.text }}</div>
             <div class="mt-5 grid gap-3 sm:grid-cols-5">
               <button
                 *ngFor="let choice of choices"
                 type="button"
                 (click)="select(choice.value)"
                 [class]="choiceClass(choice.value)"
-                class="rounded-2xl border px-4 py-3 text-sm font-medium transition">
+                class="rounded-2xl border px-4 py-3 text-left text-sm font-medium transition sm:text-center">
                 {{ choice.label }}
               </button>
             </div>
@@ -165,7 +165,7 @@ const CHOICES = [
             </div>
           </div>
 
-          <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur">
+          <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
             <div class="text-sm font-medium text-slate-500">Why this matters</div>
             <p class="mt-4 text-sm leading-7 text-slate-600">
               This assessment is designed for self-reflection and habit support. It cannot diagnose or treat mental health conditions.

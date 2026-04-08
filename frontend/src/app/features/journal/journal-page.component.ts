@@ -10,19 +10,19 @@ import { JournalEditorComponent } from "../../shared/components/journal-editor.c
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, JournalEditorComponent],
   template: `
-    <section appScrollReveal class="space-y-6">
-      <div class="theme-hero-card rounded-[2.75rem] p-8">
+    <section appScrollReveal class="page-stack">
+      <div class="theme-hero-card page-hero">
         <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Journaling</div>
-        <h1 class="mt-3 text-3xl font-semibold text-slate-900">Write with calmer prompts, mood tags, and gentle pattern hints.</h1>
-        <p class="mt-3 max-w-3xl text-base leading-8 text-slate-700">
+        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl">Write with calmer prompts, mood tags, and gentle pattern hints.</h1>
+        <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
           Your journal is for reflection and habit support. MindTrack AI is not a clinical or diagnostic system.
         </p>
       </div>
 
       <app-journal-editor (saved)="refresh()"></app-journal-editor>
 
-      <div class="theme-bento-card-soft rounded-[2.25rem] p-6 backdrop-blur">
-        <div class="flex items-start justify-between gap-3">
+      <div class="theme-bento-card-soft rounded-[2rem] p-5 backdrop-blur sm:rounded-[2.25rem] sm:p-6">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <div class="text-sm font-semibold text-slate-900">Recent entries</div>
             <div class="mt-1 text-xs leading-5 text-slate-500">A quick list to revisit what you wrote earlier.</div>

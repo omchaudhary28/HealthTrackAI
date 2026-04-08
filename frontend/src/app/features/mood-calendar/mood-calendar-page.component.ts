@@ -12,20 +12,20 @@ import { MoodTrackerComponent } from "../../shared/components/mood-tracker.compo
   imports: [ScrollRevealDirective, CommonModule, FormsModule, MoodHeatmapComponent, MoodTrackerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section appScrollReveal class="space-y-6">
-      <div class="rounded-3xl border border-white/70 bg-[linear-gradient(145deg,rgba(216,214,239,0.22),rgba(255,255,255,0.86))] p-8 shadow-[0_25px_70px_-45px_rgba(32,50,71,0.45)]">
+    <section appScrollReveal class="page-stack">
+      <div class="page-hero rounded-[2rem] border border-white/70 bg-[linear-gradient(145deg,rgba(216,214,239,0.22),rgba(255,255,255,0.86))] shadow-[0_25px_70px_-45px_rgba(32,50,71,0.45)] sm:rounded-3xl">
         <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Mood calendar</div>
-        <h1 class="mt-3 text-3xl font-semibold text-slate-900">See patterns across days, not just moments.</h1>
-        <p class="mt-3 max-w-3xl text-base leading-8 text-slate-700">
+        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl">See patterns across days, not just moments.</h1>
+        <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
           Log quick check-ins to build a calmer, more accurate picture over time. MindTrack AI is for self-reflection only.
         </p>
       </div>
 
       <div class="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <div class="space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div class="text-sm font-semibold text-slate-900">Month view</div>
-            <div class="flex items-center gap-2">
+            <div class="chip-scroll">
               <button
                 type="button"
                 (click)="prevMonth()"
@@ -56,8 +56,8 @@ import { MoodTrackerComponent } from "../../shared/components/mood-tracker.compo
           <app-mood-heatmap [month]="month()" [logs]="logs()" (selectDate)="selectDate($event)"></app-mood-heatmap>
         </div>
 
-        <div class="rounded-2xl border border-slate-200/70 bg-white/80 p-6 shadow-sm backdrop-blur">
-          <div class="flex items-start justify-between gap-3">
+        <div class="rounded-[1.75rem] border border-slate-200/70 bg-white/80 p-5 shadow-sm backdrop-blur sm:rounded-2xl sm:p-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <div class="text-sm font-semibold text-slate-900">Daily check-in</div>
               <div class="mt-1 text-xs leading-5 text-slate-500">{{ selectedLabel() }}</div>
@@ -101,7 +101,7 @@ import { MoodTrackerComponent } from "../../shared/components/mood-tracker.compo
                 (ngModelChange)="notes.set($event)"
                 rows="3"
                 placeholder="Any context you want to remember later..."
-                class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"></textarea>
+                class="app-textarea mt-2"></textarea>
             </label>
           </div>
 

@@ -12,17 +12,17 @@ import { FormsModule } from "@angular/forms";
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, ExerciseCardComponent, BoxBreathingComponent, FormsModule],
   template: `
-    <section appScrollReveal class="space-y-6">
-      <div class="glass-card rounded-[2.75rem] bg-[linear-gradient(150deg,rgba(255,255,255,0.78),rgba(255,255,255,0.48),rgba(16,185,129,0.08))] p-8">
+    <section appScrollReveal class="page-stack">
+      <div class="glass-card page-hero bg-[linear-gradient(150deg,rgba(255,255,255,0.78),rgba(255,255,255,0.48),rgba(16,185,129,0.08))]">
         <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Exercise Library</div>
-        <h1 class="mt-3 text-3xl font-semibold text-slate-900 sm:text-4xl">Actionable exercises with AI reasoning, expected outcomes, and feedback loops.</h1>
-        <p class="mt-3 max-w-3xl text-base leading-8 text-slate-700">
+        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Actionable exercises with AI reasoning, expected outcomes, and feedback loops.</h1>
+        <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
           These practices are small, supportive interventions. Complete one, leave feedback, and MindTrack will learn what helps you most.
         </p>
       </div>
 
-      <div class="glass-card rounded-[2rem] p-6">
-        <div class="flex items-start justify-between gap-4">
+      <div class="glass-card rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <div class="text-sm font-semibold text-slate-900">Recommended for you</div>
             <div class="mt-1 text-xs leading-5 text-slate-500">Generated from your latest mental-state snapshot and activity patterns.</div>
@@ -59,7 +59,7 @@ import { FormsModule } from "@angular/forms";
         </div>
       </div>
 
-      <div class="glass-card rounded-[2rem] p-5">
+      <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div class="text-sm font-semibold text-slate-900">Browse by category</div>
@@ -70,7 +70,7 @@ import { FormsModule } from "@angular/forms";
           </button>
         </div>
 
-        <div class="mt-4 flex flex-wrap gap-2">
+        <div class="chip-scroll mt-4">
           <button
             *ngFor="let cat of categories"
             type="button"
@@ -105,14 +105,14 @@ import { FormsModule } from "@angular/forms";
         </div>
       </ng-template>
 
-      <div *ngIf="activeExercise" class="fixed inset-0 z-50 flex items-end justify-center p-4 sm:items-center">
+      <div *ngIf="activeExercise" class="fixed inset-0 z-50 flex items-end justify-center p-3 sm:p-4 sm:items-center">
         <div class="absolute inset-0 bg-slate-950/25 backdrop-blur-sm" (click)="activeExercise = null"></div>
-        <div class="relative max-h-[92vh] w-full max-w-3xl overflow-auto rounded-[2.25rem] border border-white/60 bg-white shadow-2xl">
-          <div class="sticky top-0 z-10 border-b border-slate-100 bg-white/92 px-6 py-5 backdrop-blur">
+        <div class="relative max-h-[92vh] w-full max-w-3xl overflow-auto rounded-[1.75rem] border border-white/60 bg-white shadow-2xl sm:rounded-[2.25rem]">
+          <div class="sticky top-0 z-10 border-b border-slate-100 bg-white/92 px-4 py-4 backdrop-blur sm:px-6 sm:py-5">
             <div class="flex items-start justify-between gap-3">
               <div>
                 <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{{ label(activeExercise.category) }} | {{ activeExercise.durationMinutes }} min</div>
-                <div class="mt-2 text-2xl font-semibold text-slate-900">{{ activeExercise.title }}</div>
+                <div class="mt-2 text-xl font-semibold text-slate-900 sm:text-2xl">{{ activeExercise.title }}</div>
               </div>
               <button
                 type="button"
@@ -127,7 +127,7 @@ import { FormsModule } from "@angular/forms";
             </div>
           </div>
 
-          <div class="px-6 py-6">
+          <div class="px-4 py-4 sm:px-6 sm:py-6">
             <div class="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
               <div class="space-y-5">
                 <div class="rounded-[2rem] bg-slate-50 p-5">
@@ -189,12 +189,12 @@ import { FormsModule } from "@angular/forms";
 
                   <label class="mt-4 block text-sm font-medium text-slate-600">
                     What changed after this?
-                    <textarea [(ngModel)]="resultAfter" rows="3" class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" placeholder="Example: I felt less tense and a bit clearer."></textarea>
+                    <textarea [(ngModel)]="resultAfter" rows="3" class="app-textarea mt-2" placeholder="Example: I felt less tense and a bit clearer."></textarea>
                   </label>
 
                   <label class="mt-4 block text-sm font-medium text-slate-600">
                     Optional note
-                    <textarea [(ngModel)]="feedbackText" rows="3" class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" placeholder="Anything MindTrack should remember about this exercise?"></textarea>
+                    <textarea [(ngModel)]="feedbackText" rows="3" class="app-textarea mt-2" placeholder="Anything MindTrack should remember about this exercise?"></textarea>
                   </label>
 
                   <div *ngIf="completionSuccess" class="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">

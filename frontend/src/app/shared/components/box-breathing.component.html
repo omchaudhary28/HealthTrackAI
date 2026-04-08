@@ -1,15 +1,15 @@
-<section class="w-full rounded-3xl bg-gradient-to-br from-blue-50 to-emerald-50 p-6">
-  <div class="flex flex-col items-center justify-center rounded-2xl bg-white p-8 shadow-lg">
+<section class="w-full rounded-[1.75rem] bg-gradient-to-br from-blue-50 to-emerald-50 p-4 sm:rounded-3xl sm:p-6">
+  <div class="flex flex-col items-center justify-center rounded-[1.5rem] bg-white p-5 shadow-lg sm:rounded-2xl sm:p-8">
     <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Box Breathing Exercise</div>
     <div class="mt-2 text-xl font-semibold text-slate-700">{{ instruction() }}</div>
 
     <div class="mt-6 flex items-center justify-center">
       <div
-        class="breathing-shape w-40 h-40 rounded-full bg-blue-300 transition-all duration-4000"
+        class="breathing-shape h-32 w-32 rounded-full bg-blue-300 transition-all duration-4000 sm:h-40 sm:w-40"
         [ngClass]="shapeScaleClass()"></div>
     </div>
 
-    <div class="mt-6 text-3xl font-semibold text-slate-700 tabular-nums">
+    <div class="mt-6 text-2xl font-semibold text-slate-700 tabular-nums sm:text-3xl">
       {{ formatTime(elapsedSeconds()) }}
     </div>
     <div class="mt-1 text-sm text-slate-600">
@@ -17,7 +17,7 @@
     </div>
     <div class="mt-1 text-xs text-slate-500">Total: {{ formatTime(durationSeconds()) }}</div>
 
-    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+    <div class="mt-6 grid w-full gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center">
       <button
         type="button"
         (click)="start()"

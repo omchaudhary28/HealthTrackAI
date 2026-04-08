@@ -21,13 +21,13 @@ interface CalendarCell {
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="rounded-2xl border border-slate-200/70 bg-white/80 p-6 shadow-sm backdrop-blur">
+    <div class="rounded-[1.75rem] border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur sm:rounded-2xl sm:p-6">
       <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div class="text-sm font-semibold text-slate-900">Mood calendar</div>
           <div class="mt-1 text-sm text-slate-600">{{ monthLabel() }}</div>
         </div>
-        <div class="flex flex-wrap gap-2 text-xs font-semibold text-slate-700">
+        <div class="chip-scroll text-xs font-semibold text-slate-700">
           <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1">
             <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
             positive
@@ -43,8 +43,8 @@ interface CalendarCell {
         </div>
       </div>
 
-      <div class="grid grid-cols-7 gap-2">
-        <div *ngFor="let label of weekdayLabels" class="pb-1 text-center text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+      <div class="grid grid-cols-7 gap-1.5 sm:gap-2">
+        <div *ngFor="let label of weekdayLabels" class="pb-1 text-center text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400 sm:text-[11px]">
           {{ label }}
         </div>
 
@@ -53,7 +53,7 @@ interface CalendarCell {
           type="button"
           [disabled]="!cell.inMonth"
           (click)="cell.date && selectDate.emit(cell.date)"
-          class="relative grid aspect-square place-items-center rounded-2xl text-sm font-semibold transition hover:-translate-y-0.5 hover:shadow-md disabled:cursor-default disabled:opacity-60"
+          class="relative grid aspect-square min-h-[2.65rem] place-items-center rounded-xl text-xs font-semibold transition hover:-translate-y-0.5 hover:shadow-md disabled:cursor-default disabled:opacity-60 sm:min-h-[3.25rem] sm:rounded-2xl sm:text-sm"
           [class]="tileClass(cell)"
           [attr.aria-label]="cell.inMonth ? cell.key : null">
           <span class="tabular-nums">{{ cell.dayLabel }}</span>

@@ -10,15 +10,15 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, FormsModule],
   template: `
-    <section appScrollReveal class="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-      <div class="glass-card rounded-[2.5rem] bg-[linear-gradient(155deg,rgba(255,255,255,0.72),rgba(255,255,255,0.48),rgba(14,165,233,0.08))] p-8">
+    <section appScrollReveal class="mx-auto grid max-w-6xl gap-4 sm:gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+      <div class="glass-card page-hero bg-[linear-gradient(155deg,rgba(255,255,255,0.72),rgba(255,255,255,0.48),rgba(14,165,233,0.08))]">
         <div class="inline-flex rounded-full bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
           Secure access
         </div>
-        <h1 class="mt-5 text-3xl font-semibold text-slate-900 sm:text-4xl">
+        <h1 class="mt-5 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">
           Start with a private account that adapts as your patterns change.
         </h1>
-        <p class="mt-4 max-w-xl text-base leading-8 text-slate-700">
+        <p class="mt-4 max-w-xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
           MindTrack AI combines check-ins, journals, assessments, and activity patterns into a supportive wellness experience. It does not diagnose mental health conditions.
         </p>
 
@@ -40,7 +40,7 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
         </div>
       </div>
 
-      <form class="glass-card rounded-[2.5rem] p-8 backdrop-blur" (ngSubmit)="submit()">
+      <form class="glass-card rounded-[2rem] p-5 backdrop-blur sm:rounded-[2.5rem] sm:p-8" (ngSubmit)="submit()">
         <div class="mb-6 flex rounded-full bg-slate-100/80 p-1 text-sm font-semibold text-slate-600">
           <button type="button" (click)="setMode('signup')" [class]="tabClass(mode === 'signup')" class="flex-1 rounded-full px-4 py-2">
             Create account

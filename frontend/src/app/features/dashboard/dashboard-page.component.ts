@@ -34,19 +34,19 @@ interface PatternInsightCard {
       </ng-container>
 
       <ng-template #content>
-        <section appScrollReveal class="space-y-6">
-          <div class="glass-card theme-hero-card rounded-[2.75rem] p-8">
+        <section appScrollReveal class="page-stack">
+          <div class="glass-card theme-hero-card page-hero">
             <div class="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
               <div class="min-w-0">
                 <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Dashboard</div>
-                <h1 class="mt-3 text-3xl font-semibold text-slate-900 sm:text-4xl">
+                <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">
                   Welcome back, <span class="whitespace-nowrap">{{ displayName() }}</span>.
                 </h1>
-                <p class="mt-3 max-w-2xl text-base leading-8 text-slate-700">
+                <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
                   Your AI summary blends mood logs, journals, assessments, and completed exercises into one support snapshot.
                 </p>
               </div>
-              <div class="flex flex-wrap gap-3">
+              <div class="cluster-actions">
                 <a routerLink="/tests/baseline" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">
                   Retake baseline
                 </a>
@@ -131,8 +131,8 @@ interface PatternInsightCard {
                   lineColor="#f97316"></app-progress-chart>
               </div>
 
-              <div class="theme-bento-card-soft rounded-[2rem] p-6">
-                <div class="flex items-start justify-between gap-4">
+              <div class="theme-bento-card-soft rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <div class="text-sm font-semibold text-slate-900">Pattern analysis</div>
                     <div class="mt-1 text-xs leading-5 text-slate-500">A more useful read on what your recent logs, habits, and writing are saying together.</div>
@@ -175,8 +175,8 @@ interface PatternInsightCard {
             </div>
 
             <div class="space-y-6">
-              <div class="theme-bento-card-soft rounded-[2rem] p-6">
-                <div class="flex items-start justify-between gap-4">
+              <div class="theme-bento-card-soft rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <div class="text-sm font-semibold text-slate-900">Daily check-in</div>
                     <div class="mt-1 text-xs leading-5 text-slate-500">Log stress, sleep, and energy for today.</div>
@@ -227,7 +227,7 @@ interface PatternInsightCard {
                 </button>
               </div>
 
-              <div class="theme-bento-card-soft rounded-[2rem] p-6">
+              <div class="theme-bento-card-soft rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
                 <div class="text-sm font-semibold text-slate-900">AI insights history</div>
                 <div class="mt-4 space-y-3">
                   <div *ngFor="let insight of (summary.aiInsightsHistory || []).slice(0, 3)" class="theme-bento-card rounded-[1.5rem] px-4 py-4">
@@ -246,8 +246,8 @@ interface PatternInsightCard {
             </div>
           </div>
 
-          <div class="glass-card theme-bento-card-soft rounded-[2.25rem] p-6">
-            <div class="flex items-start justify-between gap-4">
+          <div class="glass-card theme-bento-card-soft rounded-[2rem] p-5 sm:rounded-[2.25rem] sm:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <div class="text-sm font-semibold text-slate-900">Recommended exercises</div>
                 <div class="mt-1 text-xs leading-5 text-slate-500">Each recommendation includes purpose, outcome, and AI reasoning.</div>
@@ -283,8 +283,8 @@ interface PatternInsightCard {
     </ng-container>
 
     <ng-template #loading>
-      <div class="space-y-6">
-        <div class="glass-card rounded-[2.75rem] p-8">
+      <div class="page-stack">
+        <div class="glass-card page-hero">
           <div class="skeleton h-4 w-28 rounded-full"></div>
           <div class="skeleton mt-5 h-12 w-2/3 rounded-2xl"></div>
           <div class="skeleton mt-4 h-24 rounded-3xl"></div>

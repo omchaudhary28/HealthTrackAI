@@ -25,7 +25,7 @@ interface JournalInsightCard {
   imports: [CommonModule, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="theme-bento-card-soft rounded-[2.25rem] p-6 backdrop-blur">
+    <div class="theme-bento-card-soft rounded-[1.9rem] p-4 backdrop-blur sm:rounded-[2.25rem] sm:p-6">
       <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div class="text-sm font-semibold text-slate-900">Journal</div>
@@ -39,7 +39,7 @@ interface JournalInsightCard {
         </button>
       </div>
 
-      <div class="theme-bento-card rounded-[1.75rem] px-4 py-4 text-sm leading-7 text-slate-700">
+      <div class="theme-bento-card rounded-[1.5rem] px-4 py-4 text-sm leading-7 text-slate-700 sm:rounded-[1.75rem]">
         <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Prompt</div>
         <div class="mt-2">{{ prompt() }}</div>
       </div>
@@ -51,14 +51,14 @@ interface JournalInsightCard {
             <textarea
               [ngModel]="content()"
               (ngModelChange)="content.set($event)"
-              rows="12"
+              rows="10"
               placeholder="Write what happened, what you felt, and what you needed..."
-              class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm leading-7 text-slate-700 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"></textarea>
+              class="app-textarea mt-2"></textarea>
           </label>
 
           <div class="mt-4">
             <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Mood tags</div>
-            <div class="mt-2 flex flex-wrap gap-2">
+            <div class="chip-scroll mt-2">
               <button
                 *ngFor="let tag of tags"
                 type="button"
@@ -76,7 +76,7 @@ interface JournalInsightCard {
             {{ error() }}
           </div>
 
-          <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div class="cluster-actions mt-5">
             <button
               type="button"
               (click)="save()"
@@ -91,11 +91,11 @@ interface JournalInsightCard {
               class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50">
               {{ analyzing() ? "Analyzing..." : "Analyze patterns" }}
             </button>
-            <div class="text-xs text-slate-500">Only you can see your writing.</div>
+            <div class="text-xs text-slate-500 sm:ml-auto">Only you can see your writing.</div>
           </div>
         </div>
 
-        <div class="theme-bento-card-soft rounded-[2rem] px-5 py-5">
+        <div class="theme-bento-card-soft rounded-[1.75rem] px-4 py-4 sm:rounded-[2rem] sm:px-5 sm:py-5">
           <div class="flex items-start justify-between gap-4">
             <div>
               <div class="text-sm font-semibold text-slate-900">Pattern analysis</div>

@@ -83,15 +83,15 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
           [class.opacity-0]="!navOpen"
           (click)="closeNav()"></div>
         <div
-          class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] border-r border-white/60 bg-white/92 shadow-2xl backdrop-blur-xl transition-transform duration-300"
+          class="fixed inset-y-0 left-0 z-50 w-[min(20rem,88vw)] border-r border-white/60 bg-white/92 shadow-2xl backdrop-blur-xl transition-transform duration-300"
           [class.-translate-x-full]="!navOpen">
           <app-side-nav [inDrawer]="true" (requestClose)="closeNav()"></app-side-nav>
         </div>
       </div>
 
-      <div class="mx-auto flex max-w-[1340px] gap-8 px-4 pb-24 pt-4 sm:px-6 lg:px-8 lg:pb-10 lg:pt-8">
+      <div class="mx-auto flex max-w-[1340px] gap-4 px-3 pb-[calc(var(--mt-safe-bottom)+1rem)] pt-3 sm:px-6 sm:pt-4 lg:gap-8 lg:px-8 lg:pb-10 lg:pt-8">
         <app-side-nav *ngIf="!isPublicRoute()"></app-side-nav>
-        <main class="min-w-0 flex-1">
+        <main class="min-w-0 flex-1 overflow-hidden">
           <div [@routeAnimations]="prepareRoute(outlet)" class="relative">
             <router-outlet #outlet="outlet"></router-outlet>
           </div>
@@ -99,7 +99,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
       </div>
 
       <div *ngIf="!isPublicRoute()" class="mobile-tabbar lg:hidden">
-        <nav class="mx-auto grid max-w-2xl grid-cols-5 gap-2 px-4 py-3">
+        <nav class="mx-auto grid max-w-2xl grid-cols-5 gap-1 px-2 pb-[calc(0.7rem+env(safe-area-inset-bottom,0px))] pt-2 sm:gap-2 sm:px-4 sm:pt-3">
           <a
             *ngFor="let item of mobileNavItems"
             [routerLink]="item.link"
@@ -177,17 +177,20 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         bottom: 0;
         z-index: 35;
         border-top: 1px solid rgba(15, 23, 42, 0.08);
-        background: rgba(255, 255, 255, 0.9);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.96));
         backdrop-filter: blur(24px);
+        box-shadow: 0 -20px 40px -34px rgba(15, 23, 42, 0.3);
       }
 
       .mobile-tab-link {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.35rem;
-        border-radius: 1.25rem;
-        padding: 0.65rem 0.35rem;
+        justify-content: center;
+        min-height: 3.5rem;
+        gap: 0.3rem;
+        border-radius: 1.1rem;
+        padding: 0.55rem 0.25rem;
         font-size: 0.68rem;
         font-weight: 700;
         letter-spacing: 0.03em;
@@ -196,13 +199,21 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
       }
 
       .mobile-tab-link-active {
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.98);
         color: var(--mt-accent-strong);
         box-shadow: 0 18px 28px -24px rgba(15, 23, 42, 0.35);
       }
 
       .mobile-tab-link:active {
         transform: translateY(1px);
+      }
+
+      @media (min-width: 640px) {
+        .mobile-tab-link {
+          min-height: 3.8rem;
+          border-radius: 1.25rem;
+          padding: 0.65rem 0.35rem;
+        }
       }
     `
   ]

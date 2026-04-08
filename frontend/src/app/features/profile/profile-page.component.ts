@@ -14,11 +14,11 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink],
   template: `
-    <section appScrollReveal class="space-y-6">
+    <section appScrollReveal class="page-stack">
       <div *ngIf="loadingProfile" class="glass-card rounded-[2rem] p-8 text-sm text-slate-500">Loading profile...</div>
 
       <ng-container *ngIf="!loadingProfile && profileData as profile">
-        <div class="glass-card rounded-[2.5rem] p-6 sm:p-8">
+        <div class="glass-card page-hero">
           <div class="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
             <div class="flex min-w-0 flex-col gap-5 sm:flex-row sm:items-center">
               <div class="grid h-24 w-24 shrink-0 place-items-center rounded-full bg-[linear-gradient(135deg,#f58529,#dd2a7b,#8134af)] p-[3px] shadow-[0_24px_44px_-28px_rgba(129,52,175,0.55)]">
@@ -29,17 +29,17 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
               <div class="min-w-0">
                 <div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Profile</div>
-                <h1 class="mt-3 text-3xl font-extrabold tracking-[-0.05em] text-slate-950 sm:text-4xl">{{ profile.profile.name }}</h1>
+                <h1 class="mt-3 text-2xl font-extrabold tracking-[-0.05em] text-slate-950 sm:text-3xl lg:text-4xl">{{ profile.profile.name }}</h1>
                 <div class="mt-2 text-base font-semibold text-[var(--mt-accent-strong)]">
                   {{ profile.profile.headline || "Tracking progress one step at a time." }}
                 </div>
-                <p class="mt-3 max-w-3xl text-sm leading-8 text-slate-600">
+                <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:leading-8">
                   {{ profile.profile.bio || "This profile stays simple so the focus can remain on mood, journaling, exercises, and steady progress." }}
                 </p>
               </div>
             </div>
 
-            <div class="flex flex-wrap gap-2">
+            <div class="cluster-actions">
               <div class="rounded-full bg-[var(--mt-accent-soft)] px-4 py-2 text-xs font-semibold text-[var(--mt-accent-strong)]">
                 {{ profile.currentMentalState || "Balanced" }}
               </div>
@@ -57,7 +57,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
         <div class="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_22rem]">
           <div class="space-y-6">
-            <div class="glass-card rounded-[2rem] p-6">
+            <div class="glass-card rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
               <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div>
                   <div class="text-sm font-semibold text-slate-950">
@@ -106,7 +106,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               </div>
             </div>
 
-            <div class="glass-card rounded-[2rem] p-5">
+            <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
               <div class="text-sm font-semibold text-slate-950">Community snapshot</div>
               <div class="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <div class="rounded-[1.4rem] border border-slate-100 bg-white px-4 py-4">
@@ -128,14 +128,14 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               </div>
             </div>
 
-            <div class="glass-card rounded-[2rem] p-5">
+            <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
               <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                   <div class="text-sm font-semibold text-slate-950">Posts</div>
                   <div class="mt-1 text-xs leading-5 text-slate-500">A simpler list of updates instead of a dense profile grid.</div>
                 </div>
 
-                <div class="flex flex-wrap gap-2">
+                <div class="chip-scroll">
                   <button
                     type="button"
                     (click)="setPostFilter('all')"
@@ -183,14 +183,14 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             </div>
 
             <div *ngIf="profilePosts.length" class="space-y-4">
-              <article *ngFor="let post of profilePosts" class="glass-card rounded-[1.8rem] p-5">
+              <article *ngFor="let post of profilePosts" class="glass-card rounded-[1.6rem] p-4 sm:rounded-[1.8rem] sm:p-5">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div class="min-w-0">
                     <div class="flex flex-wrap items-center gap-2">
                       <span class="rounded-full bg-[var(--mt-accent-soft)] px-3 py-1 text-[11px] font-semibold text-[var(--mt-accent-strong)]">{{ post.mentalStateTag }}</span>
                       <span class="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-600">{{ post.shareType }}</span>
                     </div>
-                    <div class="mt-3 text-xl font-bold tracking-[-0.04em] text-slate-950">{{ post.title }}</div>
+                    <div class="mt-3 text-lg font-bold tracking-[-0.04em] text-slate-950 sm:text-xl">{{ post.title }}</div>
                     <div class="mt-2 text-sm leading-7 text-slate-600">{{ post.content }}</div>
                   </div>
                   <div class="shrink-0 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
@@ -220,7 +220,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
           <div class="space-y-6">
             <ng-container *ngIf="profile.isOwnProfile; else publicRail">
-              <div class="glass-card rounded-[2rem] p-5">
+              <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
                 <div class="text-sm font-semibold text-slate-950">Quick tracking links</div>
                 <div class="mt-4 space-y-3">
                   <a routerLink="/mood" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
@@ -242,8 +242,8 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                 </div>
               </div>
 
-              <form class="glass-card rounded-[2rem] p-5" (ngSubmit)="save()">
-                <div class="flex items-start justify-between gap-4">
+              <form class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5" (ngSubmit)="save()">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <div class="text-sm font-semibold text-slate-950">Profile basics</div>
                     <div class="mt-1 text-xs leading-5 text-slate-500">Keep your public profile short and easy to scan.</div>
@@ -318,14 +318,14 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             </ng-container>
 
             <ng-template #publicRail>
-              <div class="glass-card rounded-[2rem] p-5">
+              <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
                 <div class="text-sm font-semibold text-slate-950">About this member</div>
                 <div class="mt-4 rounded-[1.5rem] bg-slate-50/90 px-4 py-4 text-sm leading-7 text-slate-600">
                   {{ profile.profile.bio || "No extra profile note has been added yet." }}
                 </div>
               </div>
 
-              <div class="glass-card rounded-[2rem] p-5">
+              <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
                 <div class="text-sm font-semibold text-slate-950">Community settings</div>
                 <div class="mt-4 rounded-[1.5rem] bg-slate-50/90 px-4 py-4 text-sm text-slate-600">
                   {{ profile.canMessage ? "Direct messages are open for this account." : "This account is not accepting direct messages right now." }}

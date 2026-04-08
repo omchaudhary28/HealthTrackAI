@@ -7,14 +7,14 @@ import Chart from "chart.js/auto";
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="rounded-[2rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur">
-      <div class="mb-4 flex items-center justify-between">
+    <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-4 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-5">
+      <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div class="text-sm font-medium text-slate-500">{{ title }}</div>
-          <div class="text-lg font-semibold text-slate-800">{{ subtitle }}</div>
+          <div class="text-base font-semibold text-slate-800 sm:text-lg">{{ subtitle }}</div>
         </div>
       </div>
-      <div class="relative h-[280px]">
+      <div class="relative h-[220px] sm:h-[260px] lg:h-[280px]">
         <canvas #canvas class="h-full w-full" [class.hidden]="!hasTrendData"></canvas>
 
         <div *ngIf="!hasTrendData" class="flex h-full flex-col justify-between rounded-[1.5rem] border border-dashed border-slate-200 bg-slate-50/75 p-5">
@@ -87,6 +87,10 @@ export class ProgressChartComponent implements AfterViewInit, OnChanges, OnDestr
     }
 
     const { min, max } = buildScaleBounds(this.values);
+    const reducedAnimation =
+      typeof window !== "undefined" &&
+      (window.matchMedia("(max-width: 767px)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
     this.chart = new Chart(this.canvas.nativeElement, {
       type: "line",
       data: {
@@ -109,7 +113,7 @@ export class ProgressChartComponent implements AfterViewInit, OnChanges, OnDestr
       },
       options: {
         animation: {
-          duration: 420
+          duration: reducedAnimation ? 0 : 420
         },
         responsive: true,
         maintainAspectRatio: false,

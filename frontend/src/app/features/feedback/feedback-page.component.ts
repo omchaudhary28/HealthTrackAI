@@ -9,18 +9,18 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
   standalone: true,
   imports: [CommonModule, FormsModule, ScrollRevealDirective],
   template: `
-    <section appScrollReveal class="space-y-6">
-      <div class="glass-card rounded-[2.75rem] bg-[linear-gradient(150deg,rgba(255,255,255,0.78),rgba(255,255,255,0.52),rgba(219,39,119,0.08))] p-8">
+    <section appScrollReveal class="page-stack">
+      <div class="glass-card page-hero bg-[linear-gradient(150deg,rgba(255,255,255,0.78),rgba(255,255,255,0.52),rgba(219,39,119,0.08))]">
         <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">Feedback</div>
-        <h1 class="mt-3 text-3xl font-semibold text-slate-900 sm:text-4xl">Tell us what feels useful, missing, or rough.</h1>
-        <p class="mt-3 max-w-3xl text-base leading-8 text-slate-700">
+        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Tell us what feels useful, missing, or rough.</h1>
+        <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
           MindTrack is meant to feel calm, helpful, and safe. Use this space to suggest improvements, flag friction, or rate the overall experience.
         </p>
       </div>
 
       <div class="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-        <form class="glass-card rounded-[2rem] p-6" (ngSubmit)="submit()">
-          <div class="flex items-start justify-between gap-4">
+        <form class="glass-card rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6" (ngSubmit)="submit()">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <div class="text-sm font-semibold text-slate-900">Share product feedback</div>
               <div class="mt-1 text-xs leading-5 text-slate-500">Feature ideas, UX friction, performance notes, or community safety feedback.</div>
@@ -74,7 +74,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             {{ error }}
           </div>
 
-          <button type="submit" [disabled]="pending" class="btn-primary mt-6 rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60">
+          <button type="submit" [disabled]="pending" class="btn-primary mt-6 w-full rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60 sm:w-auto">
             {{ pending ? 'Sending...' : 'Send feedback' }}
           </button>
         </form>

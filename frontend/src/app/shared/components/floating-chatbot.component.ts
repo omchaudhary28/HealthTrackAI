@@ -17,7 +17,7 @@ interface ChatMessage {
   imports: [CommonModule, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="fixed bottom-5 right-5 z-40">
+    <div class="fixed bottom-[calc(var(--mt-safe-bottom)+0.75rem)] right-3 z-40 sm:bottom-5 sm:right-5">
       <button
         type="button"
         (click)="open = !open"
@@ -33,7 +33,7 @@ interface ChatMessage {
 
       <div
         id="mindtrack-chatbot-panel"
-        class="absolute bottom-16 right-0 w-[22rem] max-w-[calc(100vw-2.5rem)] origin-bottom-right overflow-hidden rounded-3xl border border-white/70 bg-white/95 shadow-2xl backdrop-blur transition-all duration-200"
+        class="fixed inset-x-3 bottom-[calc(var(--mt-safe-bottom)+5rem)] max-h-[min(70vh,38rem)] origin-bottom overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/95 shadow-2xl backdrop-blur transition-all duration-200 sm:absolute sm:inset-x-auto sm:bottom-16 sm:right-0 sm:w-[22rem] sm:max-h-none sm:max-w-[calc(100vw-2.5rem)] sm:origin-bottom-right sm:rounded-3xl"
         [class.pointer-events-none]="!open"
         [class.opacity-0]="!open"
         [class.translate-y-2]="!open"
@@ -56,7 +56,7 @@ interface ChatMessage {
             </button>
           </div>
 
-          <div class="mt-3 flex flex-wrap gap-2">
+          <div class="chip-scroll mt-3">
             <button
               *ngFor="let chip of quickChips"
               type="button"
@@ -68,7 +68,7 @@ interface ChatMessage {
           </div>
         </div>
 
-        <div #scrollViewport class="max-h-80 space-y-3 overflow-y-auto px-4 py-4 scroll-smooth">
+        <div #scrollViewport class="max-h-[min(36vh,18rem)] space-y-3 overflow-y-auto px-4 py-4 scroll-smooth sm:max-h-80">
           <div *ngFor="let item of messages; trackBy: trackByTimestamp" class="flex" [class.justify-end]="item.role === 'user'">
             <div
               class="message-in max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm transition-all duration-200"
@@ -97,7 +97,7 @@ interface ChatMessage {
             rows="2"
             placeholder="I feel overwhelmed..."
             class="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"></textarea>
-          <div class="mt-3 flex items-center gap-3">
+          <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
             <button
               type="button"
               (click)="send()"

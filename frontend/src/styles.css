@@ -7,6 +7,8 @@
   --mt-ink: #111827;
   --mt-ink-soft: #475569;
   --mt-line: rgba(15, 23, 42, 0.08);
+  --mt-bottom-nav-height: 5.25rem;
+  --mt-safe-bottom: calc(var(--mt-bottom-nav-height) + env(safe-area-inset-bottom, 0px));
 
   --soft-blue: #c2d7ef;
   --mint: #bfe8db;
@@ -35,6 +37,10 @@ body {
   min-height: 100%;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   font-family: "Manrope", "Nunito Sans", sans-serif;
@@ -44,6 +50,9 @@ body {
     radial-gradient(circle at top right, rgba(221, 42, 123, 0.14), transparent 22%),
     radial-gradient(circle at bottom center, rgba(14, 165, 233, 0.08), transparent 28%),
     #f7f6f3;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
@@ -58,12 +67,126 @@ a {
 
 input,
 textarea,
+select,
 button {
   font: inherit;
 }
 
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+svg,
+canvas {
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+span,
+button,
+a,
+label {
+  overflow-wrap: anywhere;
+}
+
+input,
+select,
+textarea {
+  max-width: 100%;
+}
+
 ::selection {
   background: rgba(221, 42, 123, 0.18);
+}
+
+.page-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.page-hero {
+  border-radius: 2rem;
+  padding: 1.25rem;
+}
+
+.surface-card {
+  border-radius: 1.75rem;
+  padding: 1rem;
+}
+
+.compact-card {
+  border-radius: 1.35rem;
+  padding: 1rem;
+}
+
+.cluster-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cluster-actions > * {
+  width: 100%;
+}
+
+.chip-scroll {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: none;
+}
+
+.chip-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.chip-scroll > * {
+  flex-shrink: 0;
+}
+
+.app-field,
+.app-textarea {
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: var(--mt-field-bg, rgba(248, 250, 252, 0.92));
+  color: var(--mt-ink);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.app-field-white {
+  --mt-field-bg: rgba(255, 255, 255, 0.98);
+}
+
+.app-field {
+  min-height: 3rem;
+  border-radius: 1.2rem;
+  padding: 0.8rem 1rem;
+}
+
+.app-textarea {
+  min-height: 7rem;
+  resize: vertical;
+  border-radius: 1.4rem;
+  padding: 0.95rem 1rem;
+  line-height: 1.65;
+}
+
+.app-field:focus,
+.app-textarea:focus {
+  outline: none;
+  border-color: rgba(221, 42, 123, 0.42);
+  box-shadow: 0 0 0 4px rgba(221, 42, 123, 0.12);
+  background: var(--mt-field-focus-bg, rgba(255, 255, 255, 0.98));
 }
 
 .reveal {
@@ -120,6 +243,10 @@ button {
 }
 
 .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.875rem;
   background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
   color: #ffffff;
   box-shadow: 0 22px 40px -26px rgba(129, 52, 175, 0.5);
@@ -136,6 +263,10 @@ button {
 }
 
 .btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.875rem;
   background: rgba(255, 255, 255, 0.96);
   color: var(--mt-ink);
   border: 1px solid rgba(15, 23, 42, 0.08);
@@ -275,5 +406,74 @@ button {
 @keyframes skeletonWave {
   100% {
     transform: translateX(100%);
+  }
+}
+
+@media (min-width: 640px) {
+  .page-stack {
+    gap: 1.5rem;
+  }
+
+  .page-hero {
+    border-radius: 2.5rem;
+    padding: 1.5rem;
+  }
+
+  .surface-card {
+    border-radius: 2rem;
+    padding: 1.25rem;
+  }
+
+  .compact-card {
+    border-radius: 1.6rem;
+  }
+
+  .cluster-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .cluster-actions > * {
+    width: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-hero {
+    padding: 2rem;
+  }
+
+  .surface-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .glass-card,
+  .theme-hero-card,
+  .theme-bento-card,
+  .theme-bento-card-soft,
+  .theme-bento-card-strong {
+    box-shadow: 0 24px 48px -38px rgba(15, 23, 42, 0.24);
+  }
+
+  .reveal {
+    transition-duration: 0.45s;
+  }
+
+  .typing-dot {
+    animation-duration: 1.15s;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .social-nav-item:hover,
+  .social-nav-item:focus-visible,
+  .btn-primary:hover,
+  .btn-outline:hover {
+    transform: none;
+    filter: none;
+    box-shadow: inherit;
   }
 }

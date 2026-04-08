@@ -9,10 +9,13 @@ import { StatCardComponent } from "../../shared/components/stat-card.component";
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, ProgressChartComponent, StatCardComponent],
   template: `
-    <section appScrollReveal class="space-y-6">
-      <div class="rounded-[2.5rem] border border-white/70 bg-white/80 p-7 shadow-[0_25px_70px_-45px_rgba(32,50,71,0.55)] backdrop-blur">
+    <section appScrollReveal class="page-stack">
+      <div class="glass-card theme-hero-card page-hero">
         <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">Progress tracker</div>
-        <h1 class="mt-2 text-3xl font-semibold text-slate-900">See how mood, stress, and routines move together over time.</h1>
+        <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">See how mood, stress, and routines move together over time.</h1>
+        <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
+          Your charts collapse into one clear mobile stack, while desktop keeps the side-by-side comparison view.
+        </p>
       </div>
       <div class="grid gap-4 md:grid-cols-3">
         <app-stat-card title="Weekly mood average" value="3.9 / 5" context="Up 0.6 from the first week"></app-stat-card>
