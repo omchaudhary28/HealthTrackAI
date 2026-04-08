@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig } from "@angular/core";
+import { APP_INITIALIZER, ApplicationConfig, ErrorHandler } from "@angular/core";
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { provideRouter, withInMemoryScrolling } from "@angular/router";
 import { provideAnimations } from "@angular/platform-browser/animations";
@@ -6,6 +6,7 @@ import { provideAnimations } from "@angular/platform-browser/animations";
 import { routes } from "./app.routes";
 import { API_BASE_URL } from "./core/api/api.config";
 import { authInterceptor } from "./core/api/auth.interceptor";
+import { AppErrorHandler } from "./core/errors/app-error-handler";
 import { AuthService } from "./core/services/auth.service";
 
 declare global {
@@ -54,6 +55,10 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimations(),
     provideHttpClient(withInterceptors([authInterceptor])),
+    {
+      provide: ErrorHandler,
+      useClass: AppErrorHandler
+    },
     {
       provide: API_BASE_URL,
       useValue: resolveApiBaseUrl()

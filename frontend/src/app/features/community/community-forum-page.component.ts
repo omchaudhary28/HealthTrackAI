@@ -14,6 +14,7 @@ import {
   DiscoverUser
 } from "../../core/services/community.service";
 import { RealtimeService } from "../../core/services/realtime.service";
+import { shareTextSafely } from "../../core/utils/share";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 @Component({
@@ -319,12 +320,7 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
   sharePost(post: CommunityPost): void {
     const text = `I'm improving my mental health with MindTrack AI \ud83d\udc99\n\n${post.title}`;
 
-    if (navigator.share) {
-      void navigator.share({ title: "MindTrack AI", text });
-      return;
-    }
-
-    void navigator.clipboard?.writeText(text);
+    void shareTextSafely("MindTrack AI", text);
   }
 
   loadConversations(): void {

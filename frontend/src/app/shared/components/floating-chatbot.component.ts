@@ -3,6 +3,7 @@ import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { FormsModule } from "@angular/forms";
 import { ChatbotService } from "../../core/services/chatbot.service";
 import { AuthService } from "../../core/services/auth.service";
+import { readStorageJson, writeStorageJson } from "../../core/utils/storage";
 
 interface ChatMessage {
   role: "assistant" | "user";
@@ -253,25 +254,16 @@ export class FloatingChatbotComponent implements AfterViewChecked {
   }
 
   private readSavedMessages(): ChatMessage[] {
-    try {
-      const raw = localStorage.getItem(this.storageKey);
-      if (!raw) {
-        return [this.buildInitialMessage()];
-      }
-
-      const parsed = JSON.parse(raw) as ChatMessage[];
-      if (!Array.isArray(parsed) || !parsed.length) {
-        return [this.buildInitialMessage()];
-      }
-
-      return parsed;
-    } catch {
+    const parsed = readStorageJson<ChatMessage[]>(this.storageKey);
+    if (!Array.isArray(parsed) || !parsed.length) {
       return [this.buildInitialMessage()];
     }
+
+    return parsed;
   }
 
   private persistMessages(): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.messages.slice(-14)));
+    writeStorageJson(this.storageKey, this.messages.slice(-14));
   }
 
   private buildInitialMessage(): ChatMessage {

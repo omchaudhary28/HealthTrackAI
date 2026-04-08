@@ -1,7 +1,15 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, inject, signal } from "@angular/core";
-import { Observable, catchError, finalize, firstValueFrom, map, of, tap, throwError } from "rxjs";
+import { Observable, catchError, finalize, firstValueFrom, map, of, tap, throwError, timeout } from "rxjs";
 import { API_BASE_URL } from "../api/api.config";
+import {
+  readStorageJson,
+  readStorageText,
+  removeStorageItem,
+  storageAvailable,
+  writeStorageJson,
+  writeStorageText
+} from "../utils/storage";
 
 export interface UserProfile {
   id: string;
@@ -51,6 +59,8 @@ interface JwtPayload {
   exp?: number;
 }
 
+const AUTH_INITIALIZER_TIMEOUT_MS = 8000;
+
 @Injectable({ providedIn: "root" })
 export class AuthService {
   private readonly storageKey = "mindtrack-session";
@@ -79,12 +89,14 @@ export class AuthService {
 
     this.initializationPromise = firstValueFrom(
       this.refreshMe().pipe(
+        timeout({ first: AUTH_INITIALIZER_TIMEOUT_MS }),
         map(() => undefined),
         catchError((error) => {
           if (isAuthorizationError(error)) {
             this.handleUnauthorized();
           }
 
+          logAuthWarning("Unable to restore the saved session during app startup.", error);
           return of(undefined);
         }),
         finalize(() => {
@@ -216,25 +228,25 @@ export class AuthService {
   }
 
   private persistSession(token: string, user: UserProfile | null): void {
-    if (!hasStorage()) {
+    if (!storageAvailable()) {
       return;
     }
 
-    localStorage.setItem(this.storageKey, JSON.stringify({ token, user }));
-    localStorage.setItem(this.tokenStorageKey, token);
+    writeStorageJson(this.storageKey, { token, user });
+    writeStorageText(this.tokenStorageKey, token);
 
     if (user) {
-      localStorage.setItem(this.userStorageKey, JSON.stringify(user));
+      writeStorageJson(this.userStorageKey, user);
     } else {
-      localStorage.removeItem(this.userStorageKey);
+      removeStorageItem(this.userStorageKey);
     }
   }
 
   private clearSession(): void {
-    if (hasStorage()) {
-      localStorage.removeItem(this.storageKey);
-      localStorage.removeItem(this.tokenStorageKey);
-      localStorage.removeItem(this.userStorageKey);
+    if (storageAvailable()) {
+      removeStorageItem(this.storageKey);
+      removeStorageItem(this.tokenStorageKey);
+      removeStorageItem(this.userStorageKey);
     }
 
     this.tokenSignal.set(null);
@@ -242,32 +254,12 @@ export class AuthService {
   }
 
   private readJson<T>(key: string): T | null {
-    const raw = this.readText(key);
-    if (!raw) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(raw) as T;
-    } catch {
-      if (hasStorage()) {
-        localStorage.removeItem(key);
-      }
-      return null;
-    }
+    return readStorageJson<T>(key);
   }
 
   private readText(key: string): string | null {
-    if (!hasStorage()) {
-      return null;
-    }
-
-    return localStorage.getItem(key);
+    return readStorageText(key);
   }
-}
-
-function hasStorage(): boolean {
-  return typeof localStorage !== "undefined";
 }
 
 function isAuthorizationError(error: unknown): error is { status: number } {
@@ -305,4 +297,8 @@ function decodeBase64Url(value: string): string {
   const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
   const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
   return atob(padded);
+}
+
+function logAuthWarning(message: string, error: unknown): void {
+  console.warn(`[MindTrack] ${message}`, error);
 }

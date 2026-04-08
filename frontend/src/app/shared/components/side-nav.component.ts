@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+﻿import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { IconComponent, MindtrackIconName } from "./icon.component";
@@ -11,22 +11,25 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
     <aside
       [class]="
         inDrawer
-          ? 'h-full w-72 max-w-[85vw] bg-white/90 p-5 shadow-2xl backdrop-blur'
-          : 'sticky top-24 hidden h-[calc(100vh-7rem)] w-64 shrink-0 rounded-3xl border border-white/60 bg-white/70 p-5 shadow-[0_24px_60px_-40px_rgba(32,50,71,0.45)] backdrop-blur lg:block'
+          ? 'flex h-full w-72 max-w-[85vw] flex-col bg-white/95 p-5 backdrop-blur-2xl'
+          : 'sticky top-24 hidden h-[calc(100vh-7rem)] w-[17.5rem] shrink-0 flex-col rounded-[2rem] border border-black/5 bg-white/82 p-4 shadow-[0_30px_60px_-40px_rgba(15,23,42,0.35)] backdrop-blur-2xl lg:flex'
       ">
-      <div class="mb-6 flex items-center justify-between">
-        <a routerLink="/" (click)="onNavigate()" class="flex items-center gap-3 rounded-2xl px-2 py-1 transition hover:bg-slate-50">
-          <div class="grid h-10 w-10 place-items-center rounded-2xl bg-slate-900 text-sm font-semibold text-white">MT</div>
-          <div>
-            <div class="text-sm font-semibold text-slate-900">MindTrack AI</div>
-            <div class="text-xs text-slate-500">Self-reflection, not diagnosis</div>
+      <div class="mb-6 flex items-center justify-between gap-3 px-2">
+        <a routerLink="/dashboard" (click)="onNavigate()" class="flex min-w-0 items-center gap-3 rounded-full transition hover:opacity-90">
+          <div class="grid h-12 w-12 place-items-center rounded-[1.35rem] bg-[linear-gradient(135deg,#f58529,#dd2a7b,#8134af)] text-sm font-black text-white shadow-[0_24px_44px_-28px_rgba(129,52,175,0.7)]">
+            MT
+          </div>
+          <div class="min-w-0">
+            <div class="truncate text-lg font-extrabold tracking-[-0.04em] text-slate-950">MindTrack</div>
+            <div class="truncate text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">social layout</div>
           </div>
         </a>
+
         <button
           *ngIf="inDrawer"
           type="button"
           (click)="requestClose.emit()"
-          class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"
           aria-label="Close navigation">
           <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 6L6 18"></path>
@@ -35,22 +38,48 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
         </button>
       </div>
 
-      <nav class="space-y-1">
-        <a
-          *ngFor="let item of items"
-          [routerLink]="item.link"
-          routerLinkActive="nav-link-active bg-slate-50 text-slate-900 shadow-sm"
-          [routerLinkActiveOptions]="{ exact: item.exact }"
-          (click)="onNavigate()"
-          class="nav-link group flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900">
-          <app-icon [name]="item.icon" className="h-5 w-5 text-slate-400 transition group-hover:text-slate-600"></app-icon>
-          <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
-          <span class="rounded-full bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-500">{{ item.shortcut }}</span>
-        </a>
-      </nav>
+      <div class="flex-1 overflow-y-auto px-1 pb-4">
+        <div class="space-y-1">
+          <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Browse</div>
+          <a
+            *ngFor="let item of primaryItems"
+            [routerLink]="item.link"
+            routerLinkActive="social-nav-active"
+            [routerLinkActiveOptions]="{ exact: item.exact }"
+            (click)="onNavigate()"
+            class="social-nav-item group flex items-center gap-3 rounded-[1.4rem] px-3 py-3 text-sm font-semibold text-slate-700">
+            <span class="grid h-11 w-11 place-items-center rounded-[1rem] border border-black/5 bg-white text-slate-600 transition group-hover:border-transparent group-hover:bg-slate-950 group-hover:text-white">
+              <app-icon [name]="item.icon" className="h-5 w-5"></app-icon>
+            </span>
+            <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
+            <span *ngIf="item.badge" class="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+              {{ item.badge }}
+            </span>
+          </a>
+        </div>
 
-      <div class="mt-6 rounded-3xl border border-slate-100 bg-slate-50 px-4 py-4 text-xs leading-6 text-slate-600">
-        Private by default. Your check-ins and journaling stay in your account. MindTrack AI is not a medical diagnostic system.
+        <div class="mt-6 space-y-1">
+          <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Track</div>
+          <a
+            *ngFor="let item of secondaryItems"
+            [routerLink]="item.link"
+            routerLinkActive="social-nav-active"
+            [routerLinkActiveOptions]="{ exact: item.exact }"
+            (click)="onNavigate()"
+            class="social-nav-item group flex items-center gap-3 rounded-[1.4rem] px-3 py-3 text-sm font-semibold text-slate-700">
+            <span class="grid h-11 w-11 place-items-center rounded-[1rem] border border-black/5 bg-white text-slate-600 transition group-hover:border-transparent group-hover:bg-slate-950 group-hover:text-white">
+              <app-icon [name]="item.icon" className="h-5 w-5"></app-icon>
+            </span>
+            <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="rounded-[1.75rem] border border-black/5 bg-[linear-gradient(145deg,rgba(255,255,255,0.96),rgba(248,250,252,0.88))] px-4 py-4 text-sm text-slate-600 shadow-[0_24px_44px_-36px_rgba(15,23,42,0.35)]">
+        <div class="text-sm font-semibold text-slate-900">Private by default</div>
+        <div class="mt-2 text-xs leading-6 text-slate-500">
+          Community, journaling, and direct messages stay tied to your account. The app still centers support, not diagnosis.
+        </div>
       </div>
     </aside>
   `
@@ -59,18 +88,21 @@ export class SideNavComponent {
   @Input() inDrawer = false;
   @Output() requestClose = new EventEmitter<void>();
 
-  items = [
-    { label: "Dashboard", link: "/dashboard", icon: "dashboard" as MindtrackIconName, shortcut: "01", exact: true },
-    { label: "Mental State", link: "/mental-state", icon: "insights" as MindtrackIconName, shortcut: "02", exact: true },
-    { label: "Test Center", link: "/tests", icon: "tests" as MindtrackIconName, shortcut: "03", exact: false },
-    { label: "Mood Calendar", link: "/mood", icon: "mood" as MindtrackIconName, shortcut: "04", exact: true },
-    { label: "Journal", link: "/journal", icon: "journal" as MindtrackIconName, shortcut: "05", exact: true },
-    { label: "Exercises", link: "/exercises", icon: "exercises" as MindtrackIconName, shortcut: "06", exact: true },
-    { label: "Community", link: "/community", icon: "community" as MindtrackIconName, shortcut: "07", exact: true },
-    { label: "Create Post", link: "/community/create", icon: "compose" as MindtrackIconName, shortcut: "08", exact: true },
-    { label: "Progress", link: "/progress", icon: "progress" as MindtrackIconName, shortcut: "09", exact: true },
-    { label: "Profile", link: "/profile", icon: "profile" as MindtrackIconName, shortcut: "10", exact: true },
-    { label: "Feedback", link: "/feedback", icon: "feedback" as MindtrackIconName, shortcut: "11", exact: true }
+  readonly primaryItems: Array<{ label: string; link: string; icon: MindtrackIconName; badge?: string; exact: boolean }> = [
+    { label: "Dashboard", link: "/dashboard", icon: "dashboard", exact: true },
+    { label: "Community", link: "/community", icon: "community", badge: "Live", exact: true },
+    { label: "Create Post", link: "/community/create", icon: "compose", badge: "New", exact: true },
+    { label: "Profile", link: "/profile", icon: "profile", exact: false },
+    { label: "Progress", link: "/progress", icon: "progress", exact: true }
+  ];
+
+  readonly secondaryItems: Array<{ label: string; link: string; icon: MindtrackIconName; exact: boolean }> = [
+    { label: "Journal", link: "/journal", icon: "journal", exact: true },
+    { label: "Mood Calendar", link: "/mood", icon: "mood", exact: true },
+    { label: "Mental State", link: "/mental-state", icon: "insights", exact: true },
+    { label: "Exercises", link: "/exercises", icon: "exercises", exact: true },
+    { label: "Test Center", link: "/tests", icon: "tests", exact: false },
+    { label: "Feedback", link: "/feedback", icon: "feedback", exact: true }
   ];
 
   onNavigate(): void {
@@ -79,3 +111,4 @@ export class SideNavComponent {
     }
   }
 }
+

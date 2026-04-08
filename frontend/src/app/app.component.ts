@@ -1,17 +1,19 @@
-import { CommonModule } from "@angular/common";
-import { Component, OnDestroy, computed, signal } from "@angular/core";
-import { Router, RouterOutlet, NavigationEnd } from "@angular/router";
+﻿import { CommonModule } from "@angular/common";
+import { AfterViewInit, Component, OnDestroy, computed, signal } from "@angular/core";
 import { animate, group, query, style, transition, trigger } from "@angular/animations";
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from "@angular/router";
 import { filter, Subscription } from "rxjs";
+import { AppRuntimeService } from "./core/services/app-runtime.service";
 import { ROUTE_THEMES, RouteTheme } from "./core/theme/route-themes";
 import { FloatingChatbotComponent } from "./shared/components/floating-chatbot.component";
+import { IconComponent, MindtrackIconName } from "./shared/components/icon.component";
 import { SideNavComponent } from "./shared/components/side-nav.component";
 import { TopNavComponent } from "./shared/components/top-nav.component";
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, FloatingChatbotComponent, SideNavComponent, TopNavComponent],
+  imports: [CommonModule, RouterLink, RouterOutlet, FloatingChatbotComponent, IconComponent, SideNavComponent, TopNavComponent],
   animations: [
     trigger("routeAnimations", [
       transition("* <=> *", [
@@ -40,12 +42,39 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         [class.opacity-0]="!showFadingTheme()"></div>
 
       <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div class="mindtrack-orb mindtrack-orb-a" [style.background]="activeTheme().orbA"></div>
-        <div class="mindtrack-orb mindtrack-orb-b" [style.background]="activeTheme().orbB"></div>
-        <div class="mindtrack-grid"></div>
+        <div class="mindtrack-ambient mindtrack-ambient-a" [style.background]="activeTheme().orbA"></div>
+        <div class="mindtrack-ambient mindtrack-ambient-b" [style.background]="activeTheme().orbB"></div>
+        <div class="mindtrack-grain"></div>
       </div>
 
       <app-top-nav [publicMode]="isPublicRoute()" (toggleNav)="navOpen = !navOpen"></app-top-nav>
+
+      <div *ngIf="runtimeIssue() as issue" class="mx-auto max-w-[1340px] px-4 pt-4 sm:px-6 lg:px-8">
+        <div
+          class="rounded-[1.7rem] border border-amber-200 bg-amber-50/95 px-5 py-4 text-sm text-amber-900 shadow-[0_22px_40px_-30px_rgba(146,64,14,0.35)]"
+          role="alert">
+          <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div class="min-w-0">
+              <div class="font-semibold">{{ issue.title }}</div>
+              <div class="mt-1 leading-6 text-amber-800">{{ issue.message }}</div>
+            </div>
+            <div class="flex shrink-0 gap-2">
+              <button
+                type="button"
+                (click)="clearRuntimeIssue()"
+                class="rounded-full border border-amber-300 bg-white px-4 py-2 font-semibold text-amber-900 transition hover:bg-amber-100">
+                Dismiss
+              </button>
+              <button
+                type="button"
+                (click)="reloadApp()"
+                class="rounded-full bg-amber-900 px-4 py-2 font-semibold text-white transition hover:bg-amber-950">
+                Reload
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div *ngIf="!isPublicRoute()" class="lg:hidden">
         <div
@@ -54,22 +83,32 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
           [class.opacity-0]="!navOpen"
           (click)="closeNav()"></div>
         <div
-          class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] border-r border-white/60 bg-white/88 shadow-2xl backdrop-blur-xl transition-transform duration-300"
+          class="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] border-r border-white/60 bg-white/92 shadow-2xl backdrop-blur-xl transition-transform duration-300"
           [class.-translate-x-full]="!navOpen">
           <app-side-nav [inDrawer]="true" (requestClose)="closeNav()"></app-side-nav>
         </div>
       </div>
 
-      <div class="mx-auto flex max-w-7xl gap-6 px-4 pb-10 pt-6 sm:px-6 lg:px-8">
+      <div class="mx-auto flex max-w-[1340px] gap-8 px-4 pb-24 pt-4 sm:px-6 lg:px-8 lg:pb-10 lg:pt-8">
         <app-side-nav *ngIf="!isPublicRoute()"></app-side-nav>
         <main class="min-w-0 flex-1">
-          <div class="relative">
-            <div class="mindtrack-panel-glow"></div>
-            <div [@routeAnimations]="prepareRoute(outlet)" class="relative">
-              <router-outlet #outlet="outlet"></router-outlet>
-            </div>
+          <div [@routeAnimations]="prepareRoute(outlet)" class="relative">
+            <router-outlet #outlet="outlet"></router-outlet>
           </div>
         </main>
+      </div>
+
+      <div *ngIf="!isPublicRoute()" class="mobile-tabbar lg:hidden">
+        <nav class="mx-auto grid max-w-2xl grid-cols-5 gap-2 px-4 py-3">
+          <a
+            *ngFor="let item of mobileNavItems"
+            [routerLink]="item.link"
+            class="mobile-tab-link"
+            [class.mobile-tab-link-active]="isActiveLink(item.link, item.exact)">
+            <app-icon [name]="item.icon" className="h-5 w-5"></app-icon>
+            <span>{{ item.label }}</span>
+          </a>
+        </nav>
       </div>
 
       <app-floating-chatbot></app-floating-chatbot>
@@ -82,56 +121,88 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         color: var(--mt-ink);
       }
 
-      .mindtrack-orb {
+      .mindtrack-ambient {
         position: absolute;
         border-radius: 999px;
-        filter: blur(70px);
+        filter: blur(90px);
         transition: background 0.7s ease, transform 0.7s ease, opacity 0.7s ease;
       }
 
-      .mindtrack-orb-a {
-        top: 4rem;
-        left: -8rem;
-        height: 22rem;
-        width: 22rem;
-        opacity: 0.95;
+      .mindtrack-ambient-a {
+        top: 2rem;
+        left: -6rem;
+        height: 26rem;
+        width: 26rem;
+        opacity: 0.72;
       }
 
-      .mindtrack-orb-b {
-        right: -6rem;
-        top: 18rem;
-        height: 20rem;
-        width: 20rem;
-        opacity: 0.9;
+      .mindtrack-ambient-b {
+        right: -8rem;
+        top: 14rem;
+        height: 24rem;
+        width: 24rem;
+        opacity: 0.62;
       }
 
-      .mindtrack-grid {
+      .mindtrack-grain {
         position: absolute;
         inset: 0;
-        background-image:
-          linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
-        background-size: 80px 80px;
-        mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 75%);
-        opacity: 0.28;
-      }
-
-      .mindtrack-panel-glow {
-        pointer-events: none;
-        position: absolute;
-        inset: 0;
-        border-radius: 2.2rem;
         background:
-          radial-gradient(circle at 15% 12%, var(--mt-accent-soft), transparent 26%),
-          radial-gradient(circle at 82% 8%, rgba(255, 255, 255, 0.48), transparent 30%);
-        opacity: 0.9;
-        z-index: -1;
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.72), transparent 30%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.4), transparent 28%),
+          linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+        background-size: auto, auto, 28px 28px, 28px 28px;
+        mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.2));
+        opacity: 0.55;
+      }
+
+      .mobile-tabbar {
+        position: fixed;
+        inset-inline: 0;
+        bottom: 0;
+        z-index: 35;
+        border-top: 1px solid rgba(15, 23, 42, 0.08);
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(24px);
+      }
+
+      .mobile-tab-link {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+        border-radius: 1.25rem;
+        padding: 0.65rem 0.35rem;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        color: rgba(71, 85, 105, 0.86);
+        transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      }
+
+      .mobile-tab-link-active {
+        background: rgba(255, 255, 255, 0.95);
+        color: var(--mt-accent-strong);
+        box-shadow: 0 18px 28px -24px rgba(15, 23, 42, 0.35);
+      }
+
+      .mobile-tab-link:active {
+        transform: translateY(1px);
       }
     `
   ]
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent implements AfterViewInit, OnDestroy {
   navOpen = false;
+  readonly mobileNavItems: Array<{ label: string; link: string; icon: MindtrackIconName; exact?: boolean }> = [
+    { label: "Home", link: "/dashboard", icon: "dashboard", exact: true },
+    { label: "Feed", link: "/community", icon: "community", exact: true },
+    { label: "Create", link: "/community/create", icon: "compose", exact: true },
+    { label: "Stats", link: "/progress", icon: "progress", exact: true },
+    { label: "Profile", link: "/profile", icon: "profile", exact: false }
+  ];
+  readonly runtimeIssue = this.runtimeService.runtimeIssue;
 
   readonly activeTheme = signal<RouteTheme>(ROUTE_THEMES.landing);
   readonly fadingTheme = signal<RouteTheme | null>(null);
@@ -150,7 +221,10 @@ export class AppComponent implements OnDestroy {
   private readonly routerSub: Subscription;
   private fadeTimer?: ReturnType<typeof setTimeout>;
 
-  constructor(private readonly router: Router) {
+  constructor(
+    private readonly router: Router,
+    private readonly runtimeService: AppRuntimeService
+  ) {
     this.applyTheme(this.resolveThemeKey());
 
     this.routerSub = this.router.events
@@ -159,6 +233,10 @@ export class AppComponent implements OnDestroy {
         this.closeNav();
         this.applyTheme(this.resolveThemeKey());
       });
+  }
+
+  ngAfterViewInit(): void {
+    this.runtimeService.markReady();
   }
 
   ngOnDestroy(): void {
@@ -183,6 +261,19 @@ export class AppComponent implements OnDestroy {
 
   closeNav(): void {
     this.navOpen = false;
+  }
+
+  clearRuntimeIssue(): void {
+    this.runtimeService.clearError();
+  }
+
+  reloadApp(): void {
+    this.runtimeService.reload();
+  }
+
+  isActiveLink(link: string, exact = false): boolean {
+    const currentUrl = this.router.url.split("?")[0];
+    return exact ? currentUrl === link : currentUrl === link || currentUrl.startsWith(`${link}/`);
   }
 
   private resolveThemeKey(): string {
@@ -218,3 +309,4 @@ export class AppComponent implements OnDestroy {
     }, 760);
   }
 }
+

@@ -1,0 +1,11 @@
+{
+  "name": "mindtrack-ai",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix frontend run start",
+    "frontend:install": "npm --prefix frontend install",
+    "deploy": "npm run build && firebase deploy",
+    "deploy:hosting": "npm run build && firebase deploy --only hosting"
+  }
+}
