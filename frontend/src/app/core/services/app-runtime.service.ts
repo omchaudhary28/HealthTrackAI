@@ -1,5 +1,5 @@
 import { Injectable, signal } from "@angular/core";
-import { markBootstrapReady, normalizeErrorMessage, showBootstrapError } from "../bootstrap/bootstrap-ui";
+import { markBootstrapReady, normalizeErrorMessage, shouldIgnoreRuntimeError, showBootstrapError } from "../bootstrap/bootstrap-ui";
 
 export interface RuntimeIssue {
   title: string;
@@ -24,6 +24,10 @@ export class AppRuntimeService {
   }
 
   reportError(error: unknown, context = "runtime"): void {
+    if (shouldIgnoreRuntimeError(error)) {
+      return;
+    }
+
     const message = normalizeErrorMessage(error);
 
     console.error(`[MindTrack] ${context}`, error);

@@ -51,9 +51,15 @@ export class RealtimeService implements OnDestroy {
 
     this.disconnect();
     this.activeToken = token;
-    this.socket = io(resolveSocketBaseUrl(this.apiBaseUrl), {
+    const socketBaseUrl = resolveSocketBaseUrl(this.apiBaseUrl);
+    const transports = resolveRealtimeTransports(socketBaseUrl);
+
+    this.socket = io(socketBaseUrl, {
       auth: { token },
-      transports: ["websocket", "polling"]
+      transports,
+      upgrade: transports.includes("websocket"),
+      reconnectionAttempts: 2,
+      timeout: 10000
     });
 
     this.socket.on("community:post-created", (payload: CommunityPost) => this.postCreatedSubject.next(payload));
@@ -112,4 +118,17 @@ function resolveSocketBaseUrl(apiBaseUrl: string): string {
   parsed.search = "";
   parsed.hash = "";
   return parsed.toString().replace(/\/$/, "");
+}
+
+function resolveRealtimeTransports(socketBaseUrl: string): Array<"websocket" | "polling"> {
+  if (typeof window === "undefined") {
+    return ["polling"];
+  }
+
+  const appOrigin = window.location.origin.replace(/\/$/, "");
+  if (socketBaseUrl === appOrigin) {
+    return ["websocket", "polling"];
+  }
+
+  return ["polling"];
 }

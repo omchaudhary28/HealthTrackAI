@@ -10,6 +10,11 @@ export function installBootstrapErrorListeners(): void {
   }
 
   window.addEventListener("error", (event) => {
+    if (shouldIgnoreRuntimeError(event.error || event.message)) {
+      event.preventDefault();
+      return;
+    }
+
     if (isAppReady()) {
       return;
     }
@@ -18,6 +23,11 @@ export function installBootstrapErrorListeners(): void {
   });
 
   window.addEventListener("unhandledrejection", (event) => {
+    if (shouldIgnoreRuntimeError(event.reason)) {
+      event.preventDefault();
+      return;
+    }
+
     if (isAppReady()) {
       return;
     }
@@ -48,6 +58,10 @@ export function markBootstrapReady(): void {
 }
 
 export function showBootstrapError(error: unknown, title = "Unable To Start MindTrack"): void {
+  if (shouldIgnoreRuntimeError(error)) {
+    return;
+  }
+
   if (typeof document === "undefined") {
     return;
   }
@@ -90,6 +104,23 @@ export function normalizeErrorMessage(error: unknown): string {
   }
 
   return extracted;
+}
+
+export function shouldIgnoreRuntimeError(error: unknown): boolean {
+  const message = extractErrorMessage(error);
+  if (!message) {
+    return false;
+  }
+
+  if (/play\(\) request was interrupted by a call to pause\(\)/i.test(message)) {
+    return true;
+  }
+
+  if (/AbortError/i.test(message) && /play\(\)/i.test(message)) {
+    return true;
+  }
+
+  return false;
 }
 
 function extractErrorMessage(error: unknown): string {

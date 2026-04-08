@@ -87,6 +87,15 @@ export class AuthService {
       return Promise.resolve();
     }
 
+    if (this.currentUser()) {
+      void this.refreshSession(true);
+      return Promise.resolve();
+    }
+
+    return this.refreshSession(false);
+  }
+
+  private refreshSession(silent: boolean): Promise<void> {
     this.initializationPromise = firstValueFrom(
       this.refreshMe().pipe(
         timeout({ first: AUTH_INITIALIZER_TIMEOUT_MS }),
@@ -94,9 +103,17 @@ export class AuthService {
         catchError((error) => {
           if (isAuthorizationError(error)) {
             this.handleUnauthorized();
+            return of(undefined);
           }
 
-          logAuthWarning("Unable to restore the saved session during app startup.", error);
+          if (!this.currentUser()) {
+            this.clearSession();
+          }
+
+          if (!silent && !isExpectedAuthStartupError(error)) {
+            logAuthWarning("Unable to restore the saved session during app startup.", error);
+          }
+
           return of(undefined);
         }),
         finalize(() => {
@@ -114,7 +131,7 @@ export class AuthService {
       return null;
     }
 
-    if (isTokenExpired(token)) {
+    if (!isTokenStructurallyValid(token) || isTokenExpired(token)) {
       this.clearSession();
       return null;
     }
@@ -217,7 +234,7 @@ export class AuthService {
       return;
     }
 
-    if (isTokenExpired(storedToken)) {
+    if (!isTokenStructurallyValid(storedToken) || isTokenExpired(storedToken)) {
       this.clearSession();
       return;
     }
@@ -264,6 +281,28 @@ export class AuthService {
 
 function isAuthorizationError(error: unknown): error is { status: number } {
   return Boolean(error && typeof error === "object" && "status" in error && Number((error as { status: number }).status) === 401);
+}
+
+function isExpectedAuthStartupError(error: unknown): boolean {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+
+  const candidate = error as { status?: number; name?: string; message?: string };
+  if (candidate.status === 0) {
+    return true;
+  }
+
+  if (candidate.name === "TimeoutError" || candidate.name === "AbortError") {
+    return true;
+  }
+
+  return /timeout|network error|failed to fetch|abort/i.test(String(candidate.message || ""));
+}
+
+function isTokenStructurallyValid(token: string): boolean {
+  const parts = String(token || "").split(".");
+  return parts.length === 3 && Boolean(parseTokenPayload(token));
 }
 
 function isTokenExpired(token: string): boolean {
