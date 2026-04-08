@@ -99,7 +99,7 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
           </label>
           <label class="block text-sm font-medium text-slate-600 sm:col-span-2">
             Password
-            <input [(ngModel)]="form.password" name="password" type="password" autocomplete="current-password" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
+            <input [(ngModel)]="form.password" name="password" type="password" [attr.autocomplete]="mode === 'signup' ? 'new-password' : 'current-password'" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100" />
           </label>
           <label *ngIf="mode === 'signup'" class="block text-sm font-medium text-slate-600">
             Sleep habits
@@ -185,6 +185,13 @@ export class AuthPageComponent {
 
   submit(): void {
     this.error = "";
+
+    const validationError = this.validateForm();
+    if (validationError) {
+      this.error = validationError;
+      return;
+    }
+
     this.pending = true;
 
     const nextUrl = this.route.snapshot.queryParamMap.get("next") || "/dashboard";
@@ -230,6 +237,29 @@ export class AuthPageComponent {
       }
     });
   }
+
+  private validateForm(): string {
+    const email = this.form.email.trim().toLowerCase();
+    if (!isValidEmail(email)) {
+      return "Enter a valid email address.";
+    }
+
+    if (!this.form.password) {
+      return "Enter your password.";
+    }
+
+    if (this.mode === "signup") {
+      if (!this.form.name.trim()) {
+        return "Enter your name to create an account.";
+      }
+
+      if (this.form.password.length < 8) {
+        return "Use at least 8 characters for your password.";
+      }
+    }
+
+    return "";
+  }
 }
 
 function splitList(value: string): string[] {
@@ -242,4 +272,8 @@ function splitList(value: string): string[] {
     .split(/[,;\n]/g)
     .map((item) => item.trim())
     .filter(Boolean);
+}
+
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }

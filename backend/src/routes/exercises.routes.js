@@ -9,7 +9,7 @@ import { asyncHandler } from "../utils/async-handler.js";
 
 const router = Router();
 
-router.get("/", asyncHandler(listExercises));
+router.get("/", requireAuth, asyncHandler(listExercises));
 router.get("/recommended", requireAuth, asyncHandler(listRecommendedExercises));
 router.post("/completions", requireAuth, asyncHandler(recordExerciseCompletion));
 

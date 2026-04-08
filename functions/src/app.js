@@ -13,12 +13,21 @@ import forumRoutes from "./routes/forum.routes.js";
 import journalRoutes from "./routes/journal.routes.js";
 import moodRoutes from "./routes/mood.routes.js";
 import testsRoutes from "./routes/tests.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import { errorHandler } from "./middleware/error-handler.middleware.js";
 
 export const app = express();
+const corsOptions = {
+  origin: true,
+  allowedHeaders: ["Authorization", "Content-Type"],
+  methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+  maxAge: 86400
+};
 
+app.disable("x-powered-by");
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("dev"));
 
@@ -32,6 +41,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/tests", testsRoutes);
 app.use("/api/v1/assessment", assessmentRoutes);
 app.use("/api/v1/exercises", exercisesRoutes);

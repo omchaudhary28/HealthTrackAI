@@ -3,8 +3,7 @@ import { env } from "../config/env.js";
 import { HttpError } from "../utils/http-error.js";
 
 export function requireAuth(req, _res, next) {
-  const authHeader = req.headers.authorization || "";
-  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  const token = extractBearerToken(req.headers.authorization);
 
   if (!token) {
     return next(new HttpError(401, "Authentication required"));
@@ -13,8 +12,8 @@ export function requireAuth(req, _res, next) {
   try {
     req.user = jwt.verify(token, env.jwtSecret);
     return next();
-  } catch {
-    return next(new HttpError(401, "Invalid or expired token"));
+  } catch (error) {
+    return next(new HttpError(401, error?.name === "TokenExpiredError" ? "Token expired" : "Invalid token"));
   }
 }
 
@@ -24,4 +23,9 @@ export function requireAdmin(req, _res, next) {
   }
 
   return next();
+}
+
+function extractBearerToken(value) {
+  const [scheme, token] = String(value || "").trim().split(/\s+/);
+  return /^Bearer$/i.test(scheme || "") && token ? token : "";
 }
