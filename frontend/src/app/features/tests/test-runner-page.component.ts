@@ -127,7 +127,7 @@ const CHOICES = [
             </div>
 
             <div class="mt-4 text-lg font-semibold text-slate-900 sm:text-xl">{{ currentQuestion()?.text }}</div>
-            <div class="mt-5 grid gap-3 sm:grid-cols-5">
+            <div class="mt-5 grid gap-3 min-[430px]:grid-cols-2 lg:grid-cols-5">
               <button
                 *ngFor="let choice of choices"
                 type="button"

@@ -71,7 +71,7 @@ interface ChatMessage {
         <div #scrollViewport class="max-h-[min(36vh,18rem)] space-y-3 overflow-y-auto px-4 py-4 scroll-smooth sm:max-h-80">
           <div *ngFor="let item of messages; trackBy: trackByTimestamp" class="flex" [class.justify-end]="item.role === 'user'">
             <div
-              class="message-in max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm transition-all duration-200"
+              class="message-in max-w-[92%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm transition-all duration-200 sm:max-w-[85%]"
               [class.bg-blue-500]="item.role === 'user'"
               [class.text-white]="item.role === 'user'"
               [class.bg-gray-100]="item.role === 'assistant'"

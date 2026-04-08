@@ -40,7 +40,7 @@ interface PatternInsightCard {
               <div class="min-w-0">
                 <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Dashboard</div>
                 <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">
-                  Welcome back, <span class="whitespace-nowrap">{{ displayName() }}</span>.
+                  Welcome back, <span class="break-words">{{ displayName() }}</span>.
                 </h1>
                 <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
                   Your AI summary blends mood logs, journals, assessments, and completed exercises into one support snapshot.

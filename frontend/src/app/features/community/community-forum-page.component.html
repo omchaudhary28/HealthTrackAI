@@ -329,7 +329,7 @@
             <div *ngIf="chatLoading" class="text-sm text-slate-500">Loading messages...</div>
             <div *ngFor="let message of messages; trackBy: trackById" class="flex" [class.justify-end]="message.isOwn">
               <div
-                class="max-w-[85%] rounded-[1.2rem] px-4 py-3 text-sm leading-6 shadow-sm"
+                class="max-w-[92%] rounded-[1.2rem] px-4 py-3 text-sm leading-6 shadow-sm sm:max-w-[85%]"
                 [class.bg-slate-950]="message.isOwn"
                 [class.text-white]="message.isOwn"
                 [class.bg-slate-100]="!message.isOwn"

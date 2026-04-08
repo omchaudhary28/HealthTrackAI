@@ -36,7 +36,7 @@ import { TestSummary, TestsService } from "../../core/services/tests.service";
         <div class="mt-4 rounded-3xl border border-slate-100 bg-slate-50 p-5">
           <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Question 4 of 12</div>
           <div class="mt-3 text-lg font-semibold text-slate-900">Small uncertainties make me feel restless.</div>
-          <div class="mt-4 grid gap-3 sm:grid-cols-5">
+          <div class="mt-4 grid gap-3 min-[430px]:grid-cols-2 sm:grid-cols-5">
             <button *ngFor="let choice of choices" type="button" class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-600">{{ choice }}</button>
           </div>
         </div>

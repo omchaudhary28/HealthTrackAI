@@ -17,7 +17,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
   animations: [
     trigger("routeAnimations", [
       transition("* <=> *", [
-        query(":enter, :leave", style({ position: "absolute", width: "100%" }), { optional: true }),
+        query(":enter, :leave", style({ position: "absolute", inset: 0, width: "100%" }), { optional: true }),
         query(":enter", style({ opacity: 0, transform: "translateY(12px)" }), { optional: true }),
         query(":leave", style({ opacity: 1, transform: "translateY(0)" }), { optional: true }),
         group([
@@ -32,7 +32,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
     ])
   ],
   template: `
-    <div class="mindtrack-shell min-h-screen" [ngStyle]="themeStyles()">
+    <div class="mindtrack-shell min-h-screen w-full overflow-x-clip" [ngStyle]="themeStyles()">
       <div class="pointer-events-none fixed inset-0 -z-30 transition-opacity duration-700" [style.background]="activeTheme().shellGradient"></div>
       <div
         *ngIf="fadingTheme()"
@@ -49,7 +49,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
 
       <app-top-nav [publicMode]="isPublicRoute()" (toggleNav)="navOpen = !navOpen"></app-top-nav>
 
-      <div *ngIf="runtimeIssue() as issue" class="mx-auto max-w-[1340px] px-4 pt-4 sm:px-6 lg:px-8">
+      <div *ngIf="runtimeIssue() as issue" class="mx-auto w-full max-w-[var(--mt-shell-max)] px-[var(--mt-shell-gutter)] pt-4">
         <div
           class="rounded-[1.7rem] border border-amber-200 bg-amber-50/95 px-5 py-4 text-sm text-amber-900 shadow-[0_22px_40px_-30px_rgba(146,64,14,0.35)]"
           role="alert">
@@ -83,23 +83,23 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
           [class.opacity-0]="!navOpen"
           (click)="closeNav()"></div>
         <div
-          class="fixed inset-y-0 left-0 z-50 w-[min(20rem,88vw)] border-r border-white/60 bg-white/92 shadow-2xl backdrop-blur-xl transition-transform duration-300"
+          class="fixed inset-y-0 left-0 z-50 w-[min(18rem,84vw)] border-r border-white/60 bg-white/92 shadow-2xl backdrop-blur-xl transition-transform duration-300"
           [class.-translate-x-full]="!navOpen">
           <app-side-nav [inDrawer]="true" (requestClose)="closeNav()"></app-side-nav>
         </div>
       </div>
 
-      <div class="mx-auto flex max-w-[1340px] gap-4 px-3 pb-[calc(var(--mt-safe-bottom)+1rem)] pt-3 sm:px-6 sm:pt-4 lg:gap-8 lg:px-8 lg:pb-10 lg:pt-8">
+      <div class="mx-auto flex w-full max-w-[var(--mt-shell-max)] min-w-0 gap-3 px-[var(--mt-shell-gutter)] pb-[calc(var(--mt-safe-bottom)+1rem)] pt-3 sm:gap-4 sm:pt-4 lg:gap-8 lg:pb-10 lg:pt-8">
         <app-side-nav *ngIf="!isPublicRoute()"></app-side-nav>
-        <main class="min-w-0 flex-1 overflow-hidden">
-          <div [@routeAnimations]="prepareRoute(outlet)" class="relative">
+        <main class="min-w-0 flex-1 overflow-x-clip">
+          <div [@routeAnimations]="prepareRoute(outlet)" class="route-stage relative w-full min-w-0 overflow-x-clip">
             <router-outlet #outlet="outlet"></router-outlet>
           </div>
         </main>
       </div>
 
       <div *ngIf="!isPublicRoute()" class="mobile-tabbar lg:hidden">
-        <nav class="mx-auto grid max-w-2xl grid-cols-5 gap-1 px-2 pb-[calc(0.7rem+env(safe-area-inset-bottom,0px))] pt-2 sm:gap-2 sm:px-4 sm:pt-3">
+        <nav class="mx-auto grid w-full max-w-xl grid-cols-5 gap-1.5 px-2.5 pb-[calc(0.7rem+env(safe-area-inset-bottom,0px))] pt-2 sm:gap-2 sm:px-4 sm:pt-3">
           <a
             *ngFor="let item of mobileNavItems"
             [routerLink]="item.link"
@@ -118,6 +118,8 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
     `
       .mindtrack-shell {
         position: relative;
+        width: 100%;
+        overflow-x: clip;
         color: var(--mt-ink);
         isolation: isolate;
       }
@@ -176,6 +178,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         inset-inline: 0;
         bottom: 0;
         z-index: 35;
+        padding-inline: max(0.4rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
         border-top: 1px solid rgba(15, 23, 42, 0.08);
         background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.96));
         backdrop-filter: blur(24px);
@@ -187,15 +190,24 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        min-height: 3.5rem;
-        gap: 0.3rem;
+        min-height: 3.8rem;
+        gap: 0.22rem;
         border-radius: 1.1rem;
-        padding: 0.55rem 0.25rem;
-        font-size: 0.68rem;
+        padding: 0.55rem 0.2rem;
+        font-size: 0.65rem;
+        line-height: 1.1;
         font-weight: 700;
-        letter-spacing: 0.03em;
+        letter-spacing: 0.01em;
         color: rgba(71, 85, 105, 0.86);
         transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      }
+
+      .mobile-tab-link span {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .mobile-tab-link-active {
@@ -208,11 +220,29 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         transform: translateY(1px);
       }
 
+      .route-stage {
+        min-width: 0;
+      }
+
+      .mindtrack-shell :where(main, section, article, form, aside) {
+        min-width: 0;
+      }
+
+      @media (max-width: 420px) {
+        .mobile-tab-link {
+          min-height: 3.65rem;
+          border-radius: 1rem;
+          padding-inline: 0.12rem;
+          font-size: 0.61rem;
+        }
+      }
+
       @media (min-width: 640px) {
         .mobile-tab-link {
           min-height: 3.8rem;
           border-radius: 1.25rem;
           padding: 0.65rem 0.35rem;
+          font-size: 0.68rem;
         }
       }
     `
@@ -225,7 +255,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     { label: "Mood", link: "/mood", icon: "mood", exact: true },
     { label: "Journal", link: "/journal", icon: "journal", exact: true },
     { label: "Stats", link: "/progress", icon: "progress", exact: true },
-    { label: "Community", link: "/community", icon: "community", exact: true }
+    { label: "Feed", link: "/community", icon: "community", exact: true }
   ];
   readonly runtimeIssue = this.runtimeService.runtimeIssue;
 

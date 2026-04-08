@@ -1,6 +1,7 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { AuthService } from "../../core/services/auth.service";
 import { IconComponent, MindtrackIconName } from "./icon.component";
 
 @Component({
@@ -11,7 +12,7 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
     <aside
       [class]="
         inDrawer
-          ? 'flex h-full w-72 max-w-[85vw] flex-col bg-white/95 p-5 backdrop-blur-2xl'
+          ? 'flex h-full w-[min(18rem,84vw)] max-w-[84vw] flex-col bg-white/95 p-5 backdrop-blur-2xl'
           : 'sticky top-24 hidden h-[calc(100vh-7rem)] w-[17.5rem] shrink-0 flex-col rounded-[2rem] border border-black/5 bg-white/82 p-4 shadow-[0_30px_60px_-40px_rgba(15,23,42,0.35)] backdrop-blur-2xl lg:flex'
       ">
       <div class="mb-6 flex items-center justify-between gap-3 px-2">
@@ -81,6 +82,25 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
           Start with mood, journal, progress, or exercises. Community is here when support helps, not as the main job of the app.
         </div>
       </div>
+
+      <div *ngIf="isAuthenticated()" class="mt-4 rounded-[1.75rem] border border-black/5 bg-white/88 px-4 py-4 shadow-[0_24px_44px_-36px_rgba(15,23,42,0.2)]">
+        <div class="flex items-center gap-3">
+          <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-slate-950 text-xs font-bold text-white">{{ initials() }}</span>
+          <div class="min-w-0">
+            <div class="truncate text-sm font-semibold text-slate-950">{{ displayName() }}</div>
+            <div class="truncate text-xs text-slate-500">{{ email() }}</div>
+          </div>
+        </div>
+
+        <div class="mt-4 grid gap-2">
+          <a routerLink="/profile" (click)="onNavigate()" class="btn-outline rounded-full px-4 py-2.5 text-center text-xs font-semibold">
+            Profile
+          </a>
+          <button type="button" (click)="logout()" class="btn-outline rounded-full px-4 py-2.5 text-xs font-semibold">
+            Sign out
+          </button>
+        </div>
+      </div>
     </aside>
   `
 })
@@ -105,10 +125,42 @@ export class SideNavComponent {
     { label: "Feedback", link: "/feedback", icon: "feedback", exact: true }
   ];
 
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {}
+
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  displayName(): string {
+    return this.authService.currentUser()?.name || "Account";
+  }
+
+  email(): string {
+    return this.authService.currentUser()?.email || "Signed in";
+  }
+
+  initials(): string {
+    const name = this.displayName();
+    return name
+      .split(/\s+/g)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() || "")
+      .join("") || "AC";
+  }
+
   onNavigate(): void {
     if (this.inDrawer) {
       this.requestClose.emit();
     }
   }
-}
 
+  logout(): void {
+    this.authService.logout();
+    this.onNavigate();
+    this.router.navigateByUrl("/");
+  }
+}
