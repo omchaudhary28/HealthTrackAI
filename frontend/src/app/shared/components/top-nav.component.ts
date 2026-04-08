@@ -7,6 +7,43 @@ import { AuthService } from "../../core/services/auth.service";
   selector: "app-top-nav",
   standalone: true,
   imports: [CommonModule, RouterLink],
+  styles: [
+    `
+      .nav-tablet-up {
+        display: none;
+      }
+
+      .nav-desktop-wide {
+        display: none;
+      }
+
+      .nav-name {
+        display: none;
+        max-width: 10rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      @media (min-width: 640px) {
+        .nav-name {
+          display: inline;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .nav-tablet-up {
+          display: inline-flex;
+        }
+      }
+
+      @media (min-width: 1280px) {
+        .nav-desktop-wide {
+          display: inline-flex;
+        }
+      }
+    `
+  ],
   template: `
     <header class="sticky top-0 z-30 border-b border-black/5 bg-white/84 backdrop-blur-2xl">
       <div class="mx-auto flex w-full max-w-[var(--mt-shell-max)] items-center justify-between gap-2 px-[var(--mt-shell-gutter)] py-2.5 sm:gap-3 sm:py-3">
@@ -50,7 +87,7 @@ import { AuthService } from "../../core/services/auth.service";
 
         <div class="ml-2 flex shrink-0 items-center gap-2 sm:gap-3">
           <ng-container *ngIf="publicMode; else signedInActions">
-            <a routerLink="/about" class="btn-outline hidden rounded-full px-4 py-2.5 text-sm font-semibold md:inline-flex">About</a>
+            <a routerLink="/about" class="btn-outline nav-tablet-up rounded-full px-4 py-2.5 text-sm font-semibold">About</a>
             <a
               *ngIf="!isAuthenticated()"
               routerLink="/auth"
@@ -66,10 +103,10 @@ import { AuthService } from "../../core/services/auth.service";
           </ng-container>
 
           <ng-template #signedInActions>
-            <a routerLink="/mood" class="btn-outline hidden rounded-full px-4 py-2.5 text-sm font-semibold md:inline-flex">
+            <a routerLink="/mood" class="btn-outline nav-tablet-up rounded-full px-4 py-2.5 text-sm font-semibold">
               Log mood
             </a>
-            <a routerLink="/community/create" class="btn-outline hidden rounded-full px-4 py-2.5 text-sm font-semibold xl:inline-flex">
+            <a routerLink="/community/create" class="btn-outline nav-desktop-wide rounded-full px-4 py-2.5 text-sm font-semibold">
               Create post
             </a>
             <a
@@ -77,9 +114,9 @@ import { AuthService } from "../../core/services/auth.service";
               [attr.aria-label]="'Open profile for ' + displayName()"
               class="inline-flex h-11 min-w-[2.75rem] items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-2 text-sm font-semibold text-slate-800 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.35)] transition hover:border-slate-300 sm:min-w-0 sm:justify-start sm:pr-4">
               <span class="grid h-8 w-8 place-items-center rounded-full bg-slate-950 text-[11px] font-bold text-white">{{ initials() }}</span>
-              <span class="hidden max-w-[10rem] truncate sm:inline">{{ displayName() }}</span>
+              <span class="nav-name">{{ displayName() }}</span>
             </a>
-            <button type="button" (click)="logout()" class="btn-outline hidden rounded-full px-3 py-2.5 text-sm font-semibold md:inline-flex sm:px-4">
+            <button type="button" (click)="logout()" class="btn-outline nav-tablet-up rounded-full px-3 py-2.5 text-sm font-semibold sm:px-4">
               Sign out
             </button>
           </ng-template>
