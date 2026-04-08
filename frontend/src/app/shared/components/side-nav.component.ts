@@ -76,13 +76,6 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
         </div>
       </div>
 
-      <div class="rounded-[1.75rem] border border-black/5 bg-[linear-gradient(145deg,rgba(255,255,255,0.96),rgba(248,250,252,0.88))] px-4 py-4 text-sm text-slate-600 shadow-[0_24px_44px_-36px_rgba(15,23,42,0.35)]">
-        <div class="text-sm font-semibold text-slate-900">Tracking comes first</div>
-        <div class="mt-2 text-xs leading-6 text-slate-500">
-          Start with mood, journal, progress, or exercises. Community is here when support helps, not as the main job of the app.
-        </div>
-      </div>
-
       <div *ngIf="isAuthenticated()" class="mt-4 rounded-[1.75rem] border border-black/5 bg-white/88 px-4 py-4 shadow-[0_24px_44px_-36px_rgba(15,23,42,0.2)]">
         <div class="flex items-center gap-3">
           <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-slate-950 text-xs font-bold text-white">{{ initials() }}</span>
