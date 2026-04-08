@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
+import { createSocketCorsOptions } from "../config/cors.js";
 import { env } from "../config/env.js";
 
 let io;
@@ -7,10 +8,7 @@ const onlineUsers = new Map();
 
 export function initRealtime(server) {
   io = new Server(server, {
-    cors: {
-      origin: "*",
-      methods: ["GET", "POST"]
-    }
+    cors: createSocketCorsOptions()
   });
 
   io.use((socket, next) => {

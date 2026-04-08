@@ -15,47 +15,72 @@ import journalRoutes from "./routes/journal.routes.js";
 import moodRoutes from "./routes/mood.routes.js";
 import testsRoutes from "./routes/tests.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import { createCorsOptions, getAllowedOrigins } from "./config/cors.js";
+import { getDatabaseState, isDatabaseReady } from "./config/db.js";
 import { errorHandler } from "./middleware/error-handler.middleware.js";
 
 export const app = express();
-const corsOptions = {
-  origin: true,
-  allowedHeaders: ["Authorization", "Content-Type"],
-  methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-  maxAge: 86400
-};
+const corsOptions = createCorsOptions();
 
 app.disable("x-powered-by");
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false
+  })
+);
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 app.use(express.json({ limit: "1mb" }));
-app.use(morgan("dev"));
-
-/* ---------------- ROOT ROUTE (added fix) ---------------- */
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("combined"));
 
 app.get("/", (_req, res) => {
   res.json({
     status: "ok",
     service: "mindtrack-ai-api",
-    message: "MindTrack AI API is running 🚀",
+    message: "MindTrack AI API is running",
+    database: getDatabaseState(),
+    allowedOrigins: getAllowedOrigins(),
     disclaimer:
       "MindTrack AI is a wellness support platform and not a medical diagnostic system."
   });
 });
-
-/* ---------------- HEALTH CHECK ---------------- */
 
 app.get("/health", (_req, res) => {
-  res.json({
+  res.status(200).json({
     status: "ok",
     service: "mindtrack-ai-api",
+    database: getDatabaseState(),
+    uptimeSeconds: Math.round(process.uptime()),
     disclaimer:
       "MindTrack AI is a wellness support platform and not a medical diagnostic system."
   });
 });
 
-/* ---------------- API ROUTES ---------------- */
+app.get("/ready", (_req, res) => {
+  const ready = isDatabaseReady();
+  res.status(ready ? 200 : 503).json({
+    status: ready ? "ready" : "starting",
+    service: "mindtrack-ai-api",
+    database: getDatabaseState()
+  });
+});
+
+app.use("/api", (req, res, next) => {
+  if (req.method === "OPTIONS") {
+    return next();
+  }
+
+  if (isDatabaseReady()) {
+    return next();
+  }
+
+  return res.status(503).json({
+    error: "API is starting up. Please retry in a few seconds.",
+    service: "mindtrack-ai-api",
+    database: getDatabaseState()
+  });
+});
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
@@ -72,9 +97,6 @@ app.use("/api/v1/chat", chatRoutes);
 app.use("/api/v1/chatbot", chatbotRoutes);
 app.use("/api/v1/admin", adminRoutes);
 
-/* legacy route */
 app.use("/api/chat", chatRoutes);
-
-/* ---------------- ERROR HANDLER ---------------- */
 
 app.use(errorHandler);
