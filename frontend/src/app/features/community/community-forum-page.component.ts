@@ -25,9 +25,9 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 })
 export class CommunityForumPageComponent implements OnInit, OnDestroy {
   readonly scopes: Array<{ key: CommunityScope; label: string }> = [
-    { key: "global", label: "Global feed" },
+    { key: "global", label: "For you" },
     { key: "following", label: "Following" },
-    { key: "similar", label: "Similar minds" },
+    { key: "similar", label: "Similar" },
     { key: "mine", label: "My posts" }
   ];
   readonly shareFilters: Array<{ key: CommunityShareType; label: string }> = [

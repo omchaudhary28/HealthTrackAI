@@ -197,10 +197,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   navOpen = false;
   readonly mobileNavItems: Array<{ label: string; link: string; icon: MindtrackIconName; exact?: boolean }> = [
     { label: "Home", link: "/dashboard", icon: "dashboard", exact: true },
-    { label: "Feed", link: "/community", icon: "community", exact: true },
-    { label: "Create", link: "/community/create", icon: "compose", exact: true },
+    { label: "Mood", link: "/mood", icon: "mood", exact: true },
+    { label: "Journal", link: "/journal", icon: "journal", exact: true },
     { label: "Stats", link: "/progress", icon: "progress", exact: true },
-    { label: "Profile", link: "/profile", icon: "profile", exact: false }
+    { label: "Community", link: "/community", icon: "community", exact: true }
   ];
   readonly runtimeIssue = this.runtimeService.runtimeIssue;
 

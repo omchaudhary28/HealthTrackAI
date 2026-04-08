@@ -21,7 +21,7 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
           </div>
           <div class="min-w-0">
             <div class="truncate text-lg font-extrabold tracking-[-0.04em] text-slate-950">MindTrack</div>
-            <div class="truncate text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">social layout</div>
+            <div class="truncate text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">track first</div>
           </div>
         </a>
 
@@ -40,7 +40,7 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
 
       <div class="flex-1 overflow-y-auto px-1 pb-4">
         <div class="space-y-1">
-          <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Browse</div>
+          <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Track first</div>
           <a
             *ngFor="let item of primaryItems"
             [routerLink]="item.link"
@@ -59,7 +59,7 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
         </div>
 
         <div class="mt-6 space-y-1">
-          <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Track</div>
+          <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Connect</div>
           <a
             *ngFor="let item of secondaryItems"
             [routerLink]="item.link"
@@ -76,9 +76,9 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
       </div>
 
       <div class="rounded-[1.75rem] border border-black/5 bg-[linear-gradient(145deg,rgba(255,255,255,0.96),rgba(248,250,252,0.88))] px-4 py-4 text-sm text-slate-600 shadow-[0_24px_44px_-36px_rgba(15,23,42,0.35)]">
-        <div class="text-sm font-semibold text-slate-900">Private by default</div>
+        <div class="text-sm font-semibold text-slate-900">Tracking comes first</div>
         <div class="mt-2 text-xs leading-6 text-slate-500">
-          Community, journaling, and direct messages stay tied to your account. The app still centers support, not diagnosis.
+          Start with mood, journal, progress, or exercises. Community is here when support helps, not as the main job of the app.
         </div>
       </div>
     </aside>
@@ -90,18 +90,18 @@ export class SideNavComponent {
 
   readonly primaryItems: Array<{ label: string; link: string; icon: MindtrackIconName; badge?: string; exact: boolean }> = [
     { label: "Dashboard", link: "/dashboard", icon: "dashboard", exact: true },
-    { label: "Community", link: "/community", icon: "community", badge: "Live", exact: true },
-    { label: "Create Post", link: "/community/create", icon: "compose", badge: "New", exact: true },
-    { label: "Profile", link: "/profile", icon: "profile", exact: false },
+    { label: "Mood Check-In", link: "/mood", icon: "mood", exact: true },
+    { label: "Journal", link: "/journal", icon: "journal", exact: true },
     { label: "Progress", link: "/progress", icon: "progress", exact: true }
   ];
 
   readonly secondaryItems: Array<{ label: string; link: string; icon: MindtrackIconName; exact: boolean }> = [
-    { label: "Journal", link: "/journal", icon: "journal", exact: true },
-    { label: "Mood Calendar", link: "/mood", icon: "mood", exact: true },
-    { label: "Mental State", link: "/mental-state", icon: "insights", exact: true },
     { label: "Exercises", link: "/exercises", icon: "exercises", exact: true },
     { label: "Test Center", link: "/tests", icon: "tests", exact: false },
+    { label: "Mental State", link: "/mental-state", icon: "insights", exact: true },
+    { label: "Profile", link: "/profile", icon: "profile", exact: false },
+    { label: "Community", link: "/community", icon: "community", exact: true },
+    { label: "Create Post", link: "/community/create", icon: "compose", exact: true },
     { label: "Feedback", link: "/feedback", icon: "feedback", exact: true }
   ];
 

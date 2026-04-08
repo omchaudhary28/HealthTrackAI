@@ -31,7 +31,7 @@ import { AuthService } from "../../core/services/auth.service";
             <div class="min-w-0">
               <div class="truncate text-lg font-extrabold tracking-[-0.04em] text-slate-950">MindTrack</div>
               <div class="truncate text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
-                {{ publicMode ? "wellness social" : "private support feed" }}
+                {{ publicMode ? "wellness tracking" : "tracking first workspace" }}
               </div>
             </div>
           </a>
@@ -43,8 +43,8 @@ import { AuthService } from "../../core/services/auth.service";
               <circle cx="11" cy="11" r="7"></circle>
               <path d="m20 20-3.5-3.5"></path>
             </svg>
-            <span>Search people, moods, and progress stories</span>
-            <span class="ml-auto rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Preview</span>
+            <span>Jump back into mood, journal, progress, or exercises</span>
+            <span class="ml-auto rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Quick focus</span>
           </div>
         </div>
 
@@ -66,8 +66,8 @@ import { AuthService } from "../../core/services/auth.service";
           </ng-container>
 
           <ng-template #signedInActions>
-            <a routerLink="/community/create" class="btn-outline hidden rounded-full px-4 py-2.5 text-sm font-semibold md:inline-flex">
-              Create
+            <a routerLink="/mood" class="btn-outline hidden rounded-full px-4 py-2.5 text-sm font-semibold md:inline-flex">
+              Log mood
             </a>
             <a
               routerLink="/profile"

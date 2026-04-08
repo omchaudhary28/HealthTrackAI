@@ -11,19 +11,29 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
   imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink],
   template: `
     <section appScrollReveal class="space-y-6">
-      <div class="glass-card rounded-[2.75rem] bg-[linear-gradient(150deg,rgba(255,255,255,0.84),rgba(255,255,255,0.52),rgba(249,115,22,0.08))] p-8">
-        <div class="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+      <div class="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+        <div class="glass-card rounded-[2.5rem] p-6 sm:p-8">
           <div class="min-w-0">
-            <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Create Post</div>
-            <h1 class="mt-3 text-3xl font-semibold text-slate-900 sm:text-4xl">Publish separately from the feed.</h1>
-            <p class="mt-3 max-w-3xl text-base leading-8 text-slate-700">
-              This page is only for posting. The community page stays focused on browsing, discovery, reactions, comments, and conversations.
+            <div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Create Post</div>
+            <h1 class="mt-3 text-3xl font-semibold text-slate-900 sm:text-4xl">Share one clear update.</h1>
+            <p class="mt-3 max-w-3xl text-sm leading-8 text-slate-600 sm:text-base">
+              Keep posting lightweight. If you need deeper reflection, start in journal or mood tracking and only bring the useful summary here.
             </p>
-          </div>
 
-          <div class="flex flex-wrap gap-3">
-            <a routerLink="/community" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Open feed</a>
-            <a routerLink="/profile" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">My profile</a>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a routerLink="/mood" class="btn-primary rounded-full px-5 py-3 text-sm font-semibold">Log mood first</a>
+              <a routerLink="/journal" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Open journal</a>
+              <a routerLink="/community" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Back to community</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-[2.5rem] p-6">
+          <div class="text-sm font-semibold text-slate-900">Before you post</div>
+          <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
+            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">Say what changed, not your whole history.</div>
+            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">Use anonymous mode whenever privacy matters more than recognition.</div>
+            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">If the post is really for yourself, save it in journal instead.</div>
           </div>
         </div>
       </div>
@@ -32,8 +42,8 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
         <form class="glass-card rounded-[2rem] p-6" (ngSubmit)="createPost()">
           <div class="flex items-start justify-between gap-4">
             <div>
-              <div class="text-sm font-semibold text-slate-900">Post composer</div>
-              <div class="mt-1 text-xs leading-5 text-slate-500">Publish a reflection, progress update, streak, or milestone.</div>
+              <div class="text-sm font-semibold text-slate-900">Simple composer</div>
+              <div class="mt-1 text-xs leading-5 text-slate-500">Start with a title and a short description. Add progress details only if they matter.</div>
             </div>
             <label class="inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600">
               <input [(ngModel)]="compose.isAnonymous" name="isAnonymous" type="checkbox" class="rounded border-slate-300 text-slate-900 focus:ring-slate-200" />
@@ -44,18 +54,9 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           <div class="mt-5 grid gap-4 md:grid-cols-2">
             <label class="block text-sm font-medium text-slate-600">
               Title
-              <input [(ngModel)]="compose.title" name="title" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
+              <input [(ngModel)]="compose.title" name="title" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="Example: A calmer week than last week" />
             </label>
 
-            <label class="block text-sm font-medium text-slate-600">
-              Mental state tag
-              <select [(ngModel)]="compose.mentalStateTag" name="mentalStateTag" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100">
-                <option *ngFor="let state of mentalStates" [ngValue]="state">{{ state }}</option>
-              </select>
-            </label>
-          </div>
-
-          <div class="mt-4 grid gap-4 md:grid-cols-[0.9fr_1.1fr]">
             <label class="block text-sm font-medium text-slate-600">
               Share type
               <select [(ngModel)]="compose.shareType" name="shareType" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100">
@@ -65,49 +66,63 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                 <option value="milestone">Milestone</option>
               </select>
             </label>
-
-            <label *ngIf="compose.isAnonymous" class="block text-sm font-medium text-slate-600">
-              Anonymous alias
-              <input [(ngModel)]="compose.anonymousAlias" name="anonymousAlias" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="Optional. Example: Quiet Lantern" />
-            </label>
           </div>
 
           <label class="mt-4 block text-sm font-medium text-slate-600">
             Content
-            <textarea [(ngModel)]="compose.content" name="content" rows="6" class="mt-2 w-full resize-none rounded-[1.75rem] border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100"></textarea>
+            <textarea [(ngModel)]="compose.content" name="content" rows="6" class="mt-2 w-full resize-none rounded-[1.75rem] border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="What changed, what helped, or what you want support with."></textarea>
           </label>
 
-          <div *ngIf="compose.shareType !== 'reflection'" class="mt-4 grid gap-4 md:grid-cols-2">
+          <div class="mt-4 grid gap-4 md:grid-cols-2">
             <label class="block text-sm font-medium text-slate-600">
-              What improved
-              <textarea [(ngModel)]="compose.whatImproved" name="whatImproved" rows="3" class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100"></textarea>
+              Mental state tag
+              <select [(ngModel)]="compose.mentalStateTag" name="mentalStateTag" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100">
+                <option *ngFor="let state of mentalStates" [ngValue]="state">{{ state }}</option>
+              </select>
             </label>
 
             <label class="block text-sm font-medium text-slate-600">
-              What helped
-              <textarea [(ngModel)]="compose.whatHelped" name="whatHelped" rows="3" class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100"></textarea>
+              Tags
+              <input [(ngModel)]="compose.tags" name="tags" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="sleep, journaling, grounding" />
             </label>
           </div>
 
-          <div *ngIf="compose.shareType !== 'reflection'" class="mt-4 grid gap-4 sm:grid-cols-3">
-            <label class="block text-sm font-medium text-slate-600">
-              Streak days
-              <input [(ngModel)]="compose.streakDays" name="streakDays" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
-            </label>
-            <label class="block text-sm font-medium text-slate-600">
-              Mood average
-              <input [(ngModel)]="compose.moodAverage" name="moodAverage" type="number" step="0.1" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
-            </label>
-            <label class="block text-sm font-medium text-slate-600">
-              Exercise streak
-              <input [(ngModel)]="compose.exerciseStreak" name="exerciseStreak" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
-            </label>
-          </div>
-
-          <label class="mt-4 block text-sm font-medium text-slate-600">
-            Tags
-            <input [(ngModel)]="compose.tags" name="tags" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="sleep, journaling, grounding" />
+          <label *ngIf="compose.isAnonymous" class="mt-4 block text-sm font-medium text-slate-600">
+              Anonymous alias
+              <input [(ngModel)]="compose.anonymousAlias" name="anonymousAlias" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="Optional. Example: Quiet Lantern" />
           </label>
+
+          <div *ngIf="compose.shareType !== 'reflection'" class="mt-5 rounded-[1.75rem] border border-slate-200 bg-slate-50/80 p-5">
+            <div class="text-sm font-semibold text-slate-900">Optional progress details</div>
+            <div class="mt-1 text-xs leading-5 text-slate-500">Only fill in the pieces that make the update clearer.</div>
+
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+              <label class="block text-sm font-medium text-slate-600">
+                What improved
+                <textarea [(ngModel)]="compose.whatImproved" name="whatImproved" rows="3" class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100"></textarea>
+              </label>
+
+              <label class="block text-sm font-medium text-slate-600">
+                What helped
+                <textarea [(ngModel)]="compose.whatHelped" name="whatHelped" rows="3" class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100"></textarea>
+              </label>
+            </div>
+
+            <div class="mt-4 grid gap-4 sm:grid-cols-3">
+              <label class="block text-sm font-medium text-slate-600">
+                Streak days
+                <input [(ngModel)]="compose.streakDays" name="streakDays" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
+              </label>
+              <label class="block text-sm font-medium text-slate-600">
+                Mood average
+                <input [(ngModel)]="compose.moodAverage" name="moodAverage" type="number" step="0.1" class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
+              </label>
+              <label class="block text-sm font-medium text-slate-600">
+                Exercise streak
+                <input [(ngModel)]="compose.exerciseStreak" name="exerciseStreak" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
+              </label>
+            </div>
+          </div>
 
           <div *ngIf="createError" class="mt-4 rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700">
             {{ createError }}
@@ -120,18 +135,24 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
         <div class="space-y-6">
           <div class="glass-card rounded-[2rem] p-6">
-            <div class="text-sm font-semibold text-slate-900">Posting flow</div>
+            <div class="text-sm font-semibold text-slate-900">Tracking before posting</div>
             <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
-              <div class="rounded-3xl bg-slate-50/80 px-4 py-4">Create here.</div>
-              <div class="rounded-3xl bg-slate-50/80 px-4 py-4">Browse and react in Community.</div>
-              <div class="rounded-3xl bg-slate-50/80 px-4 py-4">See your account posts in Profile.</div>
+              <a routerLink="/mood" class="block rounded-3xl bg-slate-50/80 px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100">
+                Mood check-in
+              </a>
+              <a routerLink="/journal" class="block rounded-3xl bg-slate-50/80 px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100">
+                Journal entry
+              </a>
+              <a routerLink="/progress" class="block rounded-3xl bg-slate-50/80 px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100">
+                Progress page
+              </a>
             </div>
           </div>
 
           <div class="glass-card rounded-[2rem] p-6">
-            <div class="text-sm font-semibold text-slate-900">Safety</div>
+            <div class="text-sm font-semibold text-slate-900">What works best here</div>
             <div class="mt-4 rounded-3xl bg-slate-50/80 px-4 py-4 text-sm leading-7 text-slate-600">
-              Anonymous mode is still available here. Community moderation and supportive-only reactions remain unchanged.
+              Short reflections, small progress notes, and milestone updates are easier for people to support than long detailed posts. Anonymous mode is still available.
             </div>
           </div>
 
