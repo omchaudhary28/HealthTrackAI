@@ -43,7 +43,7 @@ interface PatternInsightCard {
                   Welcome back, <span class="break-words">{{ displayName() }}</span>.
                 </h1>
                 <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-                  Your AI summary blends mood logs, journals, assessments, and completed exercises into one support snapshot.
+                  Your check-ins, notes, and exercises. One clean read. No chaos.
                 </p>
               </div>
               <div class="cluster-actions">
@@ -51,7 +51,7 @@ interface PatternInsightCard {
                   Retake baseline
                 </a>
                 <a routerLink="/exercises" class="btn-primary rounded-full px-5 py-3 text-sm font-semibold">
-                  Open guided exercises
+                  Open exercises
                 </a>
               </div>
             </div>
@@ -63,7 +63,7 @@ interface PatternInsightCard {
                   {{ summary.currentMentalState?.mentalState || summary.currentMentalState?.mental_state || 'Balanced' }}
                 </div>
                 <p class="mt-4 text-sm leading-8 text-slate-700">
-                  {{ summary.currentMentalState?.description || 'Your current signals look steady overall. Continue supporting the routines that help.' }}
+                  {{ summary.currentMentalState?.description || 'Things look pretty steady. Keep the good stuff going.' }}
                 </p>
                 <div class="mt-4 flex flex-wrap gap-2">
                   <span *ngFor="let sign of (summary.currentMentalState?.commonSigns || []).slice(0, 3)" class="theme-chip-outline rounded-full px-3 py-1 text-xs font-semibold">
@@ -75,9 +75,9 @@ interface PatternInsightCard {
               <div class="theme-bento-card-strong rounded-[2rem] p-6">
                 <div class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-100/70">Suggested action</div>
                 <div class="mt-3 text-2xl font-semibold">{{ summary.suggestedAction?.title || 'Keep a gentle routine' }}</div>
-                <div class="mt-3 text-sm leading-7 text-sky-50/85">{{ summary.suggestedAction?.whyRecommended || 'A small recovery action usually works better than trying to fix everything at once.' }}</div>
+                <div class="mt-3 text-sm leading-7 text-sky-50/85">{{ summary.suggestedAction?.whyRecommended || '"Small reset" beats trying to fix everything.' }}</div>
                 <div class="mt-4 rounded-3xl bg-white/10 px-4 py-4 text-sm leading-7 text-sky-50/85">
-                  Expected outcome: {{ summary.suggestedAction?.expectedOutcome || 'A steadier nervous system and a clearer next decision.' }}
+                  What you get: {{ summary.suggestedAction?.expectedOutcome || 'A steadier vibe and a clearer next move.' }}
                 </div>
               </div>
             </div>
@@ -87,22 +87,22 @@ interface PatternInsightCard {
             <div class="theme-bento-card rounded-[2rem] p-5">
               <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Mental score</div>
               <div class="mt-3 text-3xl font-semibold text-slate-900">{{ latestScore(summary) }}</div>
-              <div class="mt-2 text-sm text-slate-600">Latest baseline snapshot out of 100.</div>
+              <div class="mt-2 text-sm text-slate-600">Latest baseline out of 100.</div>
             </div>
             <div class="theme-bento-card rounded-[2rem] p-5">
               <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Mood check-ins</div>
               <div class="mt-3 text-3xl font-semibold text-slate-900">{{ summary.activitySummary?.moodCheckIns30d || 0 }}</div>
-              <div class="mt-2 text-sm text-slate-600">Logged in the last 30 days.</div>
+              <div class="mt-2 text-sm text-slate-600">Logged in 30 days.</div>
             </div>
             <div class="theme-bento-card rounded-[2rem] p-5">
               <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Exercise streak</div>
               <div class="mt-3 text-3xl font-semibold text-slate-900">{{ summary.activitySummary?.exerciseStreak || 0 }}d</div>
-              <div class="mt-2 text-sm text-slate-600">Consecutive days with completed exercises.</div>
+              <div class="mt-2 text-sm text-slate-600">Current streak.</div>
             </div>
             <div class="theme-bento-card rounded-[2rem] p-5">
               <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Journal entries</div>
               <div class="mt-3 text-3xl font-semibold text-slate-900">{{ summary.activitySummary?.journalEntries30d || 0 }}</div>
-              <div class="mt-2 text-sm text-slate-600">Reflective entries over the last 30 days.</div>
+              <div class="mt-2 text-sm text-slate-600">Notes in 30 days.</div>
             </div>
           </div>
 
@@ -134,10 +134,10 @@ interface PatternInsightCard {
               <div class="theme-bento-card-soft rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
-                    <div class="text-sm font-semibold text-slate-900">Pattern analysis</div>
-                    <div class="mt-1 text-xs leading-5 text-slate-500">A more useful read on what your recent logs, habits, and writing are saying together.</div>
+                    <div class="text-sm font-semibold text-slate-900">Pattern read</div>
+                    <div class="mt-1 text-xs leading-5 text-slate-500">The short version of what your recent logs are saying.</div>
                   </div>
-                  <span class="theme-kicker rounded-full px-3 py-1 text-xs font-semibold">Updated from recent data</span>
+                  <span class="theme-kicker rounded-full px-3 py-1 text-xs font-semibold">Fresh read</span>
                 </div>
 
                 <div class="mt-4 grid gap-4 md:grid-cols-2">
@@ -179,7 +179,7 @@ interface PatternInsightCard {
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <div class="text-sm font-semibold text-slate-900">Daily check-in</div>
-                    <div class="mt-1 text-xs leading-5 text-slate-500">Log stress, sleep, and energy for today.</div>
+                    <div class="mt-1 text-xs leading-5 text-slate-500">Quick check on stress, sleep, and energy.</div>
                   </div>
                   <span *ngIf="checkInSaved" class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Saved</span>
                 </div>
@@ -228,7 +228,7 @@ interface PatternInsightCard {
               </div>
 
               <div class="theme-bento-card-soft rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
-                <div class="text-sm font-semibold text-slate-900">AI insights history</div>
+                <div class="text-sm font-semibold text-slate-900">AI notes</div>
                 <div class="mt-4 space-y-3">
                   <div *ngFor="let insight of (summary.aiInsightsHistory || []).slice(0, 3)" class="theme-bento-card rounded-[1.5rem] px-4 py-4">
                     <div class="flex items-start justify-between gap-4">
@@ -250,7 +250,7 @@ interface PatternInsightCard {
             <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <div class="text-sm font-semibold text-slate-900">Recommended exercises</div>
-                <div class="mt-1 text-xs leading-5 text-slate-500">Each recommendation includes purpose, outcome, and AI reasoning.</div>
+                <div class="mt-1 text-xs leading-5 text-slate-500">Short list. Best fit first.</div>
               </div>
               <a routerLink="/exercises" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Browse all</a>
             </div>
@@ -268,11 +268,11 @@ interface PatternInsightCard {
                 </div>
                 <div class="mt-3 text-sm leading-7 text-slate-600">{{ ex.purpose || ex.description }}</div>
                 <div class="theme-bento-card-soft mt-4 rounded-[1.5rem] px-4 py-4 text-sm leading-7 text-slate-700">
-                  <div class="font-semibold text-slate-900">Why recommended</div>
+                  <div class="font-semibold text-slate-900">Why it fits</div>
                   <div class="mt-1">{{ ex.whyRecommended }}</div>
                 </div>
                 <div class="theme-bento-card-soft mt-4 rounded-[1.5rem] px-4 py-4 text-sm leading-7 text-slate-700">
-                  <div class="font-semibold text-slate-900">Expected outcome</div>
+                  <div class="font-semibold text-slate-900">What you get</div>
                   <div class="mt-1">{{ ex.expectedOutcome || ex.whatYouWillAchieve }}</div>
                 </div>
               </article>
@@ -376,7 +376,7 @@ export class DashboardPageComponent {
           this.summary$ = this.loadSummary();
         },
         error: (err) => {
-          this.checkInError = err?.error?.error || "Unable to save check-in right now.";
+          this.checkInError = err?.error?.error || "Couldn't save that check-in.";
           this.checkInPending = false;
         }
       });
@@ -430,26 +430,26 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
       ? {
           key: "momentum",
           eyebrow: "Momentum",
-          title: "Your mental score is trending up.",
-          description: `Recent score snapshots are up ${scoreDelta} points, which usually means your current routines are giving you better support.`,
-          supporting: "Keep the helpful pieces stable for another few days instead of changing too much at once.",
+          title: "Your score is climbing.",
+          description: `You're up ${scoreDelta} points. The current routine is doing its thing.`,
+          supporting: "Keep the good pieces steady for a few more days.",
           badge: `+${scoreDelta}`
         }
       : scoreDelta <= -5
         ? {
             key: "momentum",
             eyebrow: "Momentum",
-            title: "Your baseline looks a bit more strained lately.",
-            description: `Recent score snapshots are down ${Math.abs(scoreDelta)} points, so recovery habits likely matter more than pushing harder right now.`,
-            supporting: `Use ${suggestedAction.toLowerCase()} as the first reset instead of trying to improve every metric at once.`,
+            title: "Your baseline looks a bit strained.",
+            description: `You're down ${Math.abs(scoreDelta)} points, so recovery matters more than pushing harder.`,
+            supporting: `Start with ${suggestedAction.toLowerCase()} and keep it simple.`,
             badge: `${scoreDelta}`
           }
         : {
             key: "momentum",
             eyebrow: "Momentum",
-            title: "Your baseline is relatively steady.",
-            description: "The score trend is fairly flat, which suggests maintenance habits are doing their job even if things are not perfect.",
-            supporting: "When the pattern is steady, the best move is usually consistency rather than intensity.",
+            title: "Your baseline is pretty steady.",
+            description: "The trend is flat, which usually means your maintenance habits are holding.",
+            supporting: "Stay consistent. No need to force it.",
             badge: "steady"
           };
 
@@ -458,9 +458,9 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
       ? {
           key: "pressure",
           eyebrow: "Mood and stress",
-          title: "Stress looks like the main pressure point.",
-          description: "Recent mood is flatter while stress stays elevated, which often means the nervous system needs settling before problem-solving.",
-          supporting: "Choose a smaller task load and do one calming action before trying to think through everything else.",
+          title: "Stress looks like the main issue.",
+          description: "Mood is flatter while stress stays high. Reset first, solve stuff second.",
+          supporting: "Smaller task load, one calming move, then think.",
           badge: `${Math.round(latestStress)} stress`,
           dark: true
         }
@@ -468,17 +468,17 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
         ? {
             key: "pressure",
             eyebrow: "Mood and stress",
-            title: "Mood is stabilizing while stress cools.",
-            description: "Your recent check-ins suggest a steadier balance between energy and emotional load.",
-            supporting: "This is a good time to reinforce the routines that are already working instead of adding extra pressure.",
+            title: "Mood is stabilizing.",
+            description: "Recent check-ins look more balanced.",
+            supporting: "Good time to repeat what's already working.",
             badge: `${latestMood.toFixed(1)} mood`
           }
         : {
             key: "pressure",
             eyebrow: "Mood and stress",
-            title: "Your signals look mixed rather than one-directional.",
-            description: "Mood and stress are moving, but not in a clean pattern yet. A few more check-ins will sharpen the read.",
-            supporting: "Keep logging for signal quality, then compare what happens on lighter versus heavier days.",
+            title: "Your signals are mixed.",
+            description: "Mood and stress are moving, but not in a clean way yet.",
+            supporting: "A few more check-ins will sharpen the read.",
             badge: "mixed"
           };
 
@@ -487,16 +487,16 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
         key: "journal",
         eyebrow: "Journal signal",
         title: `Your writing keeps circling ${formatPattern(primaryJournalPattern)}.`,
-        description: `The journal tone feels ${sentimentTone(sentiment)}, which helps explain how much weight that pattern may be carrying right now.`,
+        description: `The tone feels ${sentimentTone(sentiment)}, so that pattern may be carrying some weight right now.`,
         supporting: journalGuidance(primaryJournalPattern),
         badge: formatPattern(primaryJournalPattern)
       }
     : {
         key: "journal",
         eyebrow: "Journal signal",
-        title: "There is not enough journal signal yet for a strong read.",
-        description: "A few more reflective entries will make the pattern analysis more specific and less generic.",
-        supporting: "Short entries still count. Even two or three honest lines can improve the quality of the insight.",
+        title: "Not enough journal signal yet.",
+        description: "A few more notes will make this read way better.",
+        supporting: "\"Two honest lines\" still count.",
         badge: "build signal"
       };
 
@@ -505,17 +505,17 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
       ? {
           key: "routine",
           eyebrow: "Habit signal",
-          title: "Consistency is helping the app read you better.",
-          description: `${exerciseStreak} day exercise streak and ${moodCheckIns} mood check-ins give the analysis cleaner context instead of isolated moments.`,
+          title: "Consistency is helping.",
+          description: `${exerciseStreak} day streak and ${moodCheckIns} mood logs give the app a cleaner read.`,
           supporting: `Next focus: ${suggestedAction}.`,
           badge: exerciseStreak >= 3 ? `${exerciseStreak}d streak` : `${moodCheckIns} logs`
         }
       : {
           key: "routine",
           eyebrow: "Habit signal",
-          title: "The next improvement is better signal, not more complexity.",
-          description: "The app can give stronger insights when mood, journal, and exercise data are logged a bit more consistently.",
-          supporting: "Prioritize short daily tracking before adding more features or trying to interpret too much at once.",
+          title: "Better signal beats more complexity.",
+          description: "The app gets sharper when mood, notes, and exercises show up more often.",
+          supporting: "Track a little more before adding more stuff.",
           badge: "track first"
         };
 
@@ -553,22 +553,22 @@ function sentimentTone(value: number): string {
 function journalGuidance(pattern: string): string {
   const key = String(pattern || "").toLowerCase();
   if (key.includes("rumination")) {
-    return "Try to turn one repeated thought into one bounded action instead of letting it keep looping.";
+    return "Turn one repeated thought into one bounded action.";
   }
 
   if (key.includes("comparison")) {
-    return "Step back from comparison triggers briefly and bring the focus back to your own values and pace.";
+    return "Step back from comparison and come back to your own pace.";
   }
 
   if (key.includes("self")) {
-    return "Translate one harsh sentence into a fairer version so the next step feels more workable.";
+    return "Rewrite one harsh line so the next step feels workable.";
   }
 
   if (key.includes("grat")) {
-    return "Notice what is helping and make it easier to repeat, rather than only appreciating it in hindsight.";
+    return "Notice what's helping and make it easier to repeat.";
   }
 
-  return "Use the journal signal to choose one next move, not just to better describe the pattern.";
+  return "Use the note to pick one next move, not just describe the loop.";
 }
 
 function formatPattern(value: string): string {

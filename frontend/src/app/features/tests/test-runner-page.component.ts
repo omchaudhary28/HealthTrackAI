@@ -26,7 +26,7 @@ const CHOICES = [
               <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">{{ test()?.category || 'Assessment' }}</div>
               <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">{{ test()?.title || 'Loading test...' }}</h1>
               <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
-                {{ test()?.description || 'This questionnaire supports self-reflection only and is not a medical diagnosis.' }}
+                {{ test()?.description || 'Quick self-check only. Not a diagnosis.' }}
               </p>
             </div>
             <a routerLink="/tests" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Back to tests</a>
@@ -51,23 +51,23 @@ const CHOICES = [
           <div class="text-sm font-medium text-slate-500">Results</div>
           <div class="mt-4 flex flex-wrap gap-3">
             <div class="rounded-3xl bg-slate-50 px-5 py-4">
-              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Mental score</div>
+              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Score</div>
               <div class="mt-2 text-3xl font-semibold text-slate-900">{{ displayedScore() }} / 100</div>
             </div>
             <div *ngIf="classification()" class="rounded-3xl bg-[var(--mist)] px-5 py-4">
-              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Detected mental state</div>
+              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">State</div>
               <div class="mt-2 text-2xl font-semibold text-slate-900">{{ classification()?.mental_state }}</div>
               <div class="mt-2 text-sm leading-7 text-slate-600">{{ classification()?.description }}</div>
             </div>
             <div *ngIf="testResult()" class="rounded-3xl bg-[var(--mist)] px-5 py-4">
-              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Result type</div>
+              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Type</div>
               <div class="mt-2 text-2xl font-semibold text-slate-900">{{ testResult()?.result_type }}</div>
               <div class="mt-2 text-sm leading-7 text-slate-600">{{ testResult()?.description }}</div>
             </div>
           </div>
 
           <div *ngIf="classification()?.recommendations?.length" class="mt-6">
-            <div class="text-sm font-medium text-slate-500">Recommended improvements</div>
+            <div class="text-sm font-medium text-slate-500">Try next</div>
             <div class="mt-4 space-y-3">
               <div *ngFor="let item of classification()?.recommendations" class="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-4 text-sm text-slate-700">
                 {{ item }}
@@ -85,7 +85,7 @@ const CHOICES = [
           </div>
 
           <div *ngIf="testResult()?.suggestions?.length" class="mt-6">
-            <div class="text-sm font-medium text-slate-500">Growth suggestions</div>
+            <div class="text-sm font-medium text-slate-500">Suggestions</div>
             <div class="mt-3 space-y-2">
               <div *ngFor="let item of testResult()?.suggestions" class="rounded-2xl border border-slate-100 bg-white px-4 py-3 text-sm text-slate-700">
                 {{ item }}
@@ -94,7 +94,7 @@ const CHOICES = [
           </div>
 
           <div *ngIf="testResult()?.recommended_exercises?.length" class="mt-6">
-            <div class="text-sm font-medium text-slate-500">Recommended exercises</div>
+            <div class="text-sm font-medium text-slate-500">Exercises</div>
             <div class="mt-3 flex flex-wrap gap-2">
               <span *ngFor="let item of testResult()?.recommended_exercises" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
                 {{ item.replaceAll('_', ' ') }}
@@ -103,7 +103,7 @@ const CHOICES = [
           </div>
 
           <div class="mt-6 rounded-3xl border border-white/70 bg-white/70 px-5 py-4 text-sm text-slate-600">
-            {{ result()?.disclaimer || 'MindTrack AI provides wellness support and self-reflection tools only.' }}
+            {{ result()?.disclaimer || 'MindTrack gives wellness support only.' }}
           </div>
         </div>
 
@@ -166,12 +166,12 @@ const CHOICES = [
           </div>
 
           <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
-            <div class="text-sm font-medium text-slate-500">Why this matters</div>
+            <div class="text-sm font-medium text-slate-500">Keep in mind</div>
             <p class="mt-4 text-sm leading-7 text-slate-600">
-              This assessment is designed for self-reflection and habit support. It cannot diagnose or treat mental health conditions.
+              This is for self-reflection and habit support. Not treatment.
             </p>
             <div class="mt-5 rounded-3xl bg-[var(--mist)] px-5 py-4 text-sm text-slate-700">
-              Tip: Answer based on the last 7 to 14 days rather than one unusually good or bad moment.
+              Tip: answer from your usual week, not one weird day.
             </div>
           </div>
         </div>
@@ -248,7 +248,7 @@ export class TestRunnerPageComponent implements OnInit, OnDestroy {
       next: (test) => this.test.set(test),
       error: () => {
         this.test.set(null);
-        this.error.set("Unable to load this test right now. Please try again.");
+        this.error.set("Couldn't load this test right now.");
       }
     });
   }
@@ -295,17 +295,17 @@ export class TestRunnerPageComponent implements OnInit, OnDestroy {
   answerHint(): string {
     switch (this.currentAnswerValue()) {
       case 1:
-        return "This answer signals that the statement rarely fits your recent experience.";
+        return "This barely fits your recent experience.";
       case 2:
-        return "This suggests the pattern shows up occasionally but not strongly.";
+        return "This shows up sometimes, not a lot.";
       case 3:
-        return "Neutral answers are useful when the pattern feels mixed or unclear.";
+        return "Mixed or unsure is valid.";
       case 4:
-        return "This suggests the pattern shows up fairly often in your recent experience.";
+        return "This shows up fairly often lately.";
       case 5:
-        return "This signals the pattern feels strong or frequent lately.";
+        return "This feels strong or frequent lately.";
       default:
-        return "Answer based on the last 7 to 14 days rather than one unusually good or bad moment.";
+        return "Go with your usual week, not one weird day.";
     }
   }
 
@@ -344,7 +344,7 @@ export class TestRunnerPageComponent implements OnInit, OnDestroy {
         }
       },
       error: (err) => {
-        this.error.set(err?.error?.error || "Unable to submit this test right now.");
+        this.error.set(err?.error?.error || "Couldn't submit this test right now.");
         this.pending.set(false);
       }
     });

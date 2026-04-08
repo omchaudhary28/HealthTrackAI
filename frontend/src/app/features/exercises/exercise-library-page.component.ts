@@ -15,9 +15,9 @@ import { FormsModule } from "@angular/forms";
     <section appScrollReveal class="page-stack">
       <div class="glass-card page-hero bg-[linear-gradient(150deg,rgba(255,255,255,0.78),rgba(255,255,255,0.48),rgba(16,185,129,0.08))]">
         <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Exercise Library</div>
-        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Actionable exercises with AI reasoning, expected outcomes, and feedback loops.</h1>
+        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Tiny resets, ready when you are.</h1>
         <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-          These practices are small, supportive interventions. Complete one, leave feedback, and MindTrack will learn what helps you most.
+          Pick one, do it, leave a quick note. That's enough.
         </p>
       </div>
 
@@ -25,7 +25,7 @@ import { FormsModule } from "@angular/forms";
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <div class="text-sm font-semibold text-slate-900">Recommended for you</div>
-            <div class="mt-1 text-xs leading-5 text-slate-500">Generated from your latest mental-state snapshot and activity patterns.</div>
+            <div class="mt-1 text-xs leading-5 text-slate-500">Best fit from your latest signal.</div>
           </div>
           <button type="button" (click)="refreshRecommendations()" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Refresh</button>
         </div>
@@ -44,11 +44,11 @@ import { FormsModule } from "@angular/forms";
               </div>
               <div class="mt-3 text-sm leading-7 text-slate-600">{{ exercise.purpose || exercise.description }}</div>
               <div class="mt-4 rounded-3xl bg-slate-50 px-4 py-4 text-sm leading-7 text-slate-700">
-                <div class="font-semibold text-slate-900">Why recommended</div>
+                <div class="font-semibold text-slate-900">Why it fits</div>
                 <div class="mt-1">{{ exercise.whyRecommended }}</div>
               </div>
               <div class="mt-4 rounded-3xl bg-slate-950/[0.03] px-4 py-4 text-sm leading-7 text-slate-700">
-                <div class="font-semibold text-slate-900">Expected outcome</div>
+                <div class="font-semibold text-slate-900">What you get</div>
                 <div class="mt-1">{{ exercise.expectedOutcome }}</div>
               </div>
               <button type="button" (click)="open(exercise)" class="btn-primary mt-4 w-full rounded-2xl px-4 py-3 text-sm font-semibold">
@@ -63,7 +63,7 @@ import { FormsModule } from "@angular/forms";
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div class="text-sm font-semibold text-slate-900">Browse by category</div>
-            <div class="mt-1 text-xs leading-5 text-slate-500">Pick one focus to lower decision fatigue.</div>
+            <div class="mt-1 text-xs leading-5 text-slate-500">Pick one lane.</div>
           </div>
           <button type="button" (click)="refresh()" class="btn-outline rounded-xl px-4 py-2 text-sm font-semibold">
             Refresh
@@ -86,7 +86,7 @@ import { FormsModule } from "@angular/forms";
 
       <ng-container *ngIf="exercises$ | async as exercises; else loading">
         <div *ngIf="!exercises.length" class="glass-card rounded-[2rem] p-6 text-sm text-slate-600">
-          No exercises found for this category yet.
+          No exercises here yet.
         </div>
 
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -131,13 +131,13 @@ import { FormsModule } from "@angular/forms";
             <div class="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
               <div class="space-y-5">
                 <div class="rounded-[2rem] bg-slate-50 p-5">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Purpose</div>
+                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Why</div>
                   <p class="mt-2 text-sm leading-7 text-slate-700">{{ activeExercise.purpose || activeExercise.description }}</p>
                 </div>
 
                 <div class="rounded-[2rem] bg-slate-50 p-5">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Expected outcome</div>
-                  <p class="mt-2 text-sm leading-7 text-slate-700">{{ activeExercise.expectedOutcome || 'A calmer next step and more emotional breathing room.' }}</p>
+                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">What you get</div>
+                  <p class="mt-2 text-sm leading-7 text-slate-700">{{ activeExercise.expectedOutcome || 'A calmer next step and a little more room to breathe.' }}</p>
                 </div>
 
                 <div *ngIf="activeExercise.benefits?.length" class="rounded-[2rem] bg-slate-50 p-5">
@@ -162,7 +162,7 @@ import { FormsModule } from "@angular/forms";
 
               <div class="space-y-5">
                 <div *ngIf="activeExercise.whyRecommended" class="rounded-[2rem] p-5" [ngStyle]="{ border: '1px solid var(--mt-accent-soft)', background: 'linear-gradient(135deg, var(--mt-accent-soft), rgba(255,255,255,0.65))' }">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--mt-accent-strong)]">AI reasoning</div>
+                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--mt-accent-strong)]">AI note</div>
                   <p class="mt-2 text-sm leading-7 text-slate-700">{{ activeExercise.whyRecommended }}</p>
                 </div>
 
@@ -171,9 +171,9 @@ import { FormsModule } from "@angular/forms";
                 </div>
 
                 <div class="rounded-[2rem] border border-slate-100 bg-white p-5">
-                  <div class="text-sm font-semibold text-slate-900">Completion feedback</div>
+                  <div class="text-sm font-semibold text-slate-900">Quick feedback</div>
                   <div class="mt-4">
-                    <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">How helpful does this feel?</div>
+                    <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">How'd it feel?</div>
                     <div class="mt-3 flex flex-wrap gap-2">
                       <button *ngFor="let rating of [1,2,3,4,5]" type="button" (click)="feedbackRating = rating"
                         class="rounded-full border px-3 py-1.5 text-xs font-semibold transition"
@@ -189,16 +189,16 @@ import { FormsModule } from "@angular/forms";
 
                   <label class="mt-4 block text-sm font-medium text-slate-600">
                     What changed after this?
-                    <textarea [(ngModel)]="resultAfter" rows="3" class="app-textarea mt-2" placeholder="Example: I felt less tense and a bit clearer."></textarea>
+                    <textarea [(ngModel)]="resultAfter" rows="3" class="app-textarea mt-2" placeholder="Example: Less tense. More clear."></textarea>
                   </label>
 
                   <label class="mt-4 block text-sm font-medium text-slate-600">
                     Optional note
-                    <textarea [(ngModel)]="feedbackText" rows="3" class="app-textarea mt-2" placeholder="Anything MindTrack should remember about this exercise?"></textarea>
+                    <textarea [(ngModel)]="feedbackText" rows="3" class="app-textarea mt-2" placeholder="Anything worth remembering?"></textarea>
                   </label>
 
                   <div *ngIf="completionSuccess" class="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                    Completion saved. Future recommendations will adapt from this feedback.
+                    Saved. Future picks will learn from this.
                   </div>
 
                   <button type="button" (click)="completeActiveExercise()" [disabled]="completionPending" class="btn-primary mt-5 w-full rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60">

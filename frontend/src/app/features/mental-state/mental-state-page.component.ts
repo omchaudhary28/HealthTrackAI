@@ -20,20 +20,20 @@ import { AssessmentService, LatestAssessmentState } from "../../core/services/as
             {{ latest.mentalState?.description || fallbackDescription }}
           </p>
           <div *ngIf="latest.suggestedAction" class="mt-5 rounded-3xl bg-white/80 px-5 py-4 text-sm leading-7 text-slate-700">
-            Suggested action: <span class="font-semibold text-slate-900">{{ latest.suggestedAction?.title }}</span>
+            Next move: <span class="font-semibold text-slate-900">{{ latest.suggestedAction?.title }}</span>
             <div class="mt-2 text-slate-600">{{ latest.suggestedAction?.whyRecommended }}</div>
           </div>
         </div>
 
         <div class="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
           <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
-            <div class="text-sm font-medium text-slate-500">What this state usually looks like</div>
+            <div class="text-sm font-medium text-slate-500">Common signs</div>
             <ul class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
               <li *ngFor="let signal of signals" class="rounded-2xl bg-slate-50 px-4 py-3">{{ signal }}</li>
             </ul>
           </div>
           <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
-            <div class="text-sm font-medium text-slate-500">Recommended improvements</div>
+            <div class="text-sm font-medium text-slate-500">Try next</div>
             <div class="mt-4 space-y-3">
               <div *ngFor="let item of (latest.mentalState?.recommendations?.length ? latest.mentalState.recommendations : fallbackRecommendations)" class="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-4 text-sm text-slate-700">
                 {{ item }}
@@ -43,7 +43,7 @@ import { AssessmentService, LatestAssessmentState } from "../../core/services/as
         </div>
 
         <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 text-sm text-slate-600 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur">
-          MindTrack AI provides wellness support and self-reflection tools only. It does not diagnose medical conditions.
+          MindTrack gives wellness support only. Not a diagnosis.
         </div>
       </ng-container>
     </section>
@@ -53,12 +53,12 @@ export class MentalStatePageComponent {
   latest$: Observable<LatestAssessmentState>;
 
   fallbackDescription =
-    "Patterns can shift with stress, sleep, social load, and recovery. MindTrack AI highlights trends to support reflection, not diagnosis.";
+    "Patterns shift with stress, sleep, and recovery. This page is a guide, not a diagnosis.";
 
   signals = [
-    "Replay of conversations long after they happen",
-    "Difficulty closing open mental loops before sleep",
-    "Need to analyze uncertainty before feeling settled"
+    "Replaying conversations later",
+    "Hard to switch off before sleep",
+    "Needing to figure it all out first"
   ];
 
   fallbackRecommendations = [

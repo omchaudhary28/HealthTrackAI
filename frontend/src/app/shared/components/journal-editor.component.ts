@@ -4,11 +4,11 @@ import { FormsModule } from "@angular/forms";
 import { JournalEntry, JournalInsights, JournalService } from "../../core/services/journal.service";
 
 const PROMPTS = [
-  "What is something that made you proud today, even if it felt small?",
-  "What emotion showed up the most today, and what might it be protecting?",
-  "If today had a headline, what would it be?",
-  "What is one gentle thing you can do for yourself in the next hour?",
-  "What thought kept returning, and what would a kinder version of it sound like?"
+  "What felt good today, even a little?",
+  "What emotion ran the show today?",
+  "If today had a title, what would it be?",
+  "What's one kind thing you can do next?",
+  "What thought kept looping?"
 ];
 
 const COMMON_TAGS = ["calm", "stressed", "tired", "grateful", "overthinking", "social", "focus", "sleep", "self-kindness"];
@@ -29,13 +29,13 @@ interface JournalInsightCard {
       <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <div class="text-sm font-semibold text-slate-900">Journal</div>
-          <div class="mt-1 text-xs leading-5 text-slate-500">A private space to reflect. MindTrack AI supports wellbeing habits only, not diagnosis.</div>
+          <div class="mt-1 text-xs leading-5 text-slate-500">Private space. Real thoughts. No pressure.</div>
         </div>
         <button
           type="button"
           (click)="cyclePrompt()"
           class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
-          New prompt
+          Swap prompt
         </button>
       </div>
 
@@ -47,12 +47,12 @@ interface JournalInsightCard {
       <div class="mt-5 grid gap-4 lg:grid-cols-[1fr_0.95fr]">
         <div>
           <label class="block text-sm font-semibold text-slate-800">
-            Your entry
+            Your note
             <textarea
               [ngModel]="content()"
               (ngModelChange)="content.set($event)"
               rows="10"
-              placeholder="Write what happened, what you felt, and what you needed..."
+              placeholder="What happened? What hit? What do you need?"
               class="app-textarea mt-2"></textarea>
           </label>
 
@@ -82,24 +82,24 @@ interface JournalInsightCard {
               (click)="save()"
               [disabled]="!canSave()"
               class="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-950 disabled:cursor-not-allowed disabled:opacity-50">
-              {{ saving() ? "Saving..." : savedEntry() ? "Saved" : "Save entry" }}
+              {{ saving() ? "Saving..." : savedEntry() ? "Saved" : "Save note" }}
             </button>
             <button
               type="button"
               (click)="analyze()"
               [disabled]="!savedEntry() || analyzing()"
               class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50">
-              {{ analyzing() ? "Analyzing..." : "Analyze patterns" }}
+              {{ analyzing() ? "Reading..." : "Read vibe" }}
             </button>
-            <div class="text-xs text-slate-500 sm:ml-auto">Only you can see your writing.</div>
+            <div class="text-xs text-slate-500 sm:ml-auto">Only you see this.</div>
           </div>
         </div>
 
         <div class="theme-bento-card-soft rounded-[1.75rem] px-4 py-4 sm:rounded-[2rem] sm:px-5 sm:py-5">
           <div class="flex items-start justify-between gap-4">
             <div>
-              <div class="text-sm font-semibold text-slate-900">Pattern analysis</div>
-              <div class="mt-1 text-xs leading-5 text-slate-500">A clearer read on recurring loops, tone, and the kindest next step.</div>
+              <div class="text-sm font-semibold text-slate-900">Pattern read</div>
+              <div class="mt-1 text-xs leading-5 text-slate-500">Quick read on loops, tone, and the next move.</div>
             </div>
             <span *ngIf="insights()?.tone" class="theme-chip rounded-full px-3 py-1 text-xs font-semibold">
               {{ toneLabel(insights()?.tone) }}
@@ -108,7 +108,7 @@ interface JournalInsightCard {
 
           <ng-container *ngIf="insights() as insightData; else empty">
             <div class="theme-bento-card mt-4 rounded-[1.75rem] px-4 py-5">
-              <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">What stands out</div>
+              <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Standout</div>
               <div class="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950">{{ analysisHeadline(insightData) }}</div>
               <div class="mt-3 text-sm leading-7 text-slate-600">{{ analysisSummary(insightData) }}</div>
             </div>
@@ -132,20 +132,20 @@ interface JournalInsightCard {
 
             <div class="mt-4 space-y-3">
               <div *ngFor="let tip of insightSuggestions(insightData); let i = index" class="theme-bento-card-soft rounded-[1.4rem] px-4 py-4 text-sm leading-7 text-slate-700">
-                <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Try next {{ i + 1 }}</div>
+                <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Next {{ i + 1 }}</div>
                 <div class="mt-1">{{ tip }}</div>
               </div>
             </div>
 
             <div class="theme-bento-card mt-4 rounded-[1.5rem] px-4 py-4 text-sm leading-7 text-slate-700">
-              <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Use in the next entry</div>
+              <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Use next time</div>
               <div class="mt-2 font-semibold text-slate-950">{{ followUpPrompt(insightData) }}</div>
             </div>
           </ng-container>
 
           <ng-template #empty>
             <div class="theme-bento-card mt-4 rounded-[1.6rem] px-4 py-4 text-sm leading-7 text-slate-600">
-              Save an entry, then click "Analyze patterns" to get a simpler read on what your writing may be pointing to and what to try next.
+              Save a note, then hit "Read vibe." We'll keep it short.
             </div>
           </ng-template>
         </div>
@@ -204,23 +204,23 @@ export class JournalEditorComponent {
 
     return [
       {
-        eyebrow: "Primary pattern",
+        eyebrow: "Main loop",
         title: this.patternLabel(pattern),
         description: patternCopy.cardDetail
       },
       {
-        eyebrow: "Emotional tone",
+        eyebrow: "Tone",
         title: this.toneLabel(insights.tone),
         description: toneGuidance(insights.tone)
       },
       {
-        eyebrow: "Best next move",
-        title: "Keep it smaller and clearer",
+        eyebrow: "Next move",
+        title: "Keep it small",
         description: this.insightSuggestions(insights)[0]
       },
       {
-        eyebrow: "Reflection lens",
-        title: "Write one layer deeper",
+        eyebrow: "Next prompt",
+        title: "Go one layer deeper",
         description: patternCopy.prompt
       }
     ];
@@ -279,7 +279,7 @@ export class JournalEditorComponent {
           this.saving.set(false);
         },
         error: (err) => {
-          this.error.set(err?.error?.error || "Unable to save right now. Please try again.");
+          this.error.set(err?.error?.error || "Couldn't save that. Try again.");
           this.saving.set(false);
         }
       });
@@ -300,7 +300,7 @@ export class JournalEditorComponent {
         this.analyzing.set(false);
       },
       error: () => {
-        this.error.set("Unable to analyze this entry right now. Please try again later.");
+        this.error.set("Couldn't read this note right now.");
         this.analyzing.set(false);
       }
     });
@@ -354,40 +354,40 @@ function normalizeToneKey(value: JournalInsights["tone"]): string {
 function describePattern(pattern: string): { headline: string; summary: string; cardDetail: string; prompt: string } {
   const library: Record<string, { headline: string; summary: string; cardDetail: string; prompt: string }> = {
     reflection: {
-      headline: "This entry reads as reflective and self-aware.",
-      summary: "You are noticing the situation with some distance, which is a good base for clearer decisions.",
-      cardDetail: "The writing looks thoughtful rather than reactive. That usually means you can turn insight into one practical action.",
-      prompt: "What part of this situation is asking for action, and what part only needs acknowledgment?"
+      headline: "This note feels calm and aware.",
+      summary: "You can see the situation without getting fully dragged by it.",
+      cardDetail: "You already have enough clarity for one practical step.",
+      prompt: "What needs action, and what just needs a little grace?"
     },
     rumination: {
-      headline: "This entry looks stuck in a thinking loop.",
-      summary: "The same concern may be replaying without giving you a cleaner answer yet.",
-      cardDetail: "Rumination often feels productive, but it usually needs a boundary or one action to loosen its grip.",
-      prompt: "What is the one question here that still matters, and what can you let stay unanswered for now?"
+      headline: "This note looks stuck in a loop.",
+      summary: "The same worry may be replaying without giving you anything new.",
+      cardDetail: "Less thinking, one boundary, one move.",
+      prompt: "What still matters here, and what can you drop for now?"
     },
     overthinking: {
-      headline: "A lot of mental effort is going into figuring everything out at once.",
-      summary: "This reads like heavy analysis, which can make the next step feel bigger than it really is.",
-      cardDetail: "When overthinking is high, the kindest move is usually to shrink the choice, not to think harder.",
-      prompt: "If this only needed a 10-minute next step, what would that step be?"
+      headline: "You're trying to solve it all at once.",
+      summary: "Big mental effort is making the next step feel bigger than it is.",
+      cardDetail: "Shrink the choice. Don't add more spin.",
+      prompt: "If this only needed 10 minutes, what would you do?"
     },
     "self-criticism": {
-      headline: "The writing sounds harder on you than it needs to.",
-      summary: "There may be a strong inner-critic tone underneath the facts of what happened.",
-      cardDetail: "Self-criticism can hide the actual need. Softer language often makes the next action easier to see.",
-      prompt: "What would this entry sound like if you described yourself with fairness instead of pressure?"
+      headline: "You're being hard on yourself here.",
+      summary: "The inner critic is louder than the facts.",
+      cardDetail: "Softer words usually make the next move easier to see.",
+      prompt: "How would this sound if you were fair to yourself?"
     },
     "social comparison": {
-      headline: "Comparison seems to be pulling attention away from your own needs.",
-      summary: "This pattern often raises urgency and lowers clarity about what matters for you personally.",
-      cardDetail: "When comparison takes over, values and boundaries usually matter more than more information.",
-      prompt: "What do you want for yourself here, even if no one else were being measured?"
+      headline: "Comparison is stealing the spotlight.",
+      summary: "Looking sideways is making your own needs harder to hear.",
+      cardDetail: "Values beat more scrolling here.",
+      prompt: "What do you want, even if no one else was in frame?"
     },
     gratitude: {
-      headline: "There are steadying signals in this entry you can build on.",
-      summary: "The writing includes supportive or grounding moments that are worth repeating on purpose.",
-      cardDetail: "Gratitude works best when it points to a habit or person you can stay close to, not just a nice thought.",
-      prompt: "What helped even a little today, and how can you make that easier to repeat tomorrow?"
+      headline: "There are good signals here.",
+      summary: "Something helped. That's worth repeating on purpose.",
+      cardDetail: "Good moments matter most when they become a habit.",
+      prompt: "What helped today, and how do you make it easier tomorrow?"
     }
   };
 
@@ -398,13 +398,13 @@ function toneSummary(tone: JournalInsights["tone"]): string {
   const normalized = normalizeToneKey(tone);
   switch (normalized) {
     case "heavy":
-      return "The tone feels heavier, so staying with one gentle next move matters more than solving everything right now.";
+      return "The tone feels heavy. Keep the next move small.";
     case "hopeful":
-      return "The tone still carries some lift, which gives you room to turn insight into momentum.";
+      return "The tone still has some lift. Good spot for one clean move.";
     case "mixed":
-      return "The tone feels mixed, which usually means both pressure and resilience are present at the same time.";
+      return "The tone is mixed. Pressure and resilience are both in the room.";
     default:
-      return "The tone looks fairly neutral, which can be useful for noticing details without adding extra pressure.";
+      return "The tone is pretty neutral. That's useful for a clean read.";
   }
 }
 
@@ -412,47 +412,47 @@ function toneGuidance(tone: JournalInsights["tone"]): string {
   const normalized = normalizeToneKey(tone);
   switch (normalized) {
     case "heavy":
-      return "Use shorter, more supportive sentences with yourself and reduce the size of the next task.";
+      return "Use softer words with yourself and shrink the task.";
     case "hopeful":
-      return "Keep the momentum practical by choosing one action you can finish today.";
+      return "Ride the momentum with one move you can finish today.";
     case "mixed":
-      return "Mixed tone usually means you need both validation and one clear step.";
+      return "Mixed tone means you need both validation and one clear step.";
     default:
-      return "A neutral tone can help you sort facts, needs, and next actions more clearly.";
+      return "Neutral tone helps you sort facts from feelings.";
   }
 }
 
 function fallbackSuggestions(pattern: string): string[] {
   const library: Record<string, string[]> = {
     reflection: [
-      "Turn the clearest observation from this entry into one action for the next 24 hours.",
-      "Underline one sentence that feels most true, then write why it matters.",
-      "Name what you needed in that moment, not just what happened."
+      "Turn the clearest line into one move for today.",
+      "Highlight the truest sentence and say why it hits.",
+      "Name what you needed, not just what happened."
     ],
     rumination: [
-      "Set a short boundary for thinking, then move one part of the problem onto paper.",
-      "Pick one decision that can stay unresolved until tomorrow.",
-      "Choose one grounding action before returning to the story in your head."
+      "Set a short cap on thinking, then write one useful part down.",
+      "Let one decision wait until tomorrow.",
+      "Ground first, then revisit the story."
     ],
     overthinking: [
-      "Shrink the problem to the next smallest useful action.",
-      "List what needs action and what only needs acceptance.",
-      "Reduce the number of choices you are trying to solve right now."
+      "Shrink the problem to the next useful action.",
+      "List what needs action and what just needs acceptance.",
+      "Cut down the number of choices in front of you."
     ],
     "self-criticism": [
-      "Rewrite one harsh sentence from this entry in a more fair and supportive way.",
-      "Separate the mistake from your identity before planning the next step.",
-      "Ask what support would help more than pressure today."
+      "Rewrite one harsh line in a fairer way.",
+      "Separate the mistake from who you are.",
+      "Ask what support helps more than pressure today."
     ],
     "social comparison": [
-      "Step back from the comparison trigger for a short window today.",
-      "Write what matters to you in this situation before checking anyone else's pace.",
-      "Choose one action that fits your values, not your fear of missing out."
+      "Step away from the comparison trigger for a bit.",
+      "Write what matters to you before checking anyone else.",
+      "Pick one action that fits your values, not your FOMO."
     ],
     gratitude: [
-      "Protect the routine, person, or place that helped you feel steadier.",
-      "Write why that positive moment mattered instead of listing it quickly.",
-      "Turn one good signal from today into a repeatable habit."
+      "Protect the person, place, or routine that helped.",
+      "Write why that good moment mattered.",
+      "Turn one good signal into a repeatable habit."
     ]
   };
 

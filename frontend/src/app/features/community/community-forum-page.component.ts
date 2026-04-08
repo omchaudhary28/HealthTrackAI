@@ -73,14 +73,14 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
 
   get emptyFeedLabel(): string {
     if (this.scope === "mine") {
-      return "Your account has no posts in this filter yet. Create your first post above and it will show up here and on your profile.";
+      return "No posts here yet. Drop your first one when you're ready.";
     }
 
     if (this.scope === "following") {
-      return "Follow a few people to build a more personal feed.";
+      return "Follow a few people to make this feed yours.";
     }
 
-    return "No posts match this feed yet. Start the tone by sharing the first supportive update.";
+    return "Nothing here yet. Be the first to set the vibe.";
   }
 
   ngOnInit(): void {
@@ -213,7 +213,7 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.loadingFeed = false;
         this.loadingMore = false;
-        this.feedError = err?.error?.error || "Unable to load the community feed right now.";
+          this.feedError = err?.error?.error || "Couldn't load the feed right now.";
       }
     });
   }
@@ -230,7 +230,7 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
       error: () => {
         this.discoverUsers = [];
         this.discoverLoading = false;
-        this.discoverError = "Unable to load discover suggestions right now.";
+        this.discoverError = "Couldn't load suggestions right now.";
       }
     });
   }
@@ -318,7 +318,7 @@ export class CommunityForumPageComponent implements OnInit, OnDestroy {
   }
 
   sharePost(post: CommunityPost): void {
-    const text = `I'm improving my mental health with MindTrack AI \ud83d\udc99\n\n${post.title}`;
+    const text = `MindTrack AI check-in \ud83d\udc99\n\n${post.title}`;
 
     void shareTextSafely("MindTrack AI", text);
   }

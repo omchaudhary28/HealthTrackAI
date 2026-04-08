@@ -19,7 +19,7 @@ export interface MoodOption {
       <div *ngIf="showHeader" class="flex items-start justify-between gap-3">
         <div>
           <div class="text-sm font-semibold text-slate-900">Mood tracker</div>
-          <div class="mt-1 text-xs leading-5 text-slate-500">Pick the closest match for right now. You can adjust later.</div>
+          <div class="mt-1 text-xs leading-5 text-slate-500">Pick the vibe right now. You can tweak it later.</div>
         </div>
         <div class="hidden rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600 sm:inline-flex">
           1 to 5
@@ -54,11 +54,11 @@ export class MoodTrackerComponent {
   @Output() valueChange = new EventEmitter<1 | 2 | 3 | 4 | 5>();
 
   options: MoodOption[] = [
-    { value: 5, label: "Happy", emoji: "\u{1F604}", hint: "Light, open, steady", toneClass: "bg-emerald-400" },
-    { value: 4, label: "Calm", emoji: "\u{1F642}", hint: "Grounded, present", toneClass: "bg-emerald-300" },
-    { value: 3, label: "Neutral", emoji: "\u{1F610}", hint: "Ok, in-between", toneClass: "bg-amber-400" },
-    { value: 2, label: "Stressed", emoji: "\u{1F61F}", hint: "Tense, overloaded", toneClass: "bg-rose-400" },
-    { value: 1, label: "Sad", emoji: "\u{1F622}", hint: "Low, heavy", toneClass: "bg-rose-500" }
+    { value: 5, label: "Bright", emoji: "\u{1F604}", hint: "Light, good, steady", toneClass: "bg-emerald-400" },
+    { value: 4, label: "Chill", emoji: "\u{1F642}", hint: "Grounded, okay", toneClass: "bg-emerald-300" },
+    { value: 3, label: "Mid", emoji: "\u{1F610}", hint: "In-between", toneClass: "bg-amber-400" },
+    { value: 2, label: "Tense", emoji: "\u{1F61F}", hint: "A bit fried", toneClass: "bg-rose-400" },
+    { value: 1, label: "Low", emoji: "\u{1F622}", hint: "Heavy day", toneClass: "bg-rose-500" }
   ];
 
   select(value: 1 | 2 | 3 | 4 | 5): void {

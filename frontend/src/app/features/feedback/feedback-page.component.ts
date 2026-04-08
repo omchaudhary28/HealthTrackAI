@@ -12,9 +12,9 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
     <section appScrollReveal class="page-stack">
       <div class="glass-card page-hero bg-[linear-gradient(150deg,rgba(255,255,255,0.78),rgba(255,255,255,0.52),rgba(219,39,119,0.08))]">
         <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">Feedback</div>
-        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Tell us what feels useful, missing, or rough.</h1>
+        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Tell us what hits and what flops.</h1>
         <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-          MindTrack is meant to feel calm, helpful, and safe. Use this space to suggest improvements, flag friction, or rate the overall experience.
+          Drop a quick note. UX bugs, rough spots, ideas, all welcome.
         </p>
       </div>
 
@@ -22,14 +22,14 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
         <form class="glass-card rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6" (ngSubmit)="submit()">
           <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <div class="text-sm font-semibold text-slate-900">Share product feedback</div>
-              <div class="mt-1 text-xs leading-5 text-slate-500">Feature ideas, UX friction, performance notes, or community safety feedback.</div>
+              <div class="text-sm font-semibold text-slate-900">Drop feedback</div>
+              <div class="mt-1 text-xs leading-5 text-slate-500">Ideas, bugs, friction, safety notes.</div>
             </div>
             <span *ngIf="submitted" class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Saved</span>
           </div>
 
           <div class="mt-5">
-            <div class="text-sm font-semibold text-slate-800">How would you rate the experience?</div>
+            <div class="text-sm font-semibold text-slate-800">Rate the vibe</div>
             <div class="mt-3 flex flex-wrap gap-2">
               <button
                 *ngFor="let rating of [1,2,3,4,5]"
@@ -61,13 +61,13 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
             <label class="block text-sm font-medium text-slate-600">
               Page context
-              <input [(ngModel)]="form.pageContext" name="pageContext" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" placeholder="Example: community feed, chatbot, tests" />
+              <input [(ngModel)]="form.pageContext" name="pageContext" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" placeholder="Example: feed, chatbot, tests" />
             </label>
           </div>
 
           <label class="mt-5 block text-sm font-medium text-slate-600">
             What should we improve?
-            <textarea [(ngModel)]="form.message" name="message" rows="6" class="mt-2 w-full resize-none rounded-[1.75rem] border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" placeholder="Example: The community feed feels calm, but I'd like better messaging between users I follow."></textarea>
+            <textarea [(ngModel)]="form.message" name="message" rows="6" class="mt-2 w-full resize-none rounded-[1.75rem] border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" placeholder="Example: Feed is clean, but messaging feels clunky."></textarea>
           </label>
 
           <div *ngIf="error" class="mt-4 rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700">
@@ -75,22 +75,22 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           </div>
 
           <button type="submit" [disabled]="pending" class="btn-primary mt-6 w-full rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60 sm:w-auto">
-            {{ pending ? 'Sending...' : 'Send feedback' }}
+            {{ pending ? 'Sending...' : 'Send it' }}
           </button>
         </form>
 
         <div class="space-y-6">
           <div class="glass-card rounded-[2rem] p-6">
-            <div class="text-sm font-semibold text-slate-900">What your feedback changes</div>
+            <div class="text-sm font-semibold text-slate-900">Why it matters</div>
             <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
               <div class="rounded-3xl bg-slate-50/80 px-4 py-4">
-                Product friction gets translated into clearer UX tasks.
+                Rough UX turns into fixes.
               </div>
               <div class="rounded-3xl bg-slate-50/80 px-4 py-4">
-                Safety reports help tune moderation and community protections.
+                Safety notes help tune protections.
               </div>
               <div class="rounded-3xl bg-slate-50/80 px-4 py-4">
-                AI quality notes help reduce repetitive or weak recommendations.
+                AI notes help cut weak or repetitive replies.
               </div>
             </div>
           </div>
@@ -103,7 +103,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
             <div class="mt-4 space-y-3">
               <div *ngIf="!history.length" class="rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 px-4 py-5 text-sm text-slate-500">
-                Your submitted feedback will appear here.
+                Your feedback shows up here.
               </div>
 
               <div *ngFor="let item of history" class="rounded-3xl border border-slate-100 bg-white/80 px-4 py-4">

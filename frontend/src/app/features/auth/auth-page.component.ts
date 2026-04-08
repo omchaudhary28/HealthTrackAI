@@ -19,10 +19,10 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
                 {{ mode === "signup" ? "Create account" : "Welcome back" }}
               </div>
               <div class="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950 sm:text-2xl">
-                {{ mode === "signup" ? "Start with the essentials." : "Sign in and continue tracking." }}
+                {{ mode === "signup" ? "Start with the basics." : "Jump back in." }}
               </div>
               <div class="mt-1 text-sm leading-6 text-slate-500">
-                {{ mode === "signup" ? "Only name, email, and password are required." : "Use the same email you used for your account." }}
+                {{ mode === "signup" ? "Just name, email, and password." : "Use the email tied to your account." }}
               </div>
             </div>
 
@@ -49,7 +49,7 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
                   class="app-field app-field-white pr-24"
                   placeholder="name@example.com" />
                 <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
-                  {{ lookupPending ? 'Checking' : 'Email-first' }}
+                  {{ lookupPending ? 'Checking' : 'Smart check' }}
                 </div>
               </div>
             </label>
@@ -106,7 +106,7 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
               <div>
                 <div class="text-sm font-semibold text-slate-900">Profile details</div>
                 <div class="mt-1 text-xs leading-5 text-slate-500">
-                  Optional fields you can fill now or update later from your profile.
+                  Optional stuff. Add now or later.
                 </div>
               </div>
               <span class="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
@@ -169,31 +169,31 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
           Secure access
         </div>
         <h1 class="mt-4 text-xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">
-          Private wellness tracking that stays simple on mobile.
+          Private tracking, low friction.
         </h1>
         <p class="mt-3 max-w-xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-          MindTrack AI combines check-ins, journals, assessments, and exercises into one supportive experience. It does not diagnose mental health conditions.
+          Check-ins, notes, tests, and exercises in one place. "No long setup" is the vibe.
         </p>
 
         <div class="mt-5 rounded-[1.5rem] border border-white/70 bg-white/72 px-4 py-4 text-sm leading-7 text-slate-600 lg:hidden">
-          Start with the essentials now. You can add profile details later without slowing down account creation on your phone.
+          Start fast now. Add the extra profile stuff later.
         </div>
 
         <div class="mt-6 hidden gap-4 sm:grid-cols-2 lg:grid">
           <div class="rounded-3xl border border-white/70 bg-white/72 p-5">
             <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Fast access</div>
-            <div class="mt-2 text-lg font-semibold text-slate-900">Smart email routing</div>
-            <div class="mt-2 text-sm leading-7 text-slate-600">Enter your email once and MindTrack nudges you toward sign in or account creation automatically.</div>
+            <div class="mt-2 text-lg font-semibold text-slate-900">Smart email check</div>
+            <div class="mt-2 text-sm leading-7 text-slate-600">Type your email once. MindTrack points you to sign in or create.</div>
           </div>
           <div class="rounded-3xl border border-white/70 bg-white/72 p-5">
             <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Private by default</div>
-            <div class="mt-2 text-lg font-semibold text-slate-900">Protected wellness data</div>
-            <div class="mt-2 text-sm leading-7 text-slate-600">Assessment history, journals, and recommendations stay tied to your account session and protected routes.</div>
+            <div class="mt-2 text-lg font-semibold text-slate-900">Protected data</div>
+            <div class="mt-2 text-sm leading-7 text-slate-600">Your journal, tests, and recommendations stay tied to your account.</div>
           </div>
         </div>
 
         <div class="mt-6 rounded-3xl border border-white/70 bg-white/72 p-5 text-sm leading-7 text-slate-600">
-          Important: MindTrack AI supports reflection and habit-building only. It never acts as a clinical or medical authority.
+          MindTrack supports reflection and habits. It is not medical advice.
         </div>
       </div>
     </section>
@@ -252,11 +252,11 @@ export class AuthPageComponent {
         this.mode = result.recommendedMode;
         if (result.exists) {
           this.emailHintKind = "success";
-          this.emailHint = `We found an account${result.name ? ` for ${result.name}` : ""}. Sign in to continue.`;
+          this.emailHint = `Account found${result.name ? ` for ${result.name}` : ""}. Sign in to keep going.`;
           this.profileDetailsExpanded = false;
         } else {
           this.emailHintKind = "warning";
-          this.emailHint = "No account found for this email yet. Create one to get started.";
+          this.emailHint = "No account yet. Create one and jump in.";
         }
       },
       error: () => {

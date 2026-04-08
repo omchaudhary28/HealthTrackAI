@@ -14,44 +14,44 @@ export class LandingPageComponent {
   features = [
     {
       kicker: "Assess",
-      title: "Baseline wellness testing",
-      description: "Measure stress, anxiety, mood stability, focus, emotional sensitivity, and social comfort during onboarding."
+      title: "Quick vibe check",
+      description: "Start with a fast baseline so the app knows where you're at."
     },
     {
       kicker: "Reflect",
-      title: "Guided journaling and prompts",
-      description: "Capture daily reflections with mood tags, AI prompts, and pattern analysis for rumination or self-criticism."
+      title: "Journal, no essay",
+      description: "Drop a few lines, tag the mood, and let the app spot the loop."
     },
     {
       kicker: "Improve",
-      title: "Exercises matched to current needs",
-      description: "Surface breathing, grounding, reframing, gratitude, and sleep rituals based on evolving user signals."
+      title: "Exercises that fit today",
+      description: "Breathing, grounding, and reset moves picked for your current state."
     },
     {
       kicker: "Connect",
-      title: "Anonymous community support",
-      description: "Offer moderated anonymous discussion spaces for users who want shared encouragement without identity exposure."
+      title: "Low-key support feed",
+      description: "Post short updates, stay anonymous, and skip the oversharing."
     }
   ];
 
   benefits = [
-    "Human-like AI responses grounded in your recent patterns",
-    "Dynamic recommendations with clear why and expected outcome",
-    "Glassmorphism UI with mobile-first layouts and fast route transitions"
+    "\"Tiny wins > perfect plans.\"",
+    "AI replies shaped by your recent patterns",
+    "Fast mobile UI that stays out of your way"
   ];
 
   steps = [
     {
-      title: "Check in once",
-      description: "Complete a baseline or a quick mood entry so the platform has real context to work from."
+      title: "Check in",
+      description: "Do a baseline or drop one mood log."
     },
     {
-      title: "Get a pattern snapshot",
-      description: "MindTrack blends assessments, mood logs, journal signals, and activity history into a supportive state summary."
+      title: "Get the read",
+      description: "MindTrack blends your logs into one clean snapshot."
     },
     {
-      title: "Act on the next best step",
-      description: "Follow a recommendation with a clear reason, expected outcome, and completion tracking."
+      title: "Make one move",
+      description: "Pick the next step and keep it chill."
     }
   ];
 }

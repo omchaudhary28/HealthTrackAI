@@ -58,11 +58,11 @@ export class DailyInsightCardComponent implements OnInit, OnDestroy {
   ];
 
   private readonly insights = [
-    "Small daily reflections can reduce overthinking.",
-    "Five minutes of slow breathing can calm the nervous system.",
-    "Writing down thoughts helps reduce rumination.",
-    "Noticing one steady moment can soften stress spikes.",
-    "Gentle routines beat perfect routines on hard days."
+    "\"Tiny wins still win.\"",
+    "Keep it chill. One slow breath counts.",
+    "Low energy? One line in the journal is enough.",
+    "One steady moment can cut the spiral.",
+    "Gentle routines beat perfect ones."
   ];
 
   selectedMood = signal<string>("neutral");

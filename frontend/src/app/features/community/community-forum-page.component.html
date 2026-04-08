@@ -3,10 +3,10 @@
     <div class="glass-card page-hero">
       <div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Community</div>
       <h1 class="mt-3 text-2xl font-extrabold tracking-[-0.05em] text-slate-950 sm:text-3xl lg:text-4xl">
-        Use support when it helps. Keep tracking first.
+        Drop in, get support, keep it moving.
       </h1>
       <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
-        Mood, journal, progress, and exercises are still the center of MindTrack. Community is here for quick encouragement, not as the main workflow.
+        Quick support lives here. Your main flow is still mood, journal, and progress.
       </p>
 
       <div class="cluster-actions mt-6">
@@ -18,16 +18,16 @@
     </div>
 
     <div class="glass-card rounded-[2rem] p-5 sm:rounded-[2.5rem] sm:p-6">
-      <div class="text-sm font-semibold text-slate-950">Keep this page simple</div>
+      <div class="text-sm font-semibold text-slate-950">Keep it simple</div>
       <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
         <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">
-          Check your mood, journal, or progress first before scrolling here.
+          Check mood or journal first.
         </div>
         <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">
-          Share one clear update instead of trying to explain everything at once.
+          One clear update > a whole life story.
         </div>
         <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">
-          Similar feed spotlight: <span class="font-semibold text-slate-900">{{ spotlightMentalState || "Balanced" }}</span>
+          Feed vibe: <span class="font-semibold text-slate-900">{{ spotlightMentalState || "Balanced" }}</span>
         </div>
       </div>
     </div>
@@ -36,8 +36,8 @@
   <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
     <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
       <div>
-        <div class="text-sm font-semibold text-slate-950">Choose a simple feed</div>
-        <div class="mt-1 text-xs leading-5 text-slate-500">Pick one view and keep the page lightweight.</div>
+        <div class="text-sm font-semibold text-slate-950">Choose a feed</div>
+        <div class="mt-1 text-xs leading-5 text-slate-500">Pick one lane and chill.</div>
       </div>
 
       <div class="chip-scroll">
@@ -190,7 +190,7 @@
               <div class="mt-2 text-sm leading-7 text-slate-600">{{ comment.content }}</div>
             </div>
             <div *ngIf="!post.comments.length" class="rounded-[1.2rem] border border-dashed border-slate-200 bg-white/80 px-4 py-4 text-sm text-slate-500">
-              No comments yet. Keep replies short and supportive.
+              No comments yet. Keep it kind.
             </div>
           </div>
 
@@ -199,7 +199,7 @@
               [(ngModel)]="draftComments[post.id]"
               [ngModelOptions]="{ standalone: true }"
               class="app-field app-field-white rounded-[1.3rem]"
-              placeholder="Add one supportive comment..." />
+              placeholder="Say something kind..." />
             <button
               type="button"
               (click)="submitComment(post)"
@@ -220,23 +220,23 @@
 
     <div class="space-y-5 xl:sticky xl:top-24 xl:self-start">
       <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
-        <div class="text-sm font-semibold text-slate-950">Tracking shortcuts</div>
+        <div class="text-sm font-semibold text-slate-950">Shortcuts</div>
         <div class="mt-4 space-y-3">
           <a routerLink="/mood" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
-            <span>Mood check-in</span>
-            <span class="text-slate-400">Open</span>
+            <span>Mood</span>
+            <span class="text-slate-400">Go</span>
           </a>
           <a routerLink="/journal" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
-            <span>Journal entry</span>
-            <span class="text-slate-400">Open</span>
+            <span>Journal</span>
+            <span class="text-slate-400">Go</span>
           </a>
           <a routerLink="/progress" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
-            <span>Progress view</span>
-            <span class="text-slate-400">Open</span>
+            <span>Progress</span>
+            <span class="text-slate-400">Go</span>
           </a>
           <a routerLink="/exercises" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
             <span>Exercises</span>
-            <span class="text-slate-400">Open</span>
+            <span class="text-slate-400">Go</span>
           </a>
         </div>
       </div>
@@ -245,16 +245,16 @@
         <div class="flex items-center justify-between gap-3">
           <div>
             <div class="text-sm font-semibold text-slate-950">Suggested people</div>
-            <div class="mt-1 text-xs leading-5 text-slate-500">A smaller list, so it stays manageable.</div>
+            <div class="mt-1 text-xs leading-5 text-slate-500">Small list. Less noise.</div>
           </div>
           <button type="button" (click)="loadDiscover()" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Refresh</button>
         </div>
 
         <div class="mt-4 space-y-3">
-          <div *ngIf="discoverLoading" class="rounded-[1.5rem] bg-slate-50/80 px-4 py-4 text-sm text-slate-500">Finding supportive people...</div>
+          <div *ngIf="discoverLoading" class="rounded-[1.5rem] bg-slate-50/80 px-4 py-4 text-sm text-slate-500">Finding people...</div>
           <div *ngIf="discoverError" class="rounded-[1.5rem] border border-rose-100 bg-rose-50 px-4 py-4 text-sm text-rose-700">{{ discoverError }}</div>
           <div *ngIf="!discoverLoading && !discoverUsers.length && !discoverError" class="rounded-[1.5rem] border border-dashed border-slate-200 bg-slate-50/80 px-4 py-5 text-sm text-slate-500">
-            Suggestions will appear when the community has more active accounts.
+            Suggestions will show up soon.
           </div>
 
           <div *ngFor="let user of discoverUsers; trackBy: trackById" class="rounded-[1.5rem] border border-black/5 bg-white px-4 py-4">
@@ -282,7 +282,7 @@
         <div class="flex items-center justify-between gap-3">
           <div>
             <div class="text-sm font-semibold text-slate-950">Messages</div>
-            <div class="mt-1 text-xs leading-5 text-slate-500">Only open a chat when it adds value.</div>
+            <div class="mt-1 text-xs leading-5 text-slate-500">Keep chats short and useful.</div>
           </div>
           <button type="button" (click)="loadConversations()" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Refresh</button>
         </div>
@@ -312,7 +312,7 @@
           </button>
 
           <div *ngIf="!conversations.length" class="rounded-[1.5rem] border border-dashed border-slate-200 bg-slate-50/80 px-4 py-5 text-sm text-slate-500">
-            Follow someone or tap Message on a post to start a conversation.
+            Follow someone or tap Message to start.
           </div>
         </div>
 
@@ -346,7 +346,7 @@
               [ngModelOptions]="{ standalone: true }"
               (ngModelChange)="handleTyping()"
               class="app-field app-field-white rounded-[1.2rem]"
-              placeholder="Send a short supportive message..." />
+              placeholder="Send a quick note..." />
             <button type="button" (click)="sendMessage()" [disabled]="chatPending" class="btn-primary rounded-[1.2rem] px-4 py-3 text-sm font-semibold disabled:opacity-60">
               {{ chatPending ? "Sending..." : "Send" }}
             </button>

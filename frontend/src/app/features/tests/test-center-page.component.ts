@@ -13,9 +13,9 @@ import { TestSummary, TestsService } from "../../core/services/tests.service";
     <section appScrollReveal class="page-stack">
       <div class="glass-card theme-hero-card page-hero">
         <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">Test Center</div>
-        <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">Structured self-assessment for multiple mental wellness angles.</h1>
+        <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">Quick tests. Clear read.</h1>
         <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
-          Each test returns reflective interpretation, improvement suggestions, and optional population comparison. Results are not medical diagnoses.
+          Take a quick self-check, get a short read, and keep moving. Not a diagnosis.
         </p>
       </div>
       <div class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
@@ -32,7 +32,7 @@ import { TestSummary, TestsService } from "../../core/services/tests.service";
         </a>
       </div>
       <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur">
-        <div class="text-sm font-medium text-slate-500">Questionnaire layout preview</div>
+        <div class="text-sm font-medium text-slate-500">Question preview</div>
         <div class="mt-4 rounded-3xl border border-slate-100 bg-slate-50 p-5">
           <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Question 4 of 12</div>
           <div class="mt-3 text-lg font-semibold text-slate-900">Small uncertainties make me feel restless.</div>

@@ -13,9 +13,9 @@ import { JournalEditorComponent } from "../../shared/components/journal-editor.c
     <section appScrollReveal class="page-stack">
       <div class="theme-hero-card page-hero">
         <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Journaling</div>
-        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl">Write with calmer prompts, mood tags, and gentle pattern hints.</h1>
+        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl">Write it out. Keep it light.</h1>
         <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-          Your journal is for reflection and habit support. MindTrack AI is not a clinical or diagnostic system.
+          No essay needed. Just enough to catch the vibe and your next move.
         </p>
       </div>
 
@@ -23,10 +23,10 @@ import { JournalEditorComponent } from "../../shared/components/journal-editor.c
 
       <div class="theme-bento-card-soft rounded-[2rem] p-5 backdrop-blur sm:rounded-[2.25rem] sm:p-6">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <div class="text-sm font-semibold text-slate-900">Recent entries</div>
-            <div class="mt-1 text-xs leading-5 text-slate-500">A quick list to revisit what you wrote earlier.</div>
-          </div>
+            <div>
+              <div class="text-sm font-semibold text-slate-900">Recent entries</div>
+              <div class="mt-1 text-xs leading-5 text-slate-500">Short reads from your earlier notes.</div>
+            </div>
           <button
             type="button"
             (click)="refresh()"
@@ -38,7 +38,7 @@ import { JournalEditorComponent } from "../../shared/components/journal-editor.c
         <div class="mt-5 grid gap-3">
           <ng-container *ngIf="entries$ | async as entries; else loading">
             <div *ngIf="!entries.length" class="theme-bento-card rounded-[1.6rem] px-4 py-4 text-sm text-slate-600">
-              No entries yet. Your first one can be short, even one sentence.
+              No entries yet. "One line is enough."
             </div>
 
             <article *ngFor="let entry of entries; let i = index" appScrollReveal [revealDelay]="i * 60" class="theme-bento-card rounded-[1.75rem] px-4 py-4">

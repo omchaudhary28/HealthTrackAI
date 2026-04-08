@@ -2,18 +2,18 @@
   <div class="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
     <div class="glass-card rounded-[2rem] bg-[linear-gradient(155deg,rgba(255,255,255,0.7),rgba(255,255,255,0.48),rgba(251,146,60,0.09))] p-5 sm:rounded-[2.75rem] sm:p-10">
       <div class="mb-5 inline-flex rounded-full border border-white/70 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-        AI-powered mental wellness platform
+        Track. Breathe. Repeat.
       </div>
       <h1 class="max-w-3xl text-[2rem] font-semibold leading-tight text-slate-900 sm:text-5xl lg:text-6xl">
-        A calmer digital space that turns reflection into action.
+        Feel better, track smarter.
       </h1>
       <p class="mt-4 max-w-2xl text-base leading-7 text-slate-700 sm:text-lg sm:leading-8">
-        MindTrack AI helps people understand mental patterns, respond with smaller next steps, and build steadier habits through assessments, journaling, mood tracking, and a human-like AI guide.
+        Quick check-ins, tiny wins, and an AI guide that keeps it real. "One small step" is the whole mood.
       </p>
 
       <div class="mt-6 flex flex-col gap-3 min-[430px]:flex-row min-[430px]:flex-wrap">
         <a routerLink="/auth" class="btn-primary rounded-full px-6 py-3 text-sm font-semibold">Create account</a>
-        <a routerLink="/about" class="btn-outline rounded-full px-6 py-3 text-sm font-semibold">How it works</a>
+        <a routerLink="/about" class="btn-outline rounded-full px-6 py-3 text-sm font-semibold">See flow</a>
       </div>
 
       <div class="mt-8 grid gap-3 sm:grid-cols-3">
@@ -26,7 +26,7 @@
     <div class="space-y-6">
       <app-daily-insight-card appScrollReveal [revealDelay]="120"></app-daily-insight-card>
       <div class="glass-card rounded-[2rem] p-6">
-        <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">How it works</div>
+        <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">How it flows</div>
         <div class="mt-4 space-y-4">
           <div *ngFor="let step of steps; let i = index" class="rounded-3xl border border-slate-100 bg-white/80 p-4">
             <div class="flex items-start gap-3">
@@ -52,16 +52,16 @@
 
   <div class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
     <div class="glass-card rounded-[2rem] p-5 sm:rounded-[2.25rem] sm:p-8">
-      <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">Built for momentum</div>
-      <h2 class="mt-3 text-3xl font-semibold text-slate-900">Designed to feel smooth, private, and actionable.</h2>
+      <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">Built for tiny wins</div>
+      <h2 class="mt-3 text-3xl font-semibold text-slate-900">Smooth, private, low drama.</h2>
       <div class="mt-6 grid gap-4 sm:grid-cols-2">
         <div class="rounded-3xl bg-slate-50/80 p-5">
           <div class="text-2xl font-semibold text-slate-900">6</div>
-          <div class="mt-1 text-sm text-slate-600">core mental-state patterns tracked with AI-backed classification</div>
+          <div class="mt-1 text-sm text-slate-600">core state patterns the app keeps an eye on</div>
         </div>
         <div class="rounded-3xl bg-slate-50/80 p-5">
           <div class="text-2xl font-semibold text-slate-900">1</div>
-          <div class="mt-1 text-sm text-slate-600">next best action surfaced with clear reasoning and expected outcome</div>
+          <div class="mt-1 text-sm text-slate-600">next move picked fast, with a clear why</div>
         </div>
       </div>
     </div>
@@ -70,10 +70,10 @@
       <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">Safety note</div>
       <h2 class="mt-3 text-2xl font-semibold text-slate-900">Supportive, not clinical.</h2>
       <p class="mt-4 text-sm leading-8 text-slate-600">
-        MindTrack AI is built for self-reflection, emotional support, and habit guidance. It does not diagnose, prescribe, or replace professional care.
+        MindTrack helps with reflection and habits. It does not diagnose, prescribe, or replace real care.
       </p>
       <a routerLink="/auth" class="btn-primary mt-6 inline-flex rounded-full px-5 py-3 text-sm font-semibold">
-        Start gently
+        Start now
       </a>
     </div>
   </div>

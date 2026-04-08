@@ -30,15 +30,15 @@ interface CalendarCell {
         <div class="chip-scroll text-xs font-semibold text-slate-700">
           <span class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1">
             <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-            positive
+            bright
           </span>
           <span class="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1">
             <span class="h-2 w-2 rounded-full bg-amber-500"></span>
-            neutral
+            mid
           </span>
           <span class="inline-flex items-center gap-2 rounded-full bg-rose-100 px-3 py-1">
             <span class="h-2 w-2 rounded-full bg-rose-500"></span>
-            stressed
+            low
           </span>
         </div>
       </div>
@@ -62,7 +62,7 @@ interface CalendarCell {
       </div>
 
       <div class="mt-5 text-xs leading-6 text-slate-500">
-        Tip: You can log a quick mood even on low-energy days. Consistency matters more than perfection.
+        Tip: low energy is fine. One tap still counts.
       </div>
     </div>
   `

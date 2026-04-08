@@ -31,10 +31,10 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                 <div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Profile</div>
                 <h1 class="mt-3 text-2xl font-extrabold tracking-[-0.05em] text-slate-950 sm:text-3xl lg:text-4xl">{{ profile.profile.name }}</h1>
                 <div class="mt-2 text-base font-semibold text-[var(--mt-accent-strong)]">
-                  {{ profile.profile.headline || "Tracking progress one step at a time." }}
+                  {{ profile.profile.headline || "'One step at a time.'" }}
                 </div>
                 <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:leading-8">
-                  {{ profile.profile.bio || "This profile stays simple so the focus can remain on mood, journaling, exercises, and steady progress." }}
+                  {{ profile.profile.bio || "Keeping it simple: mood, notes, exercises, progress." }}
                 </p>
               </div>
             </div>
@@ -64,7 +64,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                     {{ profile.isOwnProfile ? "Tracking summary" : "Public tracking summary" }}
                   </div>
                   <div class="mt-1 text-xs leading-5 text-slate-500">
-                    {{ profile.isOwnProfile ? "Your health-tracking signals come before community activity." : "This view prioritizes the member's shared tracking signals first." }}
+                    {{ profile.isOwnProfile ? "Your main signals, minus the noise." : "Shared signals first." }}
                   </div>
                 </div>
                 <div class="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-600">
@@ -132,7 +132,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                   <div class="text-sm font-semibold text-slate-950">Posts</div>
-                  <div class="mt-1 text-xs leading-5 text-slate-500">A simpler list of updates instead of a dense profile grid.</div>
+                  <div class="mt-1 text-xs leading-5 text-slate-500">Short updates only.</div>
                 </div>
 
                 <div class="chip-scroll">
@@ -179,7 +179,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             <div *ngIf="profilePostsLoading" class="glass-card rounded-[2rem] p-6 text-sm text-slate-500">Loading posts...</div>
             <div *ngIf="profilePostsError" class="rounded-[1.75rem] border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700">{{ profilePostsError }}</div>
             <div *ngIf="!profilePostsLoading && !profilePosts.length" class="glass-card rounded-[2rem] p-6 text-sm text-slate-500">
-              {{ profile.isOwnProfile ? "Create your first post when you have a short update worth sharing." : "No public posts yet." }}
+              {{ profile.isOwnProfile ? "No posts yet. Share a quick win when you have one." : "No public posts yet." }}
             </div>
 
             <div *ngIf="profilePosts.length" class="space-y-4">
@@ -221,23 +221,23 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           <div class="space-y-6">
             <ng-container *ngIf="profile.isOwnProfile; else publicRail">
               <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
-                <div class="text-sm font-semibold text-slate-950">Quick tracking links</div>
+                <div class="text-sm font-semibold text-slate-950">Quick links</div>
                 <div class="mt-4 space-y-3">
                   <a routerLink="/mood" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
-                    <span>Mood check-in</span>
-                    <span class="text-slate-400">Open</span>
+                    <span>Mood</span>
+                    <span class="text-slate-400">Go</span>
                   </a>
                   <a routerLink="/journal" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
                     <span>Journal</span>
-                    <span class="text-slate-400">Open</span>
+                    <span class="text-slate-400">Go</span>
                   </a>
                   <a routerLink="/progress" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
                     <span>Progress</span>
-                    <span class="text-slate-400">Open</span>
+                    <span class="text-slate-400">Go</span>
                   </a>
                   <a routerLink="/tests" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
                     <span>Test center</span>
-                    <span class="text-slate-400">Open</span>
+                    <span class="text-slate-400">Go</span>
                   </a>
                 </div>
               </div>
@@ -246,7 +246,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <div class="text-sm font-semibold text-slate-950">Profile basics</div>
-                    <div class="mt-1 text-xs leading-5 text-slate-500">Keep your public profile short and easy to scan.</div>
+                    <div class="mt-1 text-xs leading-5 text-slate-500">Keep it short. Keep it real.</div>
                   </div>
                   <span *ngIf="saved" class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Saved</span>
                 </div>
@@ -319,19 +319,19 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
             <ng-template #publicRail>
               <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
-                <div class="text-sm font-semibold text-slate-950">About this member</div>
+                <div class="text-sm font-semibold text-slate-950">About</div>
                 <div class="mt-4 rounded-[1.5rem] bg-slate-50/90 px-4 py-4 text-sm leading-7 text-slate-600">
-                  {{ profile.profile.bio || "No extra profile note has been added yet." }}
+                  {{ profile.profile.bio || "No extra note yet." }}
                 </div>
               </div>
 
               <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
                 <div class="text-sm font-semibold text-slate-950">Community settings</div>
                 <div class="mt-4 rounded-[1.5rem] bg-slate-50/90 px-4 py-4 text-sm text-slate-600">
-                  {{ profile.canMessage ? "Direct messages are open for this account." : "This account is not accepting direct messages right now." }}
+                  {{ profile.canMessage ? "DMs are open." : "DMs are off right now." }}
                 </div>
                 <div class="mt-3 rounded-[1.5rem] bg-slate-50/90 px-4 py-4 text-sm text-slate-600">
-                  {{ profile.activitySummary ? "This member shares some tracking stats publicly." : "This member is keeping their tracking stats private." }}
+                  {{ profile.activitySummary ? "Some stats are public." : "Stats are private." }}
                 </div>
               </div>
             </ng-template>
@@ -434,7 +434,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          this.error = err?.error?.error || "Unable to save profile right now.";
+          this.error = err?.error?.error || "Couldn't save your profile right now.";
           this.pending = false;
         }
       });
@@ -583,7 +583,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       error: () => {
         this.profilePostsLoading = false;
         this.profilePostsLoadingMore = false;
-        this.profilePostsError = "Unable to load profile posts right now.";
+        this.profilePostsError = "Couldn't load profile posts right now.";
       }
     });
   }

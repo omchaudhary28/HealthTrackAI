@@ -17,7 +17,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             <div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Create Post</div>
             <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Share one clear update.</h1>
             <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
-              Keep posting lightweight. If you need deeper reflection, start in journal or mood tracking and only bring the useful summary here.
+              No essay. Just the update. If it gets deep, keep that part in your journal.
             </p>
 
             <div class="cluster-actions mt-6">
@@ -31,9 +31,9 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
         <div class="glass-card rounded-[2rem] p-5 sm:rounded-[2.5rem] sm:p-6">
           <div class="text-sm font-semibold text-slate-900">Before you post</div>
           <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
-            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">Say what changed, not your whole history.</div>
-            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">Use anonymous mode whenever privacy matters more than recognition.</div>
-            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">If the post is really for yourself, save it in journal instead.</div>
+            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">Say what changed, not the full lore.</div>
+            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">Anonymous mode is there when privacy wins.</div>
+            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">If it's just for you, drop it in journal.</div>
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <div class="text-sm font-semibold text-slate-900">Simple composer</div>
-              <div class="mt-1 text-xs leading-5 text-slate-500">Start with a title and a short description. Add progress details only if they matter.</div>
+              <div class="mt-1 text-xs leading-5 text-slate-500">Title, short note, done.</div>
             </div>
             <label class="inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600">
               <input [(ngModel)]="compose.isAnonymous" name="isAnonymous" type="checkbox" class="rounded border-slate-300 text-slate-900 focus:ring-slate-200" />
@@ -54,7 +54,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           <div class="mt-5 grid gap-4 md:grid-cols-2">
             <label class="block text-sm font-medium text-slate-600">
               Title
-              <input [(ngModel)]="compose.title" name="title" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="Example: A calmer week than last week" />
+              <input [(ngModel)]="compose.title" name="title" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="Example: Tiny win today" />
             </label>
 
             <label class="block text-sm font-medium text-slate-600">
@@ -70,7 +70,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
           <label class="mt-4 block text-sm font-medium text-slate-600">
             Content
-            <textarea [(ngModel)]="compose.content" name="content" rows="6" class="mt-2 w-full resize-none rounded-[1.75rem] border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="What changed, what helped, or what you want support with."></textarea>
+            <textarea [(ngModel)]="compose.content" name="content" rows="6" class="mt-2 w-full resize-none rounded-[1.75rem] border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="What changed? What helped? What do you need?"></textarea>
           </label>
 
           <div class="mt-4 grid gap-4 md:grid-cols-2">
@@ -94,7 +94,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
           <div *ngIf="compose.shareType !== 'reflection'" class="mt-5 rounded-[1.75rem] border border-slate-200 bg-slate-50/80 p-5">
             <div class="text-sm font-semibold text-slate-900">Optional progress details</div>
-            <div class="mt-1 text-xs leading-5 text-slate-500">Only fill in the pieces that make the update clearer.</div>
+            <div class="mt-1 text-xs leading-5 text-slate-500">Only fill what adds clarity.</div>
 
             <div class="mt-4 grid gap-4 md:grid-cols-2">
               <label class="block text-sm font-medium text-slate-600">
@@ -135,7 +135,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
         <div class="space-y-6">
           <div class="glass-card rounded-[2rem] p-6">
-            <div class="text-sm font-semibold text-slate-900">Tracking before posting</div>
+            <div class="text-sm font-semibold text-slate-900">Track before posting</div>
             <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
               <a routerLink="/mood" class="block rounded-3xl bg-slate-50/80 px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100">
                 Mood check-in
@@ -150,14 +150,14 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           </div>
 
           <div class="glass-card rounded-[2rem] p-6">
-            <div class="text-sm font-semibold text-slate-900">What works best here</div>
+            <div class="text-sm font-semibold text-slate-900">What works here</div>
             <div class="mt-4 rounded-3xl bg-slate-50/80 px-4 py-4 text-sm leading-7 text-slate-600">
-              Short reflections, small progress notes, and milestone updates are easier for people to support than long detailed posts. Anonymous mode is still available.
+              Short posts hit better. Tiny wins, quick notes, and honest asks work best.
             </div>
           </div>
 
           <div *ngIf="createdPost" class="glass-card rounded-[2rem] border border-emerald-100 bg-[linear-gradient(150deg,rgba(236,253,245,0.92),rgba(255,255,255,0.88))] p-6">
-            <div class="text-sm font-semibold text-emerald-800">Post published</div>
+            <div class="text-sm font-semibold text-emerald-800">Post live</div>
             <div class="mt-3 text-2xl font-semibold text-slate-900">{{ createdPost.title }}</div>
             <div class="mt-3 text-sm leading-7 text-slate-600">{{ createdPost.content }}</div>
             <div class="mt-5 flex flex-wrap gap-3">

@@ -15,9 +15,9 @@ import { MoodTrackerComponent } from "../../shared/components/mood-tracker.compo
     <section appScrollReveal class="page-stack">
       <div class="page-hero rounded-[2rem] border border-white/70 bg-[linear-gradient(145deg,rgba(216,214,239,0.22),rgba(255,255,255,0.86))] shadow-[0_25px_70px_-45px_rgba(32,50,71,0.45)] sm:rounded-3xl">
         <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Mood calendar</div>
-        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl">See patterns across days, not just moments.</h1>
+        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl">See the bigger vibe.</h1>
         <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-          Log quick check-ins to build a calmer, more accurate picture over time. MindTrack AI is for self-reflection only.
+          Quick logs add up. "One tap a day" is enough.
         </p>
       </div>
 
@@ -100,7 +100,7 @@ import { MoodTrackerComponent } from "../../shared/components/mood-tracker.compo
                 [ngModel]="notes()"
                 (ngModelChange)="notes.set($event)"
                 rows="3"
-                placeholder="Any context you want to remember later..."
+                placeholder="Anything worth remembering?"
                 class="app-textarea mt-2"></textarea>
             </label>
           </div>
@@ -118,7 +118,7 @@ import { MoodTrackerComponent } from "../../shared/components/mood-tracker.compo
           </button>
 
           <div class="mt-4 rounded-2xl bg-slate-50 px-4 py-4 text-sm leading-7 text-slate-600">
-            This helps track trends. It does not diagnose or treat mental health conditions.
+            This tracks trends. It is not a diagnosis.
           </div>
         </div>
       </div>
@@ -211,7 +211,7 @@ export class MoodCalendarPageComponent {
           this.saving.set(false);
         },
         error: (err) => {
-          this.error.set(err?.error?.error || "Unable to save your check-in right now.");
+          this.error.set(err?.error?.error || "Couldn't save that check-in.");
           this.saving.set(false);
         }
       });

@@ -21,7 +21,7 @@ import { Exercise } from "../../core/services/exercises.service";
       <p class="mt-2 text-sm leading-7 text-slate-600">{{ exercise.purpose || exercise.description }}</p>
 
       <div *ngIf="exercise.expectedOutcome" class="mt-4 rounded-[1.35rem] bg-slate-50 px-4 py-4 text-sm leading-7 text-slate-700 sm:rounded-3xl">
-        <div class="font-semibold text-slate-900">Expected outcome</div>
+        <div class="font-semibold text-slate-900">What you get</div>
         <div class="mt-1">{{ exercise.expectedOutcome }}</div>
       </div>
 
@@ -39,7 +39,7 @@ import { Exercise } from "../../core/services/exercises.service";
           type="button"
           (click)="start.emit(exercise)"
           class="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-950 sm:w-auto sm:py-2.5">
-          View details
+          Open
         </button>
       </div>
     </article>
