@@ -119,6 +119,20 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
       .mindtrack-shell {
         position: relative;
         color: var(--mt-ink);
+        isolation: isolate;
+      }
+
+      .mindtrack-shell::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -16;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 12% 18%, var(--mt-orb-a) 0, transparent 24%),
+          radial-gradient(circle at 86% 14%, var(--mt-orb-b) 0, transparent 23%),
+          radial-gradient(circle at 52% 88%, var(--mt-accent-soft) 0, transparent 28%);
+        opacity: 0.92;
       }
 
       .mindtrack-ambient {
@@ -214,7 +228,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       "--mt-accent-strong": theme.accentStrong,
       "--mt-accent-soft": theme.accentSoft,
       "--mt-active-surface": theme.activeSurface,
-      "--mt-tab-gradient": theme.tabGradient
+      "--mt-tab-gradient": theme.tabGradient,
+      "--mt-orb-a": theme.orbA,
+      "--mt-orb-b": theme.orbB
     };
   });
 

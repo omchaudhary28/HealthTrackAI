@@ -5,7 +5,7 @@ import { API_BASE_URL } from "../api/api.config";
 
 export interface JournalInsights {
   patterns?: string[];
-  tone?: string;
+  tone?: string | number;
   suggestions?: string[];
 }
 
@@ -46,4 +46,3 @@ export class JournalService {
     return this.http.post<JournalInsights>(`${this.apiBaseUrl}/journal/${entryId}/analyze`, { recentMood });
   }
 }
-
