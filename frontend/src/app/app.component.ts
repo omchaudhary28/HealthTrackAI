@@ -32,7 +32,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
     ])
   ],
   template: `
-    <div class="mindtrack-shell min-h-screen w-full overflow-x-hidden" [ngStyle]="themeStyles()">
+    <div class="app-container mindtrack-shell min-h-screen w-full overflow-x-hidden" [ngStyle]="themeStyles()">
       <div class="pointer-events-none fixed inset-0 -z-30 transition-opacity duration-700" [style.background]="activeTheme().shellGradient"></div>
       <div
         *ngIf="fadingTheme()"
@@ -83,7 +83,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
           [class.opacity-0]="!navOpen"
           (click)="closeNav()"></div>
         <div
-          class="fixed inset-y-0 left-0 z-50 w-[min(18rem,84vw)] border-r border-white/60 bg-white/92 shadow-2xl backdrop-blur-xl transition-transform duration-300"
+          class="fixed inset-y-0 left-0 z-50 w-[min(18rem,84vw)] border-r border-white/55 bg-[rgba(237,244,251,0.94)] shadow-2xl backdrop-blur-xl transition-transform duration-300"
           [class.-translate-x-full]="!navOpen">
           <app-side-nav [inDrawer]="true" (requestClose)="closeNav()"></app-side-nav>
         </div>
@@ -179,8 +179,8 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         bottom: 0;
         z-index: 35;
         padding-inline: max(0.4rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
-        border-top: 1px solid rgba(15, 23, 42, 0.08);
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.96));
+        border-top: 1px solid rgba(15, 23, 42, 0.1);
+        background: linear-gradient(180deg, rgba(236, 244, 251, 0.78), rgba(243, 248, 253, 0.94));
         backdrop-filter: blur(24px);
         box-shadow: 0 -20px 40px -34px rgba(15, 23, 42, 0.3);
       }
@@ -211,7 +211,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
       }
 
       .mobile-tab-link-active {
-        background: rgba(255, 255, 255, 0.98);
+        background: rgba(247, 250, 254, 0.98);
         color: var(--mt-accent-strong);
         box-shadow: 0 18px 28px -24px rgba(15, 23, 42, 0.35);
       }

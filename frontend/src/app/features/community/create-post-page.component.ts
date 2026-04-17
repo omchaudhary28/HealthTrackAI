@@ -61,7 +61,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                 <div class="mt-1 text-xs leading-5 text-slate-500">Title, short note, done.</div>
               </div>
             </div>
-            <label class="inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600">
+            <label class="inline-flex items-center gap-2 rounded-full bg-[rgba(243,248,253,0.9)] px-3 py-2 text-xs font-semibold text-slate-600">
               <input [(ngModel)]="compose.isAnonymous" name="isAnonymous" type="checkbox" class="rounded border-slate-300 text-slate-900 focus:ring-slate-200" />
               Anonymous mode
             </label>
@@ -70,12 +70,12 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           <div class="mt-5 grid gap-4 md:grid-cols-2">
             <label class="block text-sm font-medium text-slate-600">
               Title
-              <input [(ngModel)]="compose.title" name="title" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="Example: Tiny win today" />
+              <input [(ngModel)]="compose.title" name="title" class="app-field mt-2 rounded-2xl" placeholder="Example: Tiny win today" />
             </label>
 
             <label class="block text-sm font-medium text-slate-600">
               Share type
-              <select [(ngModel)]="compose.shareType" name="shareType" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100">
+              <select [(ngModel)]="compose.shareType" name="shareType" class="app-field mt-2 rounded-2xl">
                 <option value="reflection">Reflection</option>
                 <option value="progress">Progress update</option>
                 <option value="streak">Streak</option>
@@ -86,56 +86,56 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
           <label class="mt-4 block text-sm font-medium text-slate-600">
             Content
-            <textarea [(ngModel)]="compose.content" name="content" rows="6" class="mt-2 w-full resize-none rounded-[1.75rem] border border-slate-200 bg-slate-50 px-4 py-4 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="What changed? What helped? What do you need?"></textarea>
+            <textarea [(ngModel)]="compose.content" name="content" rows="6" class="app-textarea mt-2 resize-none rounded-[1.75rem]" placeholder="What changed? What helped? What do you need?"></textarea>
           </label>
 
           <div class="mt-4 grid gap-4 md:grid-cols-2">
             <label class="block text-sm font-medium text-slate-600">
               Mental state tag
-              <select [(ngModel)]="compose.mentalStateTag" name="mentalStateTag" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100">
+              <select [(ngModel)]="compose.mentalStateTag" name="mentalStateTag" class="app-field mt-2 rounded-2xl">
                 <option *ngFor="let state of mentalStates" [ngValue]="state">{{ state }}</option>
               </select>
             </label>
 
             <label class="block text-sm font-medium text-slate-600">
               Tags
-              <input [(ngModel)]="compose.tags" name="tags" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="sleep, journaling, grounding" />
+              <input [(ngModel)]="compose.tags" name="tags" class="app-field mt-2 rounded-2xl" placeholder="sleep, journaling, grounding" />
             </label>
           </div>
 
           <label *ngIf="compose.isAnonymous" class="mt-4 block text-sm font-medium text-slate-600">
               Anonymous alias
-              <input [(ngModel)]="compose.anonymousAlias" name="anonymousAlias" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="Optional. Example: Quiet Lantern" />
+              <input [(ngModel)]="compose.anonymousAlias" name="anonymousAlias" class="app-field mt-2 rounded-2xl" placeholder="Optional. Example: Quiet Lantern" />
           </label>
 
-          <div *ngIf="compose.shareType !== 'reflection'" class="mt-card-soft mt-5 border border-slate-200 p-5">
+          <div *ngIf="compose.shareType !== 'reflection'" class="mt-card-soft mt-5 border border-white/50 p-5">
             <div class="text-sm font-semibold text-slate-900">Optional progress details</div>
             <div class="mt-1 text-xs leading-5 text-slate-500">Only fill what adds clarity.</div>
 
             <div class="mt-4 grid gap-4 md:grid-cols-2">
               <label class="block text-sm font-medium text-slate-600">
                 What improved
-                <textarea [(ngModel)]="compose.whatImproved" name="whatImproved" rows="3" class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100"></textarea>
+                <textarea [(ngModel)]="compose.whatImproved" name="whatImproved" rows="3" class="app-textarea app-field-white mt-2 resize-none rounded-2xl"></textarea>
               </label>
 
               <label class="block text-sm font-medium text-slate-600">
                 What helped
-                <textarea [(ngModel)]="compose.whatHelped" name="whatHelped" rows="3" class="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100"></textarea>
+                <textarea [(ngModel)]="compose.whatHelped" name="whatHelped" rows="3" class="app-textarea app-field-white mt-2 resize-none rounded-2xl"></textarea>
               </label>
             </div>
 
             <div class="mt-4 grid gap-4 sm:grid-cols-3">
               <label class="block text-sm font-medium text-slate-600">
                 Streak days
-                <input [(ngModel)]="compose.streakDays" name="streakDays" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
+                <input [(ngModel)]="compose.streakDays" name="streakDays" type="number" class="app-field app-field-white mt-2 rounded-2xl" />
               </label>
               <label class="block text-sm font-medium text-slate-600">
                 Mood average
-                <input [(ngModel)]="compose.moodAverage" name="moodAverage" type="number" step="0.1" class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
+                <input [(ngModel)]="compose.moodAverage" name="moodAverage" type="number" step="0.1" class="app-field app-field-white mt-2 rounded-2xl" />
               </label>
               <label class="block text-sm font-medium text-slate-600">
                 Exercise streak
-                <input [(ngModel)]="compose.exerciseStreak" name="exerciseStreak" type="number" class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
+                <input [(ngModel)]="compose.exerciseStreak" name="exerciseStreak" type="number" class="app-field app-field-white mt-2 rounded-2xl" />
               </label>
             </div>
           </div>

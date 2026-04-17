@@ -45,14 +45,14 @@ import { AuthService } from "../../core/services/auth.service";
     `
   ],
   template: `
-    <header class="sticky top-0 z-30 border-b border-black/5 bg-white/84 backdrop-blur-2xl">
+    <header class="sticky top-0 z-30 border-b border-black/8 bg-[rgba(236,244,251,0.82)] backdrop-blur-2xl">
       <div class="mx-auto flex w-full max-w-[var(--mt-shell-max)] items-center justify-between gap-2 px-[var(--mt-shell-gutter)] py-2.5 sm:gap-3 sm:py-3">
         <div class="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
           <button
             *ngIf="!publicMode"
             type="button"
             (click)="toggleNav.emit()"
-            class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50 lg:hidden"
+            class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200/90 bg-[rgba(247,250,254,0.94)] text-slate-700 shadow-sm transition hover:bg-white lg:hidden"
             aria-label="Open navigation">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 7h16"></path>
@@ -61,7 +61,7 @@ import { AuthService } from "../../core/services/auth.service";
             </svg>
           </button>
 
-          <a routerLink="/" class="flex min-w-0 items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/70 sm:gap-3">
+          <a routerLink="/" class="flex min-w-0 items-center gap-2 rounded-full px-1 py-1 transition hover:bg-white/55 sm:gap-3">
             <div class="grid h-10 w-10 shrink-0 place-items-center rounded-[1.1rem] bg-[linear-gradient(135deg,#f58529,#dd2a7b,#8134af)] text-sm font-black text-white shadow-[0_20px_40px_-24px_rgba(129,52,175,0.6)] sm:h-11 sm:w-11 sm:rounded-[1.25rem]">
               MT
             </div>
@@ -75,7 +75,7 @@ import { AuthService } from "../../core/services/auth.service";
         </div>
 
         <div *ngIf="!publicMode" class="hidden flex-1 lg:flex">
-          <div class="mx-auto flex w-full max-w-xl items-center gap-3 rounded-full border border-slate-200/80 bg-white px-4 py-3 text-sm text-slate-400 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.45)]">
+          <div class="mx-auto flex w-full max-w-xl items-center gap-3 rounded-full border border-slate-200/80 bg-[rgba(246,250,254,0.88)] px-4 py-3 text-sm text-slate-500 shadow-[0_20px_42px_-32px_rgba(15,23,42,0.42)]">
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="7"></circle>
               <path d="m20 20-3.5-3.5"></path>
@@ -112,7 +112,7 @@ import { AuthService } from "../../core/services/auth.service";
             <a
               routerLink="/profile"
               [attr.aria-label]="'Open profile for ' + displayName()"
-              class="inline-flex h-11 min-w-[2.75rem] items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-2 text-sm font-semibold text-slate-800 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.35)] transition hover:border-slate-300 sm:min-w-0 sm:justify-start sm:pr-4">
+              class="inline-flex h-11 min-w-[2.75rem] items-center justify-center gap-2 rounded-full border border-slate-200/90 bg-[rgba(247,250,254,0.92)] px-2 py-2 text-sm font-semibold text-slate-800 shadow-[0_18px_34px_-24px_rgba(15,23,42,0.36)] transition hover:border-slate-300 sm:min-w-0 sm:justify-start sm:pr-4">
               <span class="grid h-8 w-8 place-items-center rounded-full bg-slate-950 text-[11px] font-bold text-white">{{ initials() }}</span>
               <span class="nav-name">{{ displayName() }}</span>
             </a>

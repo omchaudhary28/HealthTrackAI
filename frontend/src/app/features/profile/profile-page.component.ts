@@ -78,7 +78,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                     </div>
                   </div>
                 </div>
-                <div class="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-600">
+                <div class="rounded-full bg-[rgba(243,248,253,0.92)] px-4 py-2 text-xs font-semibold text-slate-600">
                   State: {{ profile.currentMentalState || "Balanced" }}
                 </div>
               </div>
@@ -292,56 +292,56 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                 <div class="mt-5 grid gap-4 sm:grid-cols-2">
                   <label class="block text-sm font-medium text-slate-600">
                     Name
-                    <input [(ngModel)]="form.name" name="name" class="mt-2 w-full rounded-[1.2rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" />
+                    <input [(ngModel)]="form.name" name="name" class="app-field app-field-white mt-2 rounded-[1.2rem]" />
                   </label>
                   <label class="block text-sm font-medium text-slate-600">
                     Email
-                    <input [ngModel]="email" name="email" disabled class="mt-2 w-full rounded-[1.2rem] border border-slate-200 bg-slate-100 px-4 py-3 text-slate-500 outline-none" />
+                    <input [ngModel]="email" name="email" disabled class="app-field mt-2 rounded-[1.2rem] text-slate-500 disabled:cursor-not-allowed disabled:opacity-90" />
                   </label>
                   <label class="block text-sm font-medium text-slate-600">
                     Headline
-                    <input [(ngModel)]="form.headline" name="headline" class="mt-2 w-full rounded-[1.2rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" />
+                    <input [(ngModel)]="form.headline" name="headline" class="app-field app-field-white mt-2 rounded-[1.2rem]" />
                   </label>
                   <label class="block text-sm font-medium text-slate-600">
                     Occupation
-                    <input [(ngModel)]="form.occupation" name="occupation" class="mt-2 w-full rounded-[1.2rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" />
+                    <input [(ngModel)]="form.occupation" name="occupation" class="app-field app-field-white mt-2 rounded-[1.2rem]" />
                   </label>
                   <label class="block text-sm font-medium text-slate-600">
                     Age
-                    <input [(ngModel)]="form.age" name="age" type="number" class="mt-2 w-full rounded-[1.2rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" />
+                    <input [(ngModel)]="form.age" name="age" type="number" class="app-field app-field-white mt-2 rounded-[1.2rem]" />
                   </label>
                   <label class="block text-sm font-medium text-slate-600">
                     Gender
-                    <input [(ngModel)]="form.gender" name="gender" class="mt-2 w-full rounded-[1.2rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" />
+                    <input [(ngModel)]="form.gender" name="gender" class="app-field app-field-white mt-2 rounded-[1.2rem]" />
                   </label>
                 </div>
 
                 <label class="mt-4 block text-sm font-medium text-slate-600">
                   Bio
-                  <textarea [(ngModel)]="form.bio" name="bio" rows="4" class="mt-2 w-full resize-none rounded-[1.4rem] border border-slate-200 bg-white px-4 py-4 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100"></textarea>
+                  <textarea [(ngModel)]="form.bio" name="bio" rows="4" class="app-textarea app-field-white mt-2 resize-none rounded-[1.4rem]"></textarea>
                 </label>
 
                 <div class="mt-4 grid gap-4">
                   <label class="block text-sm font-medium text-slate-600">
                     Sleep habits
-                    <input [(ngModel)]="form.sleepHabits" name="sleepHabits" class="mt-2 w-full rounded-[1.2rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" />
+                    <input [(ngModel)]="form.sleepHabits" name="sleepHabits" class="app-field app-field-white mt-2 rounded-[1.2rem]" />
                   </label>
                   <label class="block text-sm font-medium text-slate-600">
                     Lifestyle indicators
-                    <input [(ngModel)]="lifestyleIndicators" name="lifestyleIndicators" class="mt-2 w-full rounded-[1.2rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" />
+                    <input [(ngModel)]="lifestyleIndicators" name="lifestyleIndicators" class="app-field app-field-white mt-2 rounded-[1.2rem]" />
                   </label>
                   <label class="block text-sm font-medium text-slate-600">
                     Stress indicators
-                    <input [(ngModel)]="stressIndicators" name="stressIndicators" class="mt-2 w-full rounded-[1.2rem] border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-pink-300 focus:ring-4 focus:ring-pink-100" />
+                    <input [(ngModel)]="stressIndicators" name="stressIndicators" class="app-field app-field-white mt-2 rounded-[1.2rem]" />
                   </label>
                 </div>
 
                 <div class="mt-4 grid gap-3">
-                  <label class="inline-flex items-center gap-3 rounded-[1.25rem] bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600">
+                  <label class="inline-flex items-center gap-3 rounded-[1.25rem] bg-[rgba(243,248,253,0.9)] px-4 py-3 text-sm font-medium text-slate-600">
                     <input [(ngModel)]="form.allowDirectMessages" name="allowDirectMessages" type="checkbox" class="rounded border-slate-300 text-slate-900 focus:ring-slate-200" />
                     Allow direct messages from the community
                   </label>
-                  <label class="inline-flex items-center gap-3 rounded-[1.25rem] bg-slate-50 px-4 py-3 text-sm font-medium text-slate-600">
+                  <label class="inline-flex items-center gap-3 rounded-[1.25rem] bg-[rgba(243,248,253,0.9)] px-4 py-3 text-sm font-medium text-slate-600">
                     <input [(ngModel)]="form.shareProgressPublicly" name="shareProgressPublicly" type="checkbox" class="rounded border-slate-300 text-slate-900 focus:ring-slate-200" />
                     Show progress stats on your profile
                   </label>

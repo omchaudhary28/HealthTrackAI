@@ -30,12 +30,12 @@ interface ChatMessage {
 
       <div
         id="mindtrack-chatbot-panel"
-        class="fixed inset-x-3 bottom-[calc(var(--mt-safe-bottom)+5rem)] max-h-[min(70vh,38rem)] origin-bottom overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/95 shadow-2xl backdrop-blur transition-all duration-200 sm:absolute sm:inset-x-auto sm:bottom-16 sm:right-0 sm:w-[22rem] sm:max-h-none sm:max-w-[calc(100vw-2.5rem)] sm:origin-bottom-right sm:rounded-3xl"
+        class="fixed inset-x-3 bottom-[calc(var(--mt-safe-bottom)+5rem)] max-h-[min(70vh,38rem)] origin-bottom overflow-hidden rounded-[1.75rem] border border-white/60 bg-[linear-gradient(155deg,rgba(247,251,255,0.92),rgba(234,242,249,0.86),rgba(220,232,244,0.82))] shadow-2xl backdrop-blur transition-all duration-200 sm:absolute sm:inset-x-auto sm:bottom-16 sm:right-0 sm:w-[22rem] sm:max-h-none sm:max-w-[calc(100vw-2.5rem)] sm:origin-bottom-right sm:rounded-3xl"
         [class.pointer-events-none]="!open"
         [class.opacity-0]="!open"
         [class.translate-y-2]="!open"
         [class.scale-95]="!open">
-        <div class="border-b border-slate-100 bg-[linear-gradient(145deg,rgba(255,255,255,0.9),rgba(255,255,255,0.75),var(--mt-accent-soft))] px-5 py-4">
+        <div class="border-b border-slate-200/80 bg-[linear-gradient(145deg,rgba(249,252,255,0.88),rgba(238,245,251,0.78),var(--mt-accent-soft))] px-5 py-4">
           <div class="flex items-start justify-between gap-3">
             <div class="mt-card-brand">
               <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
@@ -49,7 +49,7 @@ interface ChatMessage {
             <button
               type="button"
               (click)="open = false"
-              class="inline-flex h-9 w-9 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"
+              class="inline-flex h-9 w-9 items-center justify-center rounded-2xl border border-slate-200 bg-[rgba(247,250,254,0.94)] text-slate-700 shadow-sm transition hover:bg-white"
               aria-label="Close assistant">
               <app-icon name="arrow" className="text-sm rotate-45"></app-icon>
             </button>
@@ -61,7 +61,7 @@ interface ChatMessage {
               type="button"
               (click)="sendQuick(chip)"
               [disabled]="pending"
-              class="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60">
+              class="rounded-full border border-slate-200 bg-[rgba(246,250,254,0.92)] px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-60">
               {{ chip }}
             </button>
           </div>
@@ -73,7 +73,7 @@ interface ChatMessage {
               class="message-in max-w-[92%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm transition-all duration-200 sm:max-w-[85%]"
               [class.bg-blue-500]="item.role === 'user'"
               [class.text-white]="item.role === 'user'"
-              [class.bg-gray-100]="item.role === 'assistant'"
+              [class.bg-slate-100]="item.role === 'assistant'"
               [class.text-gray-800]="item.role === 'assistant'">
               <div class="flex items-start gap-3">
                 <div *ngIf="item.role === 'assistant'" class="mt-card-icon h-8 w-8 rounded-[0.8rem]">
@@ -96,13 +96,13 @@ interface ChatMessage {
           </div>
         </div>
 
-        <div class="sticky bottom-0 border-t border-slate-100 bg-white/95 p-4 backdrop-blur">
+        <div class="sticky bottom-0 border-t border-slate-200/80 bg-[rgba(243,248,253,0.94)] p-4 backdrop-blur">
           <textarea
             [(ngModel)]="draft"
             (keydown.enter)="onEnter($event)"
             rows="2"
             placeholder="I feel overwhelmed..."
-            class="app-textarea w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 outline-none transition focus:border-sky-300 focus:ring-4 focus:ring-sky-100"></textarea>
+            class="app-textarea w-full resize-none rounded-2xl px-4 py-3 text-sm leading-6"></textarea>
           <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
             <button
               type="button"
@@ -114,7 +114,7 @@ interface ChatMessage {
             <button
               type="button"
               (click)="clear()"
-              class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 active:scale-[0.98]">
+              class="rounded-2xl border border-slate-200 bg-[rgba(247,250,254,0.94)] px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-white active:scale-[0.98]">
               Clear
             </button>
           </div>
@@ -277,8 +277,8 @@ export class FloatingChatbotComponent implements AfterViewChecked {
     return {
       role: "assistant",
       content: name
-        ? `Hi ${name}. If something feels off today, tell me what feels heaviest and I’ll keep the next step small.`
-        : "Tell me what feels hardest right now, and I’ll help you narrow it down into one calmer next step.",
+        ? `Hi ${name}. If something feels off today, tell me what feels heaviest and I'll keep the next step small.`
+        : "Tell me what feels hardest right now, and I'll help you narrow it down into one calmer next step.",
       timestamp: Date.now()
     };
   }
