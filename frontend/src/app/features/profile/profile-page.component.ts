@@ -286,7 +286,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                       <div class="mt-1 text-xs leading-5 text-slate-500">Keep it short. Keep it real.</div>
                     </div>
                   </div>
-                  <span *ngIf="saved" class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Saved</span>
+                  <span *ngIf="saved" class="mt-success-pop rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Saved</span>
                 </div>
 
                 <div class="mt-5 grid gap-4 sm:grid-cols-2">

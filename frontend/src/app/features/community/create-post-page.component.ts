@@ -182,7 +182,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             </div>
           </div>
 
-          <div *ngIf="createdPost" class="mt-card mt-card-hover border border-emerald-100 bg-[linear-gradient(150deg,rgba(236,253,245,0.92),rgba(255,255,255,0.88))] p-6">
+          <div *ngIf="createdPost" class="mt-success-pop mt-card mt-card-hover border border-emerald-100 bg-[linear-gradient(150deg,rgba(236,253,245,0.92),rgba(255,255,255,0.88))] p-6">
             <div class="text-sm font-semibold text-emerald-800">Post live</div>
             <div class="mt-3 text-2xl font-semibold text-slate-900">{{ createdPost.title }}</div>
             <div class="mt-3 text-sm leading-7 text-slate-600">{{ createdPost.content }}</div>

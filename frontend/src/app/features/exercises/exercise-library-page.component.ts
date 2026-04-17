@@ -1,10 +1,11 @@
 import { CommonModule } from "@angular/common";
+import { animate, style, transition, trigger } from "@angular/animations";
 import { Component } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { Observable, catchError, of } from "rxjs";
 import { Exercise, ExercisesService } from "../../core/services/exercises.service";
 import { BoxBreathingComponent } from "../../shared/components/box-breathing.component";
-import { ExerciseCardComponent } from "../../shared/components/exercise-card.component";
+import { ExerciseCardComponent, ExerciseCardStartEvent } from "../../shared/components/exercise-card.component";
 import { IconComponent } from "../../shared/components/icon.component";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
@@ -12,6 +13,21 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
   selector: "app-exercise-library-page",
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, ExerciseCardComponent, BoxBreathingComponent, FormsModule, IconComponent],
+  animations: [
+    trigger("exerciseOverlay", [
+      transition(":enter", [style({ opacity: 0 }), animate("320ms ease-out", style({ opacity: 1 }))]),
+      transition(":leave", [animate("260ms ease-in", style({ opacity: 0 }))])
+    ]),
+    trigger("exercisePanel", [
+      transition(":enter", [
+        style({ opacity: 0, transform: "translateY(26px) scale(0.98)" }),
+        animate("420ms cubic-bezier(0.22, 1, 0.36, 1)", style({ opacity: 1, transform: "translateY(0) scale(1)" }))
+      ]),
+      transition(":leave", [
+        animate("320ms cubic-bezier(0.4, 0, 1, 1)", style({ opacity: 0, transform: "translateY(16px) scale(0.985)" }))
+      ])
+    ])
+  ],
   template: `
     <section appScrollReveal class="page-stack">
       <div class="mt-card mt-card-hover page-hero">
@@ -50,7 +66,12 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
         <div class="mt-5 grid gap-4 lg:grid-cols-3">
           <ng-container *ngIf="recommended$ | async as recommended">
-            <article *ngFor="let exercise of recommended; let i = index" appScrollReveal [revealDelay]="i * 60" class="mt-card mt-card-hover comic-corner-doodle p-5">
+            <article
+              *ngFor="let exercise of recommended; let i = index"
+              appScrollReveal
+              [revealDelay]="i * 60"
+              class="mt-card mt-card-hover comic-corner-doodle p-5"
+              [style.view-transition-name]="cardTransitionName('recommended', exercise, i)">
               <div class="mt-card-head">
                 <div class="mt-card-brand">
                   <div class="mt-card-icon">
@@ -73,7 +94,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                 <div class="mt-card-kicker">What you get</div>
                 <div class="mt-2">{{ exercise.expectedOutcome }}</div>
               </div>
-              <button type="button" (click)="open(exercise)" class="btn-primary mt-4 w-full rounded-2xl px-4 py-3 text-sm font-semibold">
+              <button type="button" (click)="open(exercise, cardTransitionName('recommended', exercise, i))" class="btn-primary mt-4 w-full rounded-2xl px-4 py-3 text-sm font-semibold">
                 Open exercise
               </button>
             </article>
@@ -128,7 +149,8 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             appScrollReveal
             [revealDelay]="i * 60"
             [exercise]="exercise"
-            (start)="open(exercise)"></app-exercise-card>
+            [transitionName]="cardTransitionName('library', exercise, i)"
+            (start)="onExerciseCardStart($event)"></app-exercise-card>
         </div>
       </ng-container>
 
@@ -141,9 +163,12 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
         </div>
       </ng-template>
 
-      <div *ngIf="activeExercise" class="fixed inset-0 z-50 flex items-end justify-center p-3 sm:p-4 sm:items-center">
-        <div class="absolute inset-0 bg-slate-950/25 backdrop-blur-sm" (click)="activeExercise = null"></div>
-        <div class="relative max-h-[92vh] w-full max-w-3xl overflow-auto rounded-[1.75rem] border border-white/60 bg-white/96 shadow-2xl backdrop-blur sm:rounded-[2.25rem]">
+      <div *ngIf="activeExercise" @exerciseOverlay class="fixed inset-0 z-50 flex items-end justify-center p-3 sm:p-4 sm:items-center">
+        <div class="absolute inset-0 bg-slate-950/25 backdrop-blur-sm" (click)="closeActiveExercise()"></div>
+        <div
+          @exercisePanel
+          class="relative max-h-[92vh] w-full max-w-3xl overflow-auto rounded-[1.75rem] border border-white/60 bg-white/96 shadow-2xl backdrop-blur sm:rounded-[2.25rem]"
+          [style.view-transition-name]="activeTransitionName()">
           <div class="sticky top-0 z-10 border-b border-white/60 bg-white/88 px-4 py-4 backdrop-blur sm:px-6 sm:py-5">
             <div class="flex items-start justify-between gap-3">
               <div class="mt-card-brand">
@@ -157,7 +182,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               </div>
               <button
                 type="button"
-                (click)="activeExercise = null"
+                (click)="closeActiveExercise()"
                 class="btn-outline inline-flex h-10 w-10 items-center justify-center rounded-2xl"
                 aria-label="Close">
                 <app-icon name="arrow" className="text-sm rotate-45"></app-icon>
@@ -248,7 +273,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                     <textarea [(ngModel)]="feedbackText" rows="3" class="app-textarea mt-2" placeholder="Anything worth remembering?"></textarea>
                   </label>
 
-                  <div *ngIf="completionSuccess" class="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                  <div *ngIf="completionSuccess" class="mt-success-pop mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
                     Saved. Future picks will learn from this.
                   </div>
 
@@ -268,6 +293,7 @@ export class ExerciseLibraryPageComponent {
   exercises$: Observable<Exercise[]>;
   recommended$: Observable<Exercise[]>;
   activeExercise: Exercise | null = null;
+  activeExerciseTransitionName = "";
   feedbackRating = 4;
   feedbackText = "";
   resultAfter = "";
@@ -304,12 +330,51 @@ export class ExerciseLibraryPageComponent {
     this.recommended$ = this.loadRecommended();
   }
 
-  open(exercise: Exercise): void {
-    this.activeExercise = exercise;
-    this.feedbackRating = 4;
-    this.feedbackText = "";
-    this.resultAfter = "";
-    this.completionSuccess = false;
+  onExerciseCardStart(event: ExerciseCardStartEvent): void {
+    this.open(event.exercise, event.transitionName);
+  }
+
+  open(exercise: Exercise, transitionName: string | null = null): void {
+    this.activeExerciseTransitionName = transitionName || this.transitionNameFor("library", exercise, 0);
+
+    this.withViewTransition(() => {
+      this.activeExercise = exercise;
+      this.feedbackRating = 4;
+      this.feedbackText = "";
+      this.resultAfter = "";
+      this.completionSuccess = false;
+    });
+  }
+
+  closeActiveExercise(): void {
+    if (!this.activeExercise) {
+      return;
+    }
+
+    if (!this.activeExerciseTransitionName) {
+      this.activeExerciseTransitionName = this.transitionNameFor("library", this.activeExercise, 0);
+    }
+
+    this.withViewTransition(() => {
+      this.activeExercise = null;
+      this.completionSuccess = false;
+    });
+  }
+
+  cardTransitionName(scope: "recommended" | "library", exercise: Exercise, index: number): string | null {
+    if (this.activeExercise) {
+      return "none";
+    }
+
+    return this.transitionNameFor(scope, exercise, index);
+  }
+
+  activeTransitionName(): string | null {
+    if (!this.activeExercise) {
+      return null;
+    }
+
+    return this.activeExerciseTransitionName;
   }
 
   completeActiveExercise(): void {
@@ -355,5 +420,29 @@ export class ExerciseLibraryPageComponent {
 
   private loadRecommended(): Observable<Exercise[]> {
     return this.exercisesService.recommended().pipe(catchError(() => of([])));
+  }
+
+  private withViewTransition(update: () => void): void {
+    if (typeof document === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      update();
+      return;
+    }
+
+    const transitionDoc = document as Document & {
+      startViewTransition?: (callback: () => void) => void;
+    };
+
+    if (typeof transitionDoc.startViewTransition !== "function") {
+      update();
+      return;
+    }
+
+    transitionDoc.startViewTransition(() => update());
+  }
+
+  private transitionNameFor(scope: "recommended" | "library", exercise: Exercise, index: number): string {
+    const source = `${exercise.key || exercise.title || "card"}`.toLowerCase();
+    const cleaned = source.replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    return `exercise-card-${scope}-${cleaned || "item"}-${index}`;
   }
 }

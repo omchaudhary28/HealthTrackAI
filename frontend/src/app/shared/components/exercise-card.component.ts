@@ -3,13 +3,19 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { Exercise } from "../../core/services/exercises.service";
 import { IconComponent, MindtrackIconName } from "./icon.component";
 
+export interface ExerciseCardStartEvent {
+  exercise: Exercise;
+  source: HTMLElement | null;
+  transitionName: string;
+}
+
 @Component({
   selector: "app-exercise-card",
   standalone: true,
   imports: [CommonModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <article class="mt-card mt-card-hover mt-card-intro comic-corner-doodle h-full p-5 sm:p-6">
+    <article class="mt-card mt-card-hover mt-card-intro comic-corner-doodle h-full p-5 sm:p-6" [style.view-transition-name]="transitionName || null">
       <div class="mt-card-head">
         <div class="mt-card-brand">
           <div class="mt-card-icon">
@@ -56,7 +62,7 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
         </div>
         <button
           type="button"
-          (click)="start.emit(exercise)"
+          (click)="emitStart($event)"
           class="btn-primary w-full rounded-2xl px-4 py-3 text-sm font-semibold sm:w-auto sm:min-w-[8rem]">
           Open
         </button>
@@ -66,7 +72,17 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
 })
 export class ExerciseCardComponent {
   @Input({ required: true }) exercise!: Exercise;
-  @Output() start = new EventEmitter<Exercise>();
+  @Input() transitionName = "";
+  @Output() start = new EventEmitter<ExerciseCardStartEvent>();
+
+  emitStart(event: Event): void {
+    const target = event.currentTarget as HTMLElement | null;
+    this.start.emit({
+      exercise: this.exercise,
+      source: target?.closest("article") ?? null,
+      transitionName: this.transitionName
+    });
+  }
 
   categoryLabel(value: string): string {
     const trimmed = (value || "").trim();

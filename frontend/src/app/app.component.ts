@@ -1,5 +1,5 @@
 ﻿import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, OnDestroy, computed, signal } from "@angular/core";
+import { AfterViewInit, Component, NgZone, OnDestroy, computed, signal } from "@angular/core";
 import { animate, group, query, style, transition, trigger } from "@angular/animations";
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from "@angular/router";
 import { filter, Subscription } from "rxjs";
@@ -10,6 +10,55 @@ import { IconComponent, MindtrackIconName } from "./shared/components/icon.compo
 import { SideNavComponent } from "./shared/components/side-nav.component";
 import { TopNavComponent } from "./shared/components/top-nav.component";
 
+interface AmbientParticle {
+  id: number;
+  style: Record<string, string>;
+}
+
+const AMBIENT_PARTICLES: AmbientParticle[] = [
+  buildParticle(1, 6, 16, 6, 16, -14, 13.8, -3, 0.2),
+  buildParticle(2, 16, 30, 9, -18, -12, 17.2, -5, 0.24),
+  buildParticle(3, 24, 12, 5, 14, 20, 11.6, -2, 0.17),
+  buildParticle(4, 33, 42, 8, -10, 16, 15.9, -7, 0.19),
+  buildParticle(5, 44, 24, 12, 19, -10, 18.5, -10, 0.22),
+  buildParticle(6, 52, 64, 7, -15, -18, 12.4, -4, 0.18),
+  buildParticle(7, 61, 34, 6, 12, 14, 14.8, -8, 0.21),
+  buildParticle(8, 70, 50, 11, -22, 12, 19.3, -11, 0.16),
+  buildParticle(9, 81, 22, 5, 10, -18, 10.9, -6, 0.2),
+  buildParticle(10, 88, 44, 9, -16, 19, 16.7, -9, 0.18),
+  buildParticle(11, 74, 74, 8, 14, -16, 13.6, -5, 0.17),
+  buildParticle(12, 58, 84, 5, -12, 12, 11.2, -1, 0.16),
+  buildParticle(13, 38, 78, 10, 21, -8, 17.8, -7, 0.2),
+  buildParticle(14, 20, 70, 7, -12, 15, 14.4, -4, 0.19)
+];
+
+function buildParticle(
+  id: number,
+  left: number,
+  top: number,
+  size: number,
+  driftX: number,
+  driftY: number,
+  duration: number,
+  delay: number,
+  opacity: number
+): AmbientParticle {
+  return {
+    id,
+    style: {
+      left: `${left}%`,
+      top: `${top}%`,
+      width: `${size}px`,
+      height: `${size}px`,
+      opacity: `${opacity}`,
+      animationDuration: `${duration}s`,
+      animationDelay: `${delay}s`,
+      "--mt-particle-drift-x": `${driftX}px`,
+      "--mt-particle-drift-y": `${driftY}px`
+    }
+  };
+}
+
 @Component({
   selector: "app-root",
   standalone: true,
@@ -18,13 +67,13 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
     trigger("routeAnimations", [
       transition("* <=> *", [
         query(":enter, :leave", style({ position: "absolute", inset: 0, width: "100%" }), { optional: true }),
-        query(":enter", style({ opacity: 0, transform: "translateY(12px)" }), { optional: true }),
+        query(":enter", style({ opacity: 0, transform: "translateY(22px)" }), { optional: true }),
         query(":leave", style({ opacity: 1, transform: "translateY(0)" }), { optional: true }),
         group([
-          query(":leave", animate("220ms ease", style({ opacity: 0, transform: "translateY(-8px)" })), {
+          query(":leave", animate("320ms cubic-bezier(0.4, 0, 1, 1)", style({ opacity: 0, transform: "translateY(-16px)" })), {
             optional: true
           }),
-          query(":enter", animate("340ms 40ms ease", style({ opacity: 1, transform: "translateY(0)" })), {
+          query(":enter", animate("420ms 45ms cubic-bezier(0.22, 1, 0.36, 1)", style({ opacity: 1, transform: "translateY(0)" })), {
             optional: true
           })
         ])
@@ -40,10 +89,14 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         [style.background]="fadingTheme()!.shellGradient"
         [class.opacity-100]="showFadingTheme()"
         [class.opacity-0]="!showFadingTheme()"></div>
+      <div class="mindtrack-liquid-gradient-layer"></div>
 
       <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div class="mindtrack-ambient mindtrack-ambient-a" [style.background]="activeTheme().orbA"></div>
         <div class="mindtrack-ambient mindtrack-ambient-b" [style.background]="activeTheme().orbB"></div>
+        <div class="mindtrack-particle-field">
+          <span *ngFor="let particle of backgroundParticles; trackBy: trackParticle" class="mindtrack-particle" [ngStyle]="particle.style"></span>
+        </div>
         <div class="mindtrack-grain"></div>
       </div>
 
@@ -137,6 +190,21 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         opacity: 0.92;
       }
 
+      .mindtrack-liquid-gradient-layer {
+        position: fixed;
+        inset: -14%;
+        z-index: -24;
+        pointer-events: none;
+        opacity: 0.45;
+        background:
+          radial-gradient(circle at 10% 18%, rgba(255, 255, 255, 0.62), transparent 42%),
+          radial-gradient(circle at 86% 18%, var(--mt-accent-soft), transparent 54%),
+          radial-gradient(circle at 46% 84%, rgba(129, 52, 175, 0.22), transparent 56%);
+        filter: blur(18px) saturate(1.08);
+        transform-origin: center;
+        animation: mtLiquidDrift 18s ease-in-out infinite;
+      }
+
       .mindtrack-ambient {
         position: absolute;
         border-radius: 999px;
@@ -150,6 +218,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         height: 26rem;
         width: 26rem;
         opacity: 0.72;
+        animation: mtAmbientFloatA 14s ease-in-out infinite;
       }
 
       .mindtrack-ambient-b {
@@ -158,6 +227,27 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         height: 24rem;
         width: 24rem;
         opacity: 0.62;
+        animation: mtAmbientFloatB 17s ease-in-out infinite;
+      }
+
+      .mindtrack-particle-field {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+
+      .mindtrack-particle {
+        position: absolute;
+        border-radius: 999px;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.22) 44%, transparent 75%),
+          radial-gradient(circle at center, var(--mt-accent-soft), transparent 70%);
+        filter: blur(0.6px);
+        transform: translate3d(0, 0, 0);
+        animation-name: mtParticleFloat;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
       }
 
       .mindtrack-grain {
@@ -228,6 +318,55 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         min-width: 0;
       }
 
+      @keyframes mtLiquidDrift {
+        0%,
+        100% {
+          transform: translate3d(-2%, 0%, 0) scale(1.02);
+        }
+        50% {
+          transform: translate3d(2.6%, -2.4%, 0) scale(1.08);
+        }
+      }
+
+      @keyframes mtAmbientFloatA {
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+        50% {
+          transform: translate3d(26px, -24px, 0) scale(1.05);
+        }
+      }
+
+      @keyframes mtAmbientFloatB {
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+        50% {
+          transform: translate3d(-30px, 18px, 0) scale(1.06);
+        }
+      }
+
+      @keyframes mtParticleFloat {
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0) scale(0.96);
+        }
+        45% {
+          transform: translate3d(var(--mt-particle-drift-x), var(--mt-particle-drift-y), 0) scale(1.06);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .mindtrack-liquid-gradient-layer,
+        .mindtrack-ambient-a,
+        .mindtrack-ambient-b,
+        .mindtrack-particle {
+          animation: none;
+        }
+      }
+
       @media (max-width: 420px) {
         .mobile-tab-link {
           min-height: 3.65rem;
@@ -257,6 +396,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     { label: "Stats", link: "/progress", icon: "progress", exact: true },
     { label: "Feed", link: "/community", icon: "community", exact: true }
   ];
+  readonly backgroundParticles = AMBIENT_PARTICLES;
   readonly runtimeIssue = this.runtimeService.runtimeIssue;
 
   readonly activeTheme = signal<RouteTheme>(ROUTE_THEMES.landing);
@@ -276,11 +416,21 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   });
 
   private readonly routerSub: Subscription;
+  private readonly motionCleanupFns: Array<() => void> = [];
+  private readonly tiltSelector =
+    ".mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong";
+  private readonly rippleSelector = ".btn-primary, .btn-outline, .mobile-tab-link, .social-nav-item, [data-ripple]";
+  private tiltTarget: HTMLElement | null = null;
+  private tiltPointerX = 0;
+  private tiltPointerY = 0;
+  private tiltFrameId: number | null = null;
+  private prefersReducedMotion = false;
   private fadeTimer?: ReturnType<typeof setTimeout>;
 
   constructor(
     private readonly router: Router,
-    private readonly runtimeService: AppRuntimeService
+    private readonly runtimeService: AppRuntimeService,
+    private readonly ngZone: NgZone
   ) {
     this.applyTheme(this.resolveThemeKey());
 
@@ -294,6 +444,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.runtimeService.markReady();
+    this.setupInteractiveMotion();
   }
 
   ngOnDestroy(): void {
@@ -301,6 +452,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     if (this.fadeTimer) {
       clearTimeout(this.fadeTimer);
     }
+    this.teardownInteractiveMotion();
   }
 
   isPublicRoute(): boolean {
@@ -331,6 +483,189 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   isActiveLink(link: string, exact = false): boolean {
     const currentUrl = this.router.url.split("?")[0];
     return exact ? currentUrl === link : currentUrl === link || currentUrl.startsWith(`${link}/`);
+  }
+
+  trackParticle(_index: number, particle: AmbientParticle): number {
+    return particle.id;
+  }
+
+  private setupInteractiveMotion(): void {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return;
+    }
+
+    this.teardownInteractiveMotion();
+
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    this.prefersReducedMotion = reducedMotionQuery.matches;
+    const onReducedMotionChange: EventListener = (event): void => {
+      const motionEvent = event as MediaQueryListEvent;
+      this.prefersReducedMotion = motionEvent.matches;
+      if (motionEvent.matches) {
+        this.resetTiltTarget(this.tiltTarget);
+      }
+    };
+
+    this.registerMotionListener(reducedMotionQuery, "change", onReducedMotionChange);
+
+    this.ngZone.runOutsideAngular(() => {
+      const passiveOptions: AddEventListenerOptions = { passive: true };
+
+      const onPointerMove: EventListener = (event): void => {
+        const pointerEvent = event as PointerEvent;
+        if (this.prefersReducedMotion || pointerEvent.pointerType === "touch") {
+          return;
+        }
+
+        const surface = (pointerEvent.target as HTMLElement | null)?.closest<HTMLElement>(this.tiltSelector);
+        if (!surface) {
+          this.resetTiltTarget(this.tiltTarget);
+          return;
+        }
+
+        this.tiltPointerX = pointerEvent.clientX;
+        this.tiltPointerY = pointerEvent.clientY;
+
+        if (this.tiltTarget !== surface) {
+          this.resetTiltTarget(this.tiltTarget);
+          this.tiltTarget = surface;
+          this.tiltTarget.classList.add("mt-tilt-active");
+        }
+
+        if (this.tiltFrameId === null) {
+          this.tiltFrameId = window.requestAnimationFrame(() => this.renderTiltFrame());
+        }
+      };
+
+      const onPointerOut: EventListener = (event): void => {
+        const pointerEvent = event as PointerEvent;
+        const current = (pointerEvent.target as HTMLElement | null)?.closest<HTMLElement>(this.tiltSelector);
+        if (!current || current !== this.tiltTarget) {
+          return;
+        }
+
+        const next = pointerEvent.relatedTarget as Node | null;
+        if (next && current.contains(next)) {
+          return;
+        }
+
+        this.resetTiltTarget(current);
+      };
+
+      const onPointerDown: EventListener = (event): void => {
+        const pointerEvent = event as PointerEvent;
+        if (this.prefersReducedMotion) {
+          return;
+        }
+
+        const target = (pointerEvent.target as HTMLElement | null)?.closest<HTMLElement>(this.rippleSelector);
+        if (!target) {
+          return;
+        }
+
+        const rect = target.getBoundingClientRect();
+        target.style.setProperty("--mt-ripple-x", `${pointerEvent.clientX - rect.left}px`);
+        target.style.setProperty("--mt-ripple-y", `${pointerEvent.clientY - rect.top}px`);
+        target.classList.remove("mt-ripple-active");
+        void target.offsetWidth;
+        target.classList.add("mt-ripple-active");
+        window.setTimeout(() => target.classList.remove("mt-ripple-active"), 760);
+      };
+
+      const onAnimationEnd: EventListener = (event): void => {
+        const animationEvent = event as AnimationEvent;
+        if (animationEvent.animationName !== "mtRippleWave") {
+          return;
+        }
+
+        const target = animationEvent.target as HTMLElement | null;
+        target?.classList.remove("mt-ripple-active");
+      };
+
+      const onWindowBlur = (): void => this.resetTiltTarget(this.tiltTarget);
+
+      this.registerMotionListener(document, "pointermove", onPointerMove, passiveOptions);
+      this.registerMotionListener(document, "pointerout", onPointerOut, true);
+      this.registerMotionListener(document, "pointerdown", onPointerDown, passiveOptions);
+      this.registerMotionListener(document, "animationend", onAnimationEnd, true);
+      this.registerMotionListener(window, "blur", onWindowBlur);
+      this.registerMotionListener(window, "scroll", onWindowBlur, passiveOptions);
+    });
+  }
+
+  private teardownInteractiveMotion(): void {
+    while (this.motionCleanupFns.length) {
+      const cleanup = this.motionCleanupFns.pop();
+      cleanup?.();
+    }
+
+    if (typeof window !== "undefined" && this.tiltFrameId !== null) {
+      window.cancelAnimationFrame(this.tiltFrameId);
+    }
+
+    this.tiltFrameId = null;
+    this.resetTiltTarget(this.tiltTarget);
+  }
+
+  private renderTiltFrame(): void {
+    this.tiltFrameId = null;
+
+    if (!this.tiltTarget) {
+      return;
+    }
+
+    const rect = this.tiltTarget.getBoundingClientRect();
+    if (!rect.width || !rect.height) {
+      return;
+    }
+
+    const pointerX = this.clamp((this.tiltPointerX - rect.left) / rect.width, 0, 1);
+    const pointerY = this.clamp((this.tiltPointerY - rect.top) / rect.height, 0, 1);
+    const normalizedX = pointerX * 2 - 1;
+    const normalizedY = pointerY * 2 - 1;
+
+    this.tiltTarget.style.setProperty("--mt-tilt-x", `${(-normalizedY * 4.2).toFixed(2)}deg`);
+    this.tiltTarget.style.setProperty("--mt-tilt-y", `${(normalizedX * 5.6).toFixed(2)}deg`);
+    this.tiltTarget.style.setProperty("--mt-shadow-x", `${(normalizedX * 11).toFixed(2)}px`);
+    this.tiltTarget.style.setProperty("--mt-shadow-y", `${(normalizedY * 10).toFixed(2)}px`);
+    this.tiltTarget.style.setProperty("--mt-reflect-x", `${(pointerX * 100).toFixed(2)}%`);
+    this.tiltTarget.style.setProperty("--mt-reflect-y", `${(pointerY * 100).toFixed(2)}%`);
+    this.tiltTarget.style.setProperty("--mt-glint-shift-x", `${(-normalizedX * 10).toFixed(2)}px`);
+    this.tiltTarget.style.setProperty("--mt-glint-shift-y", `${(-normalizedY * 12).toFixed(2)}px`);
+  }
+
+  private resetTiltTarget(target: HTMLElement | null): void {
+    if (!target) {
+      return;
+    }
+
+    target.classList.remove("mt-tilt-active");
+    target.style.removeProperty("--mt-tilt-x");
+    target.style.removeProperty("--mt-tilt-y");
+    target.style.removeProperty("--mt-shadow-x");
+    target.style.removeProperty("--mt-shadow-y");
+    target.style.removeProperty("--mt-reflect-x");
+    target.style.removeProperty("--mt-reflect-y");
+    target.style.removeProperty("--mt-glint-shift-x");
+    target.style.removeProperty("--mt-glint-shift-y");
+
+    if (this.tiltTarget === target) {
+      this.tiltTarget = null;
+    }
+  }
+
+  private registerMotionListener(
+    target: EventTarget,
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: AddEventListenerOptions | boolean
+  ): void {
+    target.addEventListener(type, listener, options);
+    this.motionCleanupFns.push(() => target.removeEventListener(type, listener, options));
+  }
+
+  private clamp(value: number, min: number, max: number): number {
+    return Math.min(max, Math.max(min, value));
   }
 
   private resolveThemeKey(): string {

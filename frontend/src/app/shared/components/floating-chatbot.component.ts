@@ -24,13 +24,14 @@ interface ChatMessage {
         (click)="open = !open"
         [attr.aria-expanded]="open"
         aria-controls="mindtrack-chatbot-panel"
+        data-ripple
         class="group mt-card mt-card-hover flex h-14 w-14 items-center justify-center rounded-full p-0 text-[var(--mt-accent-strong)] shadow-lg ring-1 ring-white/70">
         <app-icon name="bot" className="icon-bounce-soft text-xl transition group-hover:scale-105"></app-icon>
       </button>
 
       <div
         id="mindtrack-chatbot-panel"
-        class="fixed inset-x-3 bottom-[calc(var(--mt-safe-bottom)+5rem)] max-h-[min(70vh,38rem)] origin-bottom overflow-hidden rounded-[1.75rem] border border-white/60 bg-[linear-gradient(155deg,rgba(247,251,255,0.92),rgba(234,242,249,0.86),rgba(220,232,244,0.82))] shadow-2xl backdrop-blur transition-all duration-200 sm:absolute sm:inset-x-auto sm:bottom-16 sm:right-0 sm:w-[22rem] sm:max-h-none sm:max-w-[calc(100vw-2.5rem)] sm:origin-bottom-right sm:rounded-3xl"
+        class="fixed inset-x-3 bottom-[calc(var(--mt-safe-bottom)+5rem)] max-h-[min(70vh,38rem)] origin-bottom overflow-hidden rounded-[1.75rem] border border-white/60 bg-[linear-gradient(155deg,rgba(247,251,255,0.92),rgba(234,242,249,0.86),rgba(220,232,244,0.82))] shadow-2xl backdrop-blur transition-all duration-300 sm:absolute sm:inset-x-auto sm:bottom-16 sm:right-0 sm:w-[22rem] sm:max-h-none sm:max-w-[calc(100vw-2.5rem)] sm:origin-bottom-right sm:rounded-3xl"
         [class.pointer-events-none]="!open"
         [class.opacity-0]="!open"
         [class.translate-y-2]="!open"
@@ -49,6 +50,7 @@ interface ChatMessage {
             <button
               type="button"
               (click)="open = false"
+              data-ripple
               class="inline-flex h-9 w-9 items-center justify-center rounded-2xl border border-slate-200 bg-[rgba(247,250,254,0.94)] text-slate-700 shadow-sm transition hover:bg-white"
               aria-label="Close assistant">
               <app-icon name="arrow" className="text-sm rotate-45"></app-icon>
@@ -61,6 +63,7 @@ interface ChatMessage {
               type="button"
               (click)="sendQuick(chip)"
               [disabled]="pending"
+              data-ripple
               class="rounded-full border border-slate-200 bg-[rgba(246,250,254,0.92)] px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-60">
               {{ chip }}
             </button>
@@ -68,9 +71,10 @@ interface ChatMessage {
         </div>
 
         <div #scrollViewport class="max-h-[min(36vh,18rem)] space-y-3 overflow-y-auto px-4 py-4 scroll-smooth sm:max-h-80">
-          <div *ngFor="let item of messages; trackBy: trackByTimestamp" class="flex" [class.justify-end]="item.role === 'user'">
+          <div *ngFor="let item of messages; trackBy: trackByTimestamp; let i = index" class="flex" [class.justify-end]="item.role === 'user'">
             <div
               class="message-in chat-speech-bubble max-w-[92%] px-4 py-3 text-sm leading-6 shadow-sm transition-all duration-200 sm:max-w-[85%]"
+              [style.animationDelay.ms]="i * 16"
               [class.chat-speech-bubble-user]="item.role === 'user'"
               [class.bg-blue-500]="item.role === 'user'"
               [class.text-white]="item.role === 'user'"
@@ -89,13 +93,18 @@ interface ChatMessage {
             </div>
           </div>
 
-          <div *ngIf="pending" class="flex items-center gap-2 text-xs text-slate-500">
-            <span>Assistant is thinking...</span>
-            <span class="typing-dots">
-              <span class="typing-dot"></span>
-              <span class="typing-dot"></span>
-              <span class="typing-dot"></span>
-            </span>
+          <div *ngIf="pending" class="message-in flex">
+            <div class="chat-speech-bubble flex items-center gap-2 border-slate-200 bg-slate-100 px-3 py-2 text-xs text-slate-500 shadow-sm">
+              <div class="assistant-avatar assistant-avatar-sm">
+                <app-icon name="bot" className="text-[10px]"></app-icon>
+              </div>
+              <span>Assistant is thinking...</span>
+              <span class="typing-dots">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+              </span>
+            </div>
           </div>
         </div>
 
@@ -111,12 +120,14 @@ interface ChatMessage {
               type="button"
               (click)="send()"
               [disabled]="pending || !draft.trim()"
+              data-ripple
               class="flex-1 rounded-2xl bg-blue-500 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50">
               Send
             </button>
             <button
               type="button"
               (click)="clear()"
+              data-ripple
               class="rounded-2xl border border-slate-200 bg-[rgba(247,250,254,0.94)] px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-white active:scale-[0.98]">
               Clear
             </button>

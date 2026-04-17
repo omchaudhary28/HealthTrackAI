@@ -22,6 +22,7 @@
         type="button"
         (click)="start()"
         [disabled]="running()"
+        data-ripple
         class="rounded-xl bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-60">
         Start Exercise
       </button>
@@ -29,12 +30,14 @@
         type="button"
         (click)="pause()"
         [disabled]="!running()"
+        data-ripple
         class="rounded-xl bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-60">
         Pause
       </button>
       <button
         type="button"
         (click)="reset()"
+        data-ripple
         class="rounded-xl bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600">
         Reset
       </button>
@@ -47,6 +50,7 @@
         type="button"
         (click)="selectDuration(option)"
         [disabled]="running()"
+        data-ripple
         class="rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold transition"
         [class.bg-blue-500]="durationMinutes() === option"
         [class.text-white]="durationMinutes() === option"
@@ -55,7 +59,7 @@
       </button>
     </div>
 
-    <div *ngIf="isComplete()" class="mt-4 rounded-xl bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-700">
+    <div *ngIf="isComplete()" class="mt-success-pop mt-4 rounded-xl bg-emerald-50 px-4 py-2 text-xs font-semibold text-emerald-700">
       Exercise complete. Reset to try another round.
     </div>
   </div>

@@ -36,6 +36,8 @@
   --mt-card-shadow-hover: 0 46px 98px -50px rgba(15, 23, 42, 0.5);
   --mt-card-outline: rgba(255, 255, 255, 0.58);
   --mt-card-radius: 1.75rem;
+  --mt-breathe-duration: 5.2s;
+  --mt-ripple-duration: 620ms;
 }
 
 html,
@@ -313,9 +315,26 @@ form {
   .mt-card-panel,
   .card,
   .mt-card-icon,
-  .icon-bounce-soft {
+  .icon-bounce-soft,
+  .assistant-avatar,
+  .message-in,
+  .typing-dot,
+  .mt-success-pop,
+  .mt-ripple-active::after {
     animation: none;
     transition: none;
+  }
+
+  .mt-card-hover,
+  .glass-card,
+  .theme-hero-card,
+  .theme-bento-card,
+  .theme-bento-card-soft,
+  .theme-bento-card-strong,
+  .card {
+    transform: none !important;
+    scale: 1 !important;
+    box-shadow: inherit;
   }
 }
 
@@ -393,6 +412,49 @@ form {
   transform: translateY(1px) scale(0.988);
 }
 
+.btn-primary,
+.btn-outline,
+.mobile-tab-link,
+.social-nav-item,
+[data-ripple] {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-primary::after,
+.btn-outline::after,
+.mobile-tab-link::after,
+.social-nav-item::after,
+[data-ripple]::after {
+  content: "";
+  position: absolute;
+  left: var(--mt-ripple-x, 50%);
+  top: var(--mt-ripple-y, 50%);
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.66) 0, rgba(255, 255, 255, 0.15) 72%, transparent 100%);
+  z-index: 1;
+}
+
+.btn-primary.mt-ripple-active::after,
+.btn-outline.mt-ripple-active::after,
+.mobile-tab-link.mt-ripple-active::after,
+.social-nav-item.mt-ripple-active::after,
+[data-ripple].mt-ripple-active::after {
+  animation: mtRippleWave var(--mt-ripple-duration) cubic-bezier(0.17, 0.84, 0.44, 1) both;
+}
+
+.btn-primary.mt-ripple-active,
+.btn-outline.mt-ripple-active,
+[data-ripple].mt-ripple-active {
+  animation: mtActionGlow 0.44s ease;
+}
+
 .glass-card {
   border: 1px solid rgba(255, 255, 255, 0.52);
   background:
@@ -444,6 +506,14 @@ form {
 .mt-card-interactive,
 .mt-card-panel,
 .card {
+  --mt-tilt-x: 0deg;
+  --mt-tilt-y: 0deg;
+  --mt-shadow-x: 0px;
+  --mt-shadow-y: 0px;
+  --mt-reflect-x: 16%;
+  --mt-reflect-y: 18%;
+  --mt-glint-shift-x: 0px;
+  --mt-glint-shift-y: 0px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -454,15 +524,32 @@ form {
   isolation: isolate;
   background-position: 0% 50%;
   background-size: 140% 140%;
+  scale: 1;
   animation: mtCardEntry 0.72s cubic-bezier(0.18, 0.9, 0.28, 1) both;
   animation-delay: var(--mt-entry-delay, 0ms);
   transition:
     transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    scale 0.42s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.42s ease,
     border-color 0.42s ease,
     background-position 0.46s ease,
     filter 0.42s ease;
   will-change: transform, box-shadow, background-position;
+}
+
+.mt-card-hover,
+.glass-card,
+.theme-hero-card,
+.theme-bento-card,
+.theme-bento-card-soft,
+.theme-bento-card-strong,
+.card {
+  animation-name: mtCardEntry, mtCalmBreath;
+  animation-duration: 0.72s, var(--mt-breathe-duration);
+  animation-timing-function: cubic-bezier(0.18, 0.9, 0.28, 1), ease-in-out;
+  animation-delay: var(--mt-entry-delay, 0ms), calc(var(--mt-entry-delay, 0ms) + 0.78s);
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: both, both;
 }
 
 .mt-card,
@@ -513,7 +600,7 @@ form {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.64), transparent 24%),
+    radial-gradient(circle at var(--mt-reflect-x) var(--mt-reflect-y), rgba(255, 255, 255, 0.66), transparent 26%),
     radial-gradient(circle at 88% 14%, rgba(255, 255, 255, 0.18), transparent 26%),
     radial-gradient(circle at 74% 84%, var(--mt-accent-soft), transparent 44%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 55%);
@@ -542,6 +629,7 @@ form {
   background: radial-gradient(circle, rgba(255, 255, 255, 0.64) 0, rgba(255, 255, 255, 0.14) 26%, transparent 70%);
   filter: blur(12px);
   opacity: 0.68;
+  transform: translate(var(--mt-glint-shift-x), var(--mt-glint-shift-y));
   transition: transform 0.45s ease, opacity 0.45s ease;
 }
 
@@ -568,11 +656,20 @@ form {
 .card {
   transition:
     transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    scale 0.42s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.42s ease,
     border-color 0.42s ease,
     background-position 0.46s ease,
     filter 0.42s ease;
-  will-change: transform, box-shadow;
+  will-change: transform, scale, box-shadow;
+}
+
+.mt-tilt-active {
+  transform: perspective(1200px) translate3d(0, -5px, 0) rotateX(var(--mt-tilt-x)) rotateY(var(--mt-tilt-y));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    calc(var(--mt-shadow-x) + 0px) calc(36px + var(--mt-shadow-y)) 78px -52px rgba(15, 23, 42, 0.4);
+  background-position: 68% 50%;
 }
 
 .mt-card-hover:hover,
@@ -589,8 +686,15 @@ form {
 .theme-bento-card-strong:focus-within,
 .card:hover,
 .card:focus-within {
-  transform: perspective(1200px) translateY(-8px) scale(1.04) rotateX(1.25deg) rotateY(-1deg);
-  box-shadow: var(--mt-card-shadow-hover);
+  transform:
+    perspective(1200px)
+    translate3d(0, -8px, 0)
+    rotateX(calc(1.15deg + var(--mt-tilt-x)))
+    rotateY(calc(-1deg + var(--mt-tilt-y)));
+  scale: 1.02;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    calc(var(--mt-shadow-x) + 0px) calc(42px + var(--mt-shadow-y)) 92px -56px rgba(15, 23, 42, 0.48);
   border-color: rgba(255, 255, 255, 0.92);
   background-position: 100% 50%;
   filter: saturate(1.06) brightness(1.02);
@@ -629,13 +733,17 @@ form {
 .theme-bento-card-strong:focus-within::after,
 .card:hover::after,
 .card:focus-within::after {
-  transform: translate(-8%, -12%);
+  transform: translate(calc(-8% + var(--mt-glint-shift-x)), calc(-12% + var(--mt-glint-shift-y)));
   opacity: 0.96;
 }
 
 .mt-card-intro {
-  animation: mtCardEntry 0.72s cubic-bezier(0.18, 0.9, 0.28, 1) both;
-  animation-delay: var(--mt-entry-delay, 0ms);
+  animation-name: mtCardEntry, mtCalmBreath;
+  animation-duration: 0.72s, var(--mt-breathe-duration);
+  animation-timing-function: cubic-bezier(0.18, 0.9, 0.28, 1), ease-in-out;
+  animation-delay: var(--mt-entry-delay, 0ms), calc(var(--mt-entry-delay, 0ms) + 0.78s);
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: both, both;
 }
 
 .mt-card-brand {
@@ -904,12 +1012,16 @@ form {
   background: linear-gradient(140deg, rgba(245, 133, 41, 0.22), rgba(129, 52, 175, 0.24), rgba(14, 165, 233, 0.24));
   border: 1px solid rgba(148, 163, 184, 0.38);
   color: var(--mt-accent-strong);
+  transform-origin: center;
+  animation: assistantAvatarDrift 5.8s ease-in-out infinite;
+  will-change: transform;
 }
 
 .assistant-avatar-sm {
   width: 2rem;
   height: 2rem;
   border-radius: 0.7rem;
+  animation-duration: 4.8s;
 }
 
 .chat-speech-bubble {
@@ -966,21 +1078,21 @@ form {
 }
 
 .message-in {
-  animation: messageIn 0.22s ease;
+  animation: messageIn 0.36s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .typing-dots {
   display: inline-flex;
-  gap: 4px;
+  gap: 5px;
   align-items: center;
 }
 
 .typing-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 999px;
   background: #cbd5f5;
-  animation: typingBounce 1s infinite;
+  animation: typingBounce 1.24s ease-in-out infinite;
 }
 
 .typing-dot:nth-child(2) {
@@ -991,14 +1103,22 @@ form {
   animation-delay: 0.3s;
 }
 
+.mt-success-pop {
+  animation: mtSuccessPop 0.52s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @keyframes messageIn {
   from {
     opacity: 0;
-    transform: translateY(6px) scale(0.98);
+    transform: translate3d(0, 12px, 0) scale(0.976);
+  }
+  70% {
+    opacity: 1;
+    transform: translate3d(0, -1px, 0) scale(1.004);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
@@ -1006,12 +1126,22 @@ form {
   0%,
   80%,
   100% {
-    transform: translateY(0);
-    opacity: 0.45;
+    transform: translateY(0) scale(0.96);
+    opacity: 0.46;
   }
   40% {
-    transform: translateY(-4px);
+    transform: translateY(-5px) scale(1.08);
     opacity: 1;
+  }
+}
+
+@keyframes assistantAvatarDrift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -2px, 0) rotate(1.5deg);
   }
 }
 
@@ -1042,6 +1172,54 @@ form {
   }
 }
 
+@keyframes mtCalmBreath {
+  0%,
+  100% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.02;
+  }
+}
+
+@keyframes mtRippleWave {
+  0% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(34);
+  }
+}
+
+@keyframes mtActionGlow {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, 0, 0) scale(1.012);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes mtSuccessPop {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.98);
+  }
+  65% {
+    opacity: 1;
+    transform: translate3d(0, -1px, 0) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
 @keyframes iconBounceSoft {
   0%,
   100% {
@@ -1052,6 +1230,19 @@ form {
   }
   72% {
     transform: translateY(1px);
+  }
+}
+
+@supports (view-transition-name: mindtrack-shared) {
+  ::view-transition-group(*) {
+    animation-duration: 420ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 420ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 
@@ -1183,8 +1374,10 @@ form {
   .theme-bento-card-strong:hover .mt-card-icon,
   .theme-bento-card-strong:focus-within .mt-card-icon,
   .card:hover .mt-card-icon,
-  .card:focus-within .mt-card-icon {
+  .card:focus-within .mt-card-icon,
+  .mt-tilt-active {
     transform: none;
+    scale: 1;
     filter: none;
     box-shadow: inherit;
   }
