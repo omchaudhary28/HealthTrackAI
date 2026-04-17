@@ -20,10 +20,10 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             <app-icon name="exercises" className="text-xl"></app-icon>
           </div>
           <div>
-            <div class="mt-card-kicker">Exercise Library</div>
-            <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Tiny resets, ready when you are.</h1>
+            <div class="comic-subline text-slate-500">Mission 03</div>
+            <h1 class="comic-heading mt-3 text-3xl text-slate-900 sm:text-5xl lg:text-6xl">Calm your mind.</h1>
             <p class="mt-card-copy mt-3 text-sm sm:text-base">
-              Pick one, do it, leave a quick note. The library stays light, useful, and responsive.
+              Pick one reset. Run it. Log it.
             </p>
             <div class="mt-4 flex flex-wrap gap-2">
               <span class="mt-chip"><app-icon name="activity" className="text-xs"></app-icon> Activity</span>
@@ -41,8 +41,8 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               <app-icon name="sparkles" className="text-lg"></app-icon>
             </div>
             <div>
-              <div class="mt-card-kicker">Recommended for you</div>
-              <div class="mt-card-copy mt-2 text-sm">Best fit from your latest signal.</div>
+              <div class="mt-card-kicker">Best mission for now</div>
+              <div class="mt-card-copy mt-2 text-sm">Picked from your latest signal.</div>
             </div>
           </div>
           <button type="button" (click)="refreshRecommendations()" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Refresh</button>
@@ -73,7 +73,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                 <div class="mt-2">{{ exercise.expectedOutcome }}</div>
               </div>
               <button type="button" (click)="open(exercise)" class="btn-primary mt-4 w-full rounded-2xl px-4 py-3 text-sm font-semibold">
-                Open exercise
+                Start mission
               </button>
             </article>
           </ng-container>
@@ -211,12 +211,12 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                       <app-icon name="feedback" className="text-base"></app-icon>
                     </div>
                     <div>
-                      <div class="mt-card-kicker">Quick feedback</div>
-                      <div class="mt-card-copy mt-2 text-sm">Tell the recommender how this felt.</div>
+                  <div class="mt-card-kicker">Quick feedback</div>
+                      <div class="mt-card-copy mt-2 text-sm">Tell AI how this mission felt.</div>
                     </div>
                   </div>
                   <div class="mt-4">
-                    <div class="mt-card-kicker">How'd it feel?</div>
+                    <div class="mt-card-kicker">How did it feel?</div>
                     <div class="mt-3 flex flex-wrap gap-2">
                       <button *ngFor="let rating of [1,2,3,4,5]" type="button" (click)="feedbackRating = rating"
                         class="mt-chip transition"
@@ -229,7 +229,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                   </div>
 
                   <label class="mt-4 block text-sm font-medium text-slate-600">
-                    What changed after this?
+                    What changed after this mission?
                     <textarea [(ngModel)]="resultAfter" rows="3" class="app-textarea mt-2" placeholder="Example: Less tense. More clear."></textarea>
                   </label>
 
@@ -239,11 +239,11 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                   </label>
 
                   <div *ngIf="completionSuccess" class="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                    Saved. Future picks will learn from this.
+                    Saved. You gained mission momentum.
                   </div>
 
                   <button type="button" (click)="completeActiveExercise()" [disabled]="completionPending" class="btn-primary mt-5 w-full rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60">
-                    {{ completionPending ? "Saving..." : "Mark complete" }}
+                    {{ completionPending ? "Saving..." : "Complete mission" }}
                   </button>
                 </div>
               </div>

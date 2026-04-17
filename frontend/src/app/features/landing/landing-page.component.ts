@@ -14,49 +14,49 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 export class LandingPageComponent {
   features: Array<{ kicker: string; title: string; description: string; icon: MindtrackIconName }> = [
     {
-      kicker: "Assess",
-      title: "Quick vibe check",
-      description: "Start with a fast baseline so the app knows where you're at.",
+      kicker: "Mission 01",
+      title: "Scan your mind",
+      description: "Fast baseline. Fast clarity.",
       icon: "tests"
     },
     {
-      kicker: "Reflect",
-      title: "Journal, no essay",
-      description: "Drop a few lines, tag the mood, and let the app spot the loop.",
+      kicker: "Mission 02",
+      title: "Dump your thoughts",
+      description: "No essay. Just the raw thought.",
       icon: "journal"
     },
     {
-      kicker: "Improve",
-      title: "Exercises that fit today",
-      description: "Breathing, grounding, and reset moves picked for your current state.",
+      kicker: "Mission 03",
+      title: "Calm your mind",
+      description: "One reset move matched to your state.",
       icon: "exercises"
     },
     {
-      kicker: "Connect",
-      title: "Low-key support feed",
-      description: "Post short updates, stay anonymous, and skip the oversharing.",
+      kicker: "Side Quest",
+      title: "Crew support",
+      description: "Share small wins. Stay anonymous.",
       icon: "community"
     }
   ];
 
   benefits = [
-    "\"Tiny wins > perfect plans.\"",
-    "AI replies shaped by your recent patterns",
-    "Fast mobile UI that stays out of your way"
+    "XP for every action",
+    "Mood-aware AI guide",
+    "Playful flow, low friction"
   ];
 
   steps = [
     {
-      title: "Check in",
-      description: "Do a baseline or drop one mood log."
+      title: "Ping your mood",
+      description: "Quick check. No overthinking."
     },
     {
-      title: "Get the read",
-      description: "MindTrack blends your logs into one clean snapshot."
+      title: "Get your read",
+      description: "MindTrack builds your mind snapshot."
     },
     {
-      title: "Make one move",
-      description: "Pick the next step and keep it chill."
+      title: "Run one mission",
+      description: "Dump, calm, or scan. Stack XP."
     }
   ];
 }

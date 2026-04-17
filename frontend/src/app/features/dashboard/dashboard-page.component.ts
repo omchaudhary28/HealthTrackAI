@@ -22,6 +22,24 @@ interface PatternInsightCard {
   dark?: boolean;
 }
 
+interface MissionCard {
+  key: string;
+  kicker: string;
+  title: string;
+  description: string;
+  progress: string;
+  link: string;
+  icon: MindtrackIconName;
+  rewardXp: number;
+}
+
+interface AchievementBadge {
+  key: string;
+  label: string;
+  icon: MindtrackIconName;
+  unlocked: boolean;
+}
+
 @Component({
   selector: "app-dashboard-page",
   standalone: true,
@@ -39,55 +57,86 @@ interface PatternInsightCard {
         <section appScrollReveal class="page-stack">
           <div class="mt-card mt-card-hover page-hero">
             <div class="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-              <div class="mt-card-brand min-w-0 max-w-3xl">
-                <div class="mt-card-icon">
-                  <app-icon name="dashboard" className="text-xl"></app-icon>
+              <div class="min-w-0 max-w-4xl">
+                <div class="flex flex-wrap gap-2">
+                  <span class="xp-pill"><app-icon name="sparkles" className="text-xs"></app-icon> Level {{ level(summary) }}</span>
+                  <span class="xp-pill"><app-icon name="progress" className="text-xs"></app-icon> {{ totalXp(summary) }} XP</span>
+                  <span class="xp-pill"><app-icon name="streak" className="text-xs"></app-icon> {{ streakDays(summary) }}d streak</span>
                 </div>
-                <div class="min-w-0">
-                  <div class="mt-card-kicker">Dashboard</div>
-                  <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">
-                    Welcome back, <span class="break-words">{{ displayName() }}</span>.
-                  </h1>
-                  <p class="mt-card-copy mt-3 max-w-2xl text-sm sm:text-base">
-                    Your check-ins, notes, and exercises. One clean read. No chaos.
-                  </p>
-                  <div class="mt-4 flex flex-wrap gap-2">
-                    <span class="mt-chip"><app-icon name="chart-line" className="text-xs"></app-icon> Analytics</span>
-                    <span class="mt-chip"><app-icon name="sparkles" className="text-xs"></app-icon> AI insights</span>
+
+                <h1 class="comic-heading mt-4 text-3xl text-slate-900 sm:text-5xl">
+                  Mission hub, {{ displayName() }}.
+                </h1>
+                <p class="mt-3 text-sm font-semibold leading-7 text-slate-700 sm:text-base">
+                  Pick one mission. Win one moment.
+                </p>
+
+                <div class="speech-bubble mt-4 max-w-2xl">
+                  <div class="flex items-start gap-3">
+                    <div class="guide-avatar">
+                      <app-icon name="bot" className="text-sm"></app-icon>
+                    </div>
+                    <div>
+                      <div class="comic-subline text-slate-500">Nova, AI guide</div>
+                      <div class="mt-2 text-sm font-semibold leading-7" [ngClass]="emotionClass(summary)">
+                        {{ emotionalLine(summary) }}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+
               <div class="cluster-actions">
                 <a routerLink="/tests/baseline" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">
-                  Retake baseline
+                  Scan now
+                </a>
+                <a routerLink="/journal" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">
+                  Dump thoughts
                 </a>
                 <a routerLink="/exercises" class="btn-primary rounded-full px-5 py-3 text-sm font-semibold">
-                  Open exercises
+                  Calm now
                 </a>
               </div>
             </div>
 
-            <div class="mt-8 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-              <div class="mt-card mt-card-hover p-6">
+            <div class="mission-grid mt-7">
+              <a
+                *ngFor="let mission of missionCards(summary)"
+                [routerLink]="mission.link"
+                class="mission-card block">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="mt-card-brand min-w-0">
+                    <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                      <app-icon [name]="mission.icon" className="text-base"></app-icon>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="mission-tag">{{ mission.kicker }}</div>
+                      <div class="mt-3 text-xl font-semibold text-slate-900">{{ mission.title }}</div>
+                    </div>
+                  </div>
+                  <div class="mt-chip">+{{ mission.rewardXp }} XP</div>
+                </div>
+                <div class="mt-3 text-sm font-medium leading-6 text-slate-700">{{ mission.description }}</div>
+                <div class="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">{{ mission.progress }}</div>
+              </a>
+            </div>
+
+            <div class="mt-6 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+              <div class="mission-card">
                 <div class="mt-card-brand">
                   <div class="mt-card-icon">
                     <app-icon name="brain" className="text-lg"></app-icon>
                   </div>
                   <div>
-                    <div class="mt-card-kicker">Your current mental state</div>
+                    <div class="comic-subline text-slate-500">Current state</div>
                     <div class="mt-chip mt-3">
                       {{ summary.currentMentalState?.mentalState || summary.currentMentalState?.mental_state || 'Balanced' }}
                     </div>
                   </div>
                 </div>
-                <p class="mt-card-copy mt-4 text-sm">
-                  {{ summary.currentMentalState?.description || 'Things look pretty steady. Keep the good stuff going.' }}
+                <p class="mt-3 text-sm font-medium leading-7 text-slate-700">
+                  {{ summary.currentMentalState?.description || 'Things look steady. Keep the rhythm.' }}
                 </p>
-                <div class="mt-4 flex flex-wrap gap-2">
-                  <span *ngFor="let sign of (summary.currentMentalState?.commonSigns || []).slice(0, 3)" class="theme-chip-outline rounded-full px-3 py-1 text-xs font-semibold">
-                    {{ sign }}
-                  </span>
-                </div>
               </div>
 
               <div class="mt-card-strong mt-card-hover p-6">
@@ -96,13 +145,13 @@ interface PatternInsightCard {
                     <app-icon name="target" className="text-lg"></app-icon>
                   </div>
                   <div>
-                    <div class="mt-card-kicker">Suggested action</div>
+                    <div class="comic-subline text-white/70">Best next move</div>
                     <div class="mt-3 text-2xl font-semibold">{{ summary.suggestedAction?.title || 'Keep a gentle routine' }}</div>
                   </div>
                 </div>
-                <div class="mt-card-copy mt-3 text-sm">{{ summary.suggestedAction?.whyRecommended || '"Small reset" beats trying to fix everything.' }}</div>
+                <div class="mt-card-copy mt-3 text-sm">{{ summary.suggestedAction?.whyRecommended || 'Calm first. Then focus.' }}</div>
                 <div class="mt-4 rounded-3xl bg-white/10 px-4 py-4 text-sm leading-7 text-sky-50/85">
-                  What you get: {{ summary.suggestedAction?.expectedOutcome || 'A steadier vibe and a clearer next move.' }}
+                  Reward: {{ summary.suggestedAction?.expectedOutcome || 'A steadier vibe and a clearer next move.' }}
                 </div>
               </div>
             </div>
@@ -114,40 +163,65 @@ interface PatternInsightCard {
                 <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
                   <app-icon name="chart-line" className="text-base"></app-icon>
                 </div>
-                <div class="mt-card-kicker">Mental score</div>
+                <div class="mt-card-kicker">Mind score</div>
               </div>
               <div class="mt-card-stat mt-4 text-slate-900">{{ latestScore(summary) }}</div>
-              <div class="mt-card-copy mt-2 text-sm">Latest baseline out of 100.</div>
+              <div class="mt-card-copy mt-2 text-sm">Latest scan out of 100.</div>
             </div>
             <div class="mt-card mt-card-hover p-5">
               <div class="mt-card-brand">
                 <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
                   <app-icon name="smile" className="text-base"></app-icon>
                 </div>
-                <div class="mt-card-kicker">Mood check-ins</div>
+                <div class="mt-card-kicker">Mood pings</div>
               </div>
               <div class="mt-card-stat mt-4 text-slate-900">{{ summary.activitySummary?.moodCheckIns30d || 0 }}</div>
-              <div class="mt-card-copy mt-2 text-sm">Logged in 30 days.</div>
+              <div class="mt-card-copy mt-2 text-sm">Last 30 days.</div>
             </div>
             <div class="mt-card mt-card-hover p-5">
               <div class="mt-card-brand">
                 <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
                   <app-icon name="streak" className="text-base"></app-icon>
                 </div>
-                <div class="mt-card-kicker">Exercise streak</div>
+                <div class="mt-card-kicker">Calm streak</div>
               </div>
               <div class="mt-card-stat mt-4 text-slate-900">{{ summary.activitySummary?.exerciseStreak || 0 }}d</div>
-              <div class="mt-card-copy mt-2 text-sm">Current streak.</div>
+              <div class="mt-card-copy mt-2 text-sm">Keep this alive.</div>
             </div>
             <div class="mt-card mt-card-hover p-5">
               <div class="mt-card-brand">
                 <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
                   <app-icon name="journal" className="text-base"></app-icon>
                 </div>
-                <div class="mt-card-kicker">Journal entries</div>
+                <div class="mt-card-kicker">Thought dumps</div>
               </div>
               <div class="mt-card-stat mt-4 text-slate-900">{{ summary.activitySummary?.journalEntries30d || 0 }}</div>
-              <div class="mt-card-copy mt-2 text-sm">Notes in 30 days.</div>
+              <div class="mt-card-copy mt-2 text-sm">Last 30 days.</div>
+            </div>
+          </div>
+
+          <div class="mt-card mt-card-hover p-5 sm:p-6">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div class="mt-card-brand">
+                <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                  <app-icon name="sparkles" className="text-base"></app-icon>
+                </div>
+                <div>
+                  <div class="comic-subline text-slate-500">Achievements</div>
+                  <div class="mt-2 text-lg font-semibold text-slate-900">Unlocked by momentum</div>
+                </div>
+              </div>
+              <div class="mt-chip">{{ unlockedAchievements(summary).length }}/{{ achievements(summary).length }} unlocked</div>
+            </div>
+
+            <div class="mt-4 flex flex-wrap gap-3">
+              <div
+                *ngFor="let badge of achievements(summary)"
+                class="achievement-chip"
+                [class.opacity-45]="!badge.unlocked">
+                <app-icon [name]="badge.icon" className="text-xs"></app-icon>
+                <span>{{ badge.label }}</span>
+              </div>
             </div>
           </div>
 
@@ -240,8 +314,8 @@ interface PatternInsightCard {
                       <app-icon name="mood" className="text-base"></app-icon>
                     </div>
                     <div>
-                      <div class="text-sm font-semibold text-slate-900">Daily check-in</div>
-                      <div class="mt-1 text-xs leading-5 text-slate-500">Quick check on stress, sleep, and energy.</div>
+                      <div class="text-sm font-semibold text-slate-900">Mood ping</div>
+                      <div class="mt-1 text-xs leading-5 text-slate-500">Tap mood. Slide stress, sleep, energy.</div>
                     </div>
                   </div>
                   <span *ngIf="checkInSaved" class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Saved</span>
@@ -253,7 +327,7 @@ interface PatternInsightCard {
 
                 <div class="mt-5 space-y-4">
                   <label class="block text-sm font-semibold text-slate-800">
-                    Stress level
+                    Stress
                     <div class="mt-2 flex items-center gap-3">
                       <input [(ngModel)]="stressLevel" type="range" min="0" max="100" class="w-full" />
                       <div class="w-12 text-right text-sm font-semibold text-slate-700 tabular-nums">{{ stressLevel }}</div>
@@ -261,7 +335,7 @@ interface PatternInsightCard {
                   </label>
 
                   <label class="block text-sm font-semibold text-slate-800">
-                    Sleep quality
+                    Sleep
                     <div class="mt-2 flex items-center gap-3">
                       <input [(ngModel)]="sleepQuality" type="range" min="1" max="5" class="w-full" />
                       <div class="w-12 text-right text-sm font-semibold text-slate-700 tabular-nums">{{ sleepQuality }}/5</div>
@@ -269,7 +343,7 @@ interface PatternInsightCard {
                   </label>
 
                   <label class="block text-sm font-semibold text-slate-800">
-                    Energy level
+                    Energy
                     <div class="mt-2 flex items-center gap-3">
                       <input [(ngModel)]="energyLevel" type="range" min="1" max="5" class="w-full" />
                       <div class="w-12 text-right text-sm font-semibold text-slate-700 tabular-nums">{{ energyLevel }}/5</div>
@@ -286,16 +360,16 @@ interface PatternInsightCard {
                   (click)="saveCheckIn()"
                   [disabled]="checkInPending"
                   class="btn-primary mt-5 w-full rounded-2xl px-5 py-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50">
-                  {{ checkInPending ? "Saving..." : "Save check-in" }}
+                  {{ checkInPending ? "Saving..." : "Lock check-in" }}
                 </button>
               </div>
 
               <div class="theme-bento-card-soft rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
                 <div class="mt-card-brand">
-                  <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
-                    <app-icon name="sparkles" className="text-base"></app-icon>
-                  </div>
-                  <div class="text-sm font-semibold text-slate-900">AI notes</div>
+                    <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                      <app-icon name="sparkles" className="text-base"></app-icon>
+                    </div>
+                  <div class="text-sm font-semibold text-slate-900">AI callouts</div>
                 </div>
                 <div class="mt-4 space-y-3">
                   <div *ngFor="let insight of (summary.aiInsightsHistory || []).slice(0, 3)" class="theme-bento-card rounded-[1.5rem] px-4 py-4">
@@ -425,6 +499,120 @@ export class DashboardPageComponent {
 
   trackPatternCard(_index: number, card: PatternInsightCard): string {
     return card.key;
+  }
+
+  totalXp(summary: DashboardSummary): number {
+    const moodLogs = Number(summary.activitySummary?.moodCheckIns30d || 0);
+    const journalLogs = Number(summary.activitySummary?.journalEntries30d || 0);
+    const exerciseLogs = Number(summary.activitySummary?.exerciseCompleted30d || 0);
+    const scoreBonus = Math.max(0, this.latestScore(summary));
+    return moodLogs * 8 + journalLogs * 12 + exerciseLogs * 15 + Math.round(scoreBonus * 2.5);
+  }
+
+  level(summary: DashboardSummary): number {
+    return Math.max(1, Math.floor(this.totalXp(summary) / 320) + 1);
+  }
+
+  streakDays(summary: DashboardSummary): number {
+    const exercise = Number(summary.activitySummary?.exerciseStreak || 0);
+    const journal = Number(summary.activitySummary?.journalStreak || 0);
+    return Math.max(exercise, journal);
+  }
+
+  emotionClass(summary: DashboardSummary): string {
+    const stress = lastValue(summary.analytics?.stressTrend?.values, 55);
+    const mood = lastValue(summary.analytics?.moodTrend?.values, 3);
+    const delta = trendDelta(summary.analytics?.scoreTrend?.values);
+
+    if (delta >= 5 && mood >= 4) {
+      return "status-line-good";
+    }
+
+    if (stress >= 65 || mood <= 2) {
+      return "status-line-slow";
+    }
+
+    return "status-line-steady";
+  }
+
+  emotionalLine(summary: DashboardSummary): string {
+    const stress = lastValue(summary.analytics?.stressTrend?.values, 55);
+    const mood = lastValue(summary.analytics?.moodTrend?.values, 3);
+    const delta = trendDelta(summary.analytics?.scoreTrend?.values);
+
+    if (delta >= 5 && mood >= 4) {
+      return "You're doing better today. Keep this rhythm.";
+    }
+
+    if (stress >= 65 || mood <= 2) {
+      return "Let's slow things down. Calm first, then decide.";
+    }
+
+    if (this.streakDays(summary) >= 4) {
+      return "Streak looks strong. One more mission keeps momentum.";
+    }
+
+    return "Small moves still count. Pick one mission and go.";
+  }
+
+  missionCards(summary: DashboardSummary): MissionCard[] {
+    const journalCount = Number(summary.activitySummary?.journalEntries30d || 0);
+    const exerciseCount = Number(summary.activitySummary?.exerciseCompleted30d || 0);
+    const testsTaken = summary.latestBaseline ? 1 : 0;
+
+    return [
+      {
+        key: "journal",
+        kicker: "Mission 02",
+        title: "Dump your thoughts",
+        description: "Drop 2-5 lines. Clear the mental noise.",
+        progress: `${journalCount} dumps in 30d`,
+        link: "/journal",
+        icon: "journal",
+        rewardXp: 20
+      },
+      {
+        key: "exercise",
+        kicker: "Mission 03",
+        title: "Calm your mind",
+        description: "Run one reset move and log how it felt.",
+        progress: `${exerciseCount} calm runs in 30d`,
+        link: "/exercises",
+        icon: "exercises",
+        rewardXp: 25
+      },
+      {
+        key: "test",
+        kicker: "Mission 01",
+        title: "Scan your mind",
+        description: "Take a quick check. Update your read.",
+        progress: testsTaken ? "Latest scan complete" : "No scan yet",
+        link: "/tests/baseline",
+        icon: "tests",
+        rewardXp: 30
+      }
+    ];
+  }
+
+  achievements(summary: DashboardSummary): AchievementBadge[] {
+    const streak = this.streakDays(summary);
+    const moodLogs = Number(summary.activitySummary?.moodCheckIns30d || 0);
+    const journalLogs = Number(summary.activitySummary?.journalEntries30d || 0);
+    const exercises = Number(summary.activitySummary?.exerciseCompleted30d || 0);
+    const scoreDelta = trendDelta(summary.analytics?.scoreTrend?.values);
+
+    return [
+      { key: "starter", label: "First Scan", icon: "tests", unlocked: !!summary.latestBaseline },
+      { key: "tracker", label: "Mood Tracker", icon: "mood", unlocked: moodLogs >= 5 },
+      { key: "writer", label: "Thought Dumper", icon: "journal", unlocked: journalLogs >= 5 },
+      { key: "calm", label: "Calm Runner", icon: "exercises", unlocked: exercises >= 4 },
+      { key: "streak", label: "Streak Keeper", icon: "streak", unlocked: streak >= 3 },
+      { key: "momentum", label: "Momentum Up", icon: "progress", unlocked: scoreDelta >= 5 }
+    ];
+  }
+
+  unlockedAchievements(summary: DashboardSummary): AchievementBadge[] {
+    return this.achievements(summary).filter((badge) => badge.unlocked);
   }
 
   saveCheckIn(): void {

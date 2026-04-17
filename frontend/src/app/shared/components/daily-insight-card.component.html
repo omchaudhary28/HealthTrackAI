@@ -1,18 +1,18 @@
 <div class="mt-card mt-card-hover p-5 sm:p-6">
   <div class="mt-card-head flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div class="mt-card-brand min-w-0">
-      <div class="mt-card-icon">
+      <div class="guide-avatar">
         <app-icon name="insights" className="text-lg"></app-icon>
       </div>
       <div class="min-w-0">
-        <div class="mt-card-kicker">Daily insight</div>
-        <div class="mt-2 text-xl font-semibold text-slate-950 sm:text-2xl">Quick reset before the scroll starts.</div>
-        <div class="mt-card-copy mt-2 text-sm">Pick the nearest vibe and use the prompt if you want a cleaner next step.</div>
+        <div class="comic-subline text-slate-500">Nova drop</div>
+        <div class="comic-heading mt-2 text-3xl text-slate-950">Pick your vibe. Get your line.</div>
+        <div class="mt-card-copy mt-2 text-sm">Short check-in. Zero fluff.</div>
       </div>
     </div>
 
     <a routerLink="/journal" class="btn-primary rounded-2xl px-4 py-3 text-sm font-semibold">
-      Open journal
+      Dump thoughts
     </a>
   </div>
 
@@ -23,7 +23,7 @@
       (click)="selectMood(mood)"
       [attr.aria-pressed]="selectedMood() === mood.id"
       [ngClass]="buttonClass(mood)"
-      class="mt-card-soft mt-card-hover flex min-h-[5.5rem] items-center gap-3 rounded-[1.35rem] border px-4 py-3 text-left text-sm font-semibold transition focus-visible:outline-none">
+      class="mission-card flex min-h-[5.5rem] items-center gap-3 rounded-[1.35rem] border px-4 py-3 text-left text-sm font-semibold transition focus-visible:outline-none">
       <div class="mt-card-icon h-10 w-10 rounded-[0.85rem]">
         <app-icon [name]="mood.icon" className="text-sm"></app-icon>
       </div>
@@ -31,14 +31,14 @@
     </button>
   </div>
 
-  <div class="mt-card-soft mt-5 p-4">
+  <div class="speech-bubble mt-5">
     <div class="mt-card-brand">
       <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
         <app-icon name="wand" className="text-base"></app-icon>
       </div>
       <div class="min-w-0">
-        <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Quick note</div>
-        <div class="mt-2 text-sm leading-7 text-slate-700">
+        <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Quick line</div>
+        <div class="mt-2 text-sm font-semibold leading-7 text-slate-700">
           {{ currentInsight() }}
         </div>
       </div>

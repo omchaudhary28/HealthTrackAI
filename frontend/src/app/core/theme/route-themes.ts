@@ -13,14 +13,14 @@ export interface RouteTheme {
 export const ROUTE_THEMES: Record<string, RouteTheme> = {
   landing: {
     key: "landing",
-    shellGradient: "linear-gradient(135deg, #fff6ef 0%, #f1f7ff 42%, #eefdf6 100%)",
-    accent: "#fb923c",
-    accentStrong: "#ea580c",
-    accentSoft: "rgba(251, 146, 60, 0.14)",
-    activeSurface: "rgba(255, 247, 237, 0.88)",
-    orbA: "rgba(251, 146, 60, 0.2)",
-    orbB: "rgba(34, 197, 94, 0.18)",
-    tabGradient: "linear-gradient(90deg, rgba(251,146,60,0.95), rgba(45,212,191,0.95))"
+    shellGradient: "linear-gradient(135deg, #fff0e3 0%, #e8f2ff 44%, #e7fff5 100%)",
+    accent: "#ff5f00",
+    accentStrong: "#ec4899",
+    accentSoft: "rgba(255, 95, 0, 0.16)",
+    activeSurface: "rgba(255, 244, 235, 0.9)",
+    orbA: "rgba(255, 95, 0, 0.22)",
+    orbB: "rgba(14, 165, 233, 0.18)",
+    tabGradient: "linear-gradient(90deg, rgba(255,95,0,0.96), rgba(236,72,153,0.95), rgba(14,165,233,0.92))"
   },
   auth: {
     key: "auth",
@@ -35,25 +35,25 @@ export const ROUTE_THEMES: Record<string, RouteTheme> = {
   },
   dashboard: {
     key: "dashboard",
-    shellGradient: "linear-gradient(140deg, #eef8ff 0%, #f6fbff 44%, #effcf7 100%)",
-    accent: "#0284c7",
-    accentStrong: "#075985",
-    accentSoft: "rgba(2, 132, 199, 0.14)",
-    activeSurface: "rgba(240, 249, 255, 0.9)",
-    orbA: "rgba(56, 189, 248, 0.2)",
-    orbB: "rgba(52, 211, 153, 0.16)",
-    tabGradient: "linear-gradient(90deg, rgba(2,132,199,0.95), rgba(52,211,153,0.92))"
+    shellGradient: "linear-gradient(140deg, #e8f4ff 0%, #f7f3ff 44%, #e8fff5 100%)",
+    accent: "#0ea5e9",
+    accentStrong: "#ec4899",
+    accentSoft: "rgba(14, 165, 233, 0.16)",
+    activeSurface: "rgba(240, 249, 255, 0.92)",
+    orbA: "rgba(14, 165, 233, 0.24)",
+    orbB: "rgba(236, 72, 153, 0.18)",
+    tabGradient: "linear-gradient(90deg, rgba(14,165,233,0.95), rgba(236,72,153,0.94), rgba(255,95,0,0.9))"
   },
   tests: {
     key: "tests",
-    shellGradient: "linear-gradient(140deg, #fffaf1 0%, #f8fbff 52%, #eefdf8 100%)",
-    accent: "#f59e0b",
-    accentStrong: "#b45309",
-    accentSoft: "rgba(245, 158, 11, 0.14)",
-    activeSurface: "rgba(255, 251, 235, 0.88)",
-    orbA: "rgba(251, 191, 36, 0.2)",
-    orbB: "rgba(14, 165, 233, 0.12)",
-    tabGradient: "linear-gradient(90deg, rgba(245,158,11,0.95), rgba(14,165,233,0.9))"
+    shellGradient: "linear-gradient(140deg, #fff3df 0%, #eaf3ff 52%, #eefdf8 100%)",
+    accent: "#ff8a00",
+    accentStrong: "#ea580c",
+    accentSoft: "rgba(255, 138, 0, 0.16)",
+    activeSurface: "rgba(255, 247, 230, 0.9)",
+    orbA: "rgba(255, 138, 0, 0.24)",
+    orbB: "rgba(14, 165, 233, 0.14)",
+    tabGradient: "linear-gradient(90deg, rgba(255,138,0,0.95), rgba(236,72,153,0.9), rgba(14,165,233,0.88))"
   },
   mentalState: {
     key: "mentalState",
@@ -68,14 +68,14 @@ export const ROUTE_THEMES: Record<string, RouteTheme> = {
   },
   exercises: {
     key: "exercises",
-    shellGradient: "linear-gradient(140deg, #effcf7 0%, #f9fcff 50%, #fff9f2 100%)",
+    shellGradient: "linear-gradient(140deg, #eafff4 0%, #eef5ff 50%, #fff0e7 100%)",
     accent: "#10b981",
-    accentStrong: "#047857",
-    accentSoft: "rgba(16, 185, 129, 0.14)",
-    activeSurface: "rgba(236, 253, 245, 0.88)",
-    orbA: "rgba(16, 185, 129, 0.18)",
-    orbB: "rgba(251, 146, 60, 0.12)",
-    tabGradient: "linear-gradient(90deg, rgba(16,185,129,0.95), rgba(251,146,60,0.88))"
+    accentStrong: "#0f766e",
+    accentSoft: "rgba(16, 185, 129, 0.16)",
+    activeSurface: "rgba(236, 253, 245, 0.9)",
+    orbA: "rgba(16, 185, 129, 0.24)",
+    orbB: "rgba(255, 95, 0, 0.14)",
+    tabGradient: "linear-gradient(90deg, rgba(16,185,129,0.95), rgba(14,165,233,0.9), rgba(255,95,0,0.86))"
   },
   mood: {
     key: "mood",
@@ -90,14 +90,14 @@ export const ROUTE_THEMES: Record<string, RouteTheme> = {
   },
   journal: {
     key: "journal",
-    shellGradient: "linear-gradient(140deg, #fff8f3 0%, #faf7ff 50%, #f5fff9 100%)",
-    accent: "#f97316",
-    accentStrong: "#c2410c",
-    accentSoft: "rgba(249, 115, 22, 0.14)",
-    activeSurface: "rgba(255, 247, 237, 0.88)",
-    orbA: "rgba(251, 146, 60, 0.2)",
-    orbB: "rgba(168, 85, 247, 0.12)",
-    tabGradient: "linear-gradient(90deg, rgba(249,115,22,0.95), rgba(168,85,247,0.88))"
+    shellGradient: "linear-gradient(140deg, #fff2e7 0%, #f1efff 50%, #e9fff7 100%)",
+    accent: "#ff5f00",
+    accentStrong: "#db2777",
+    accentSoft: "rgba(255, 95, 0, 0.16)",
+    activeSurface: "rgba(255, 244, 236, 0.9)",
+    orbA: "rgba(255, 95, 0, 0.22)",
+    orbB: "rgba(219, 39, 119, 0.16)",
+    tabGradient: "linear-gradient(90deg, rgba(255,95,0,0.95), rgba(219,39,119,0.9), rgba(14,165,233,0.86))"
   },
   community: {
     key: "community",
@@ -123,14 +123,14 @@ export const ROUTE_THEMES: Record<string, RouteTheme> = {
   },
   progress: {
     key: "progress",
-    shellGradient: "linear-gradient(140deg, #eef8ff 0%, #fefbf4 48%, #eefcf8 100%)",
-    accent: "#0f766e",
-    accentStrong: "#115e59",
-    accentSoft: "rgba(15, 118, 110, 0.14)",
-    activeSurface: "rgba(240, 253, 250, 0.88)",
-    orbA: "rgba(45, 212, 191, 0.18)",
-    orbB: "rgba(251, 191, 36, 0.14)",
-    tabGradient: "linear-gradient(90deg, rgba(15,118,110,0.95), rgba(251,191,36,0.88))"
+    shellGradient: "linear-gradient(140deg, #eaf4ff 0%, #fff4e8 48%, #eafff4 100%)",
+    accent: "#0ea5e9",
+    accentStrong: "#0f766e",
+    accentSoft: "rgba(14, 165, 233, 0.16)",
+    activeSurface: "rgba(240, 249, 255, 0.9)",
+    orbA: "rgba(14, 165, 233, 0.22)",
+    orbB: "rgba(255, 138, 0, 0.16)",
+    tabGradient: "linear-gradient(90deg, rgba(14,165,233,0.95), rgba(16,185,129,0.9), rgba(255,138,0,0.86))"
   },
   profile: {
     key: "profile",

@@ -18,37 +18,37 @@ import { StatCardComponent } from "../../shared/components/stat-card.component";
               <app-icon name="progress" className="text-xl"></app-icon>
             </div>
             <div>
-              <div class="mt-card-kicker">Progress Tracker</div>
-              <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl">See how mood, stress, and routines move together over time.</h1>
+              <div class="comic-subline text-slate-500">XP Board</div>
+              <h1 class="comic-heading mt-3 text-3xl text-slate-900 sm:text-5xl">See your momentum.</h1>
               <p class="mt-card-copy mt-3 text-sm sm:text-base">
-                Your trends stay easy to scan on mobile and expand into a richer side-by-side analytics view on larger screens.
+                Mood, stress, and habits in one quick read.
               </p>
             </div>
           </div>
           <div class="mt-chip">
             <app-icon name="analytics" className="text-sm"></app-icon>
-            Live signals
+            Live feed
           </div>
         </div>
       </div>
 
       <div class="grid gap-4 md:grid-cols-3">
         <app-stat-card
-          title="Weekly mood average"
+          title="Mood average"
           value="3.9 / 5"
-          context="Up 0.6 from the first week"
+          context="+0.6 from week one"
           icon="smile"
           badge="Mood"></app-stat-card>
         <app-stat-card
           title="Stress trend"
           value="-14%"
-          context="Down from early onboarding"
+          context="Down since start"
           icon="heartbeat"
           badge="Recovery"></app-stat-card>
         <app-stat-card
-          title="Routine adherence"
+          title="Mission completion"
           value="81%"
-          context="Exercise completion across the last month"
+          context="Completed missions this month"
           icon="activity"
           badge="Consistency"></app-stat-card>
       </div>

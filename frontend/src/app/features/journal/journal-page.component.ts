@@ -13,10 +13,10 @@ import { JournalEditorComponent } from "../../shared/components/journal-editor.c
   template: `
     <section appScrollReveal class="page-stack">
       <div class="theme-hero-card page-hero">
-        <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Journaling</div>
-        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl">Write it out. Keep it light.</h1>
-        <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-          No essay needed. Just enough to catch the vibe and your next move.
+        <div class="comic-subline text-slate-500">Mission 02</div>
+        <h1 class="comic-heading mt-3 text-3xl text-slate-900 sm:text-5xl">Dump your thoughts.</h1>
+        <p class="mt-3 max-w-3xl text-sm font-semibold leading-7 text-slate-700 sm:text-base sm:leading-8">
+          No essay. Just the real line.
         </p>
       </div>
 
@@ -25,26 +25,26 @@ import { JournalEditorComponent } from "../../shared/components/journal-editor.c
       <div class="mt-card mt-card-hover p-5 sm:p-6">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div class="mt-card-brand">
-            <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
-              <app-icon name="journal" className="text-base"></app-icon>
-            </div>
-            <div>
-              <div class="text-sm font-semibold text-slate-900">Recent entries</div>
-              <div class="mt-1 text-xs leading-5 text-slate-500">Short reads from your earlier notes.</div>
-            </div>
-          </div>
-          <button
-            type="button"
-            (click)="refresh()"
-            class="btn-outline rounded-xl px-4 py-2 text-sm font-semibold">
-            Refresh
-          </button>
-        </div>
+                    <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                      <app-icon name="journal" className="text-base"></app-icon>
+                    </div>
+                    <div>
+                      <div class="text-sm font-semibold text-slate-900">Recent dumps</div>
+                      <div class="mt-1 text-xs leading-5 text-slate-500">Your last thought drops.</div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    (click)="refresh()"
+                    class="btn-outline rounded-xl px-4 py-2 text-sm font-semibold">
+                    Reload
+                  </button>
+                </div>
 
         <div class="mt-5 grid gap-3">
           <ng-container *ngIf="entries$ | async as entries; else loading">
             <div *ngIf="!entries.length" class="mt-card-soft px-4 py-4 text-sm text-slate-600">
-              No entries yet. "One line is enough."
+              No dumps yet. One line is enough.
             </div>
 
             <article *ngFor="let entry of entries; let i = index" appScrollReveal [revealDelay]="i * 60" class="mt-card mt-card-hover p-4">

@@ -44,6 +44,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
       <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div class="mindtrack-ambient mindtrack-ambient-a" [style.background]="activeTheme().orbA"></div>
         <div class="mindtrack-ambient mindtrack-ambient-b" [style.background]="activeTheme().orbB"></div>
+        <div class="mindtrack-ambient mindtrack-ambient-c" [style.background]="activeTheme().tabGradient"></div>
         <div class="mindtrack-grain"></div>
       </div>
 
@@ -83,7 +84,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
           [class.opacity-0]="!navOpen"
           (click)="closeNav()"></div>
         <div
-          class="fixed inset-y-0 left-0 z-50 w-[min(18rem,84vw)] border-r border-white/55 bg-[rgba(237,244,251,0.94)] shadow-2xl backdrop-blur-xl transition-transform duration-300"
+          class="fixed inset-y-0 left-0 z-50 w-[min(18rem,84vw)] border-r-2 border-slate-900/85 bg-[rgba(242,248,255,0.96)] shadow-2xl backdrop-blur-xl transition-transform duration-300"
           [class.-translate-x-full]="!navOpen">
           <app-side-nav [inDrawer]="true" (requestClose)="closeNav()"></app-side-nav>
         </div>
@@ -137,6 +138,18 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         opacity: 0.92;
       }
 
+      .mindtrack-shell::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -15;
+        pointer-events: none;
+        background-image: radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px);
+        background-size: 18px 18px;
+        mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.72), transparent 78%);
+        opacity: 0.42;
+      }
+
       .mindtrack-ambient {
         position: absolute;
         border-radius: 999px;
@@ -160,6 +173,14 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         opacity: 0.62;
       }
 
+      .mindtrack-ambient-c {
+        left: 42%;
+        top: 36%;
+        height: 20rem;
+        width: 20rem;
+        opacity: 0.42;
+      }
+
       .mindtrack-grain {
         position: absolute;
         inset: 0;
@@ -179,10 +200,12 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         bottom: 0;
         z-index: 35;
         padding-inline: max(0.4rem, env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
-        border-top: 1px solid rgba(15, 23, 42, 0.1);
-        background: linear-gradient(180deg, rgba(236, 244, 251, 0.78), rgba(243, 248, 253, 0.94));
+        border-top: 2px solid rgba(15, 23, 42, 0.82);
+        background: linear-gradient(180deg, rgba(238, 247, 255, 0.88), rgba(250, 252, 255, 0.98));
         backdrop-filter: blur(24px);
-        box-shadow: 0 -20px 40px -34px rgba(15, 23, 42, 0.3);
+        box-shadow:
+          0 -8px 0 rgba(15, 23, 42, 0.72),
+          0 -24px 40px -34px rgba(15, 23, 42, 0.3);
       }
 
       .mobile-tab-link {
@@ -199,7 +222,8 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
         font-weight: 700;
         letter-spacing: 0.01em;
         color: rgba(71, 85, 105, 0.86);
-        transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        border: 2px solid transparent;
+        transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
       }
 
       .mobile-tab-link span {
@@ -212,12 +236,15 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
 
       .mobile-tab-link-active {
         background: rgba(247, 250, 254, 0.98);
+        border-color: rgba(15, 23, 42, 0.82);
         color: var(--mt-accent-strong);
-        box-shadow: 0 18px 28px -24px rgba(15, 23, 42, 0.35);
+        box-shadow:
+          0 5px 0 rgba(15, 23, 42, 0.72),
+          0 18px 28px -24px rgba(15, 23, 42, 0.35);
       }
 
       .mobile-tab-link:active {
-        transform: translateY(1px);
+        transform: translateY(2px) scale(0.99);
       }
 
       .route-stage {
@@ -251,11 +278,11 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
 export class AppComponent implements AfterViewInit, OnDestroy {
   navOpen = false;
   readonly mobileNavItems: Array<{ label: string; link: string; icon: MindtrackIconName; exact?: boolean }> = [
-    { label: "Home", link: "/dashboard", icon: "dashboard", exact: true },
+    { label: "Hub", link: "/dashboard", icon: "dashboard", exact: true },
     { label: "Mood", link: "/mood", icon: "mood", exact: true },
-    { label: "Journal", link: "/journal", icon: "journal", exact: true },
-    { label: "Stats", link: "/progress", icon: "progress", exact: true },
-    { label: "Feed", link: "/community", icon: "community", exact: true }
+    { label: "Dump", link: "/journal", icon: "journal", exact: true },
+    { label: "XP", link: "/progress", icon: "progress", exact: true },
+    { label: "Crew", link: "/community", icon: "community", exact: true }
   ];
   readonly runtimeIssue = this.runtimeService.runtimeIssue;
 

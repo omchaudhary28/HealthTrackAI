@@ -52,7 +52,7 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
           type="button"
           (click)="start.emit(exercise)"
           class="btn-primary w-full rounded-2xl px-4 py-3 text-sm font-semibold sm:w-auto sm:min-w-[8rem]">
-          Open
+          Start
         </button>
       </div>
     </article>

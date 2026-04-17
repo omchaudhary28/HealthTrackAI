@@ -8,11 +8,11 @@ import { IconComponent } from "../../shared/components/icon.component";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 const CHOICES = [
-  { value: 1, label: "Strongly disagree" },
-  { value: 2, label: "Disagree" },
-  { value: 3, label: "Neutral" },
-  { value: 4, label: "Agree" },
-  { value: 5, label: "Strongly agree" }
+  { value: 1, label: "Nope" },
+  { value: 2, label: "Mostly no" },
+  { value: 3, label: "Mixed" },
+  { value: 4, label: "Mostly yes" },
+  { value: 5, label: "Yes" }
 ];
 
 @Component({
@@ -31,11 +31,11 @@ const CHOICES = [
               <div class="mt-card-kicker">{{ test()?.category || "Assessment" }}</div>
               <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">{{ test()?.title || "Loading test..." }}</h1>
               <p class="mt-card-copy mt-3 text-sm sm:text-base">
-                {{ test()?.description || "Quick self-check only. Not a diagnosis." }}
+                {{ test()?.description || "Quick self-check. Not a diagnosis." }}
               </p>
             </div>
           </div>
-          <a routerLink="/tests" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Back to tests</a>
+          <a routerLink="/tests" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Back to scans</a>
         </div>
 
         <div *ngIf="test()" class="mt-6">
@@ -60,8 +60,8 @@ const CHOICES = [
               <app-icon name="analytics" className="text-lg"></app-icon>
             </div>
             <div>
-              <div class="mt-card-kicker">Results</div>
-              <div class="mt-card-copy mt-2 text-sm">Your assessment snapshot and suggested direction.</div>
+              <div class="mt-card-kicker">Scan result</div>
+              <div class="mt-card-copy mt-2 text-sm">Snapshot + next move.</div>
             </div>
           </div>
 
@@ -129,14 +129,14 @@ const CHOICES = [
               <app-icon name="target" className="text-lg"></app-icon>
             </div>
             <div>
-              <div class="mt-card-kicker">Next steps</div>
-              <div class="mt-card-copy mt-2 text-sm">Keep the flow moving while the result is fresh.</div>
+              <div class="mt-card-kicker">Next missions</div>
+              <div class="mt-card-copy mt-2 text-sm">Use this momentum now.</div>
             </div>
           </div>
           <div class="mt-5 space-y-3">
-            <a routerLink="/dashboard" class="btn-primary block rounded-2xl px-4 py-4 text-center text-sm font-semibold">Open dashboard</a>
+            <a routerLink="/dashboard" class="btn-primary block rounded-2xl px-4 py-4 text-center text-sm font-semibold">Open mission hub</a>
             <button type="button" (click)="restart()" class="btn-outline w-full rounded-2xl px-4 py-4 text-sm font-semibold">
-              Retake this test
+              Run scan again
             </button>
           </div>
         </div>
@@ -184,7 +184,7 @@ const CHOICES = [
                 (click)="submit()"
                 [disabled]="!canSubmit() || pending()"
                 class="btn-primary rounded-full px-6 py-3 text-sm font-semibold disabled:opacity-50">
-                {{ pending() ? "Submitting..." : "Submit" }}
+                {{ pending() ? "Submitting..." : "Finish scan" }}
               </button>
             </div>
           </div>
@@ -202,7 +202,7 @@ const CHOICES = [
               </div>
             </div>
             <div class="mt-card-soft mt-5 p-5 text-sm text-slate-700">
-              Tip: answer from your usual week, not one weird day.
+              Tip: answer from your usual week.
             </div>
           </div>
         </div>
@@ -326,17 +326,17 @@ export class TestRunnerPageComponent implements OnInit, OnDestroy {
   answerHint(): string {
     switch (this.currentAnswerValue()) {
       case 1:
-        return "This barely fits your recent experience.";
+        return "This barely fits your week.";
       case 2:
-        return "This shows up sometimes, not a lot.";
+        return "Shows up sometimes.";
       case 3:
-        return "Mixed or unsure is valid.";
+        return "Mixed is valid.";
       case 4:
-        return "This shows up fairly often lately.";
+        return "This shows up often.";
       case 5:
-        return "This feels strong or frequent lately.";
+        return "This feels very frequent.";
       default:
-        return "Go with your usual week, not one weird day.";
+        return "Answer for your usual week.";
     }
   }
 

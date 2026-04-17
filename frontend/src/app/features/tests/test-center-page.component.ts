@@ -18,10 +18,10 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             <app-icon name="tests" className="text-xl"></app-icon>
           </div>
           <div>
-            <div class="mt-card-kicker">Test Center</div>
-            <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">Quick tests. Clear read.</h1>
+            <div class="comic-subline text-slate-500">Mission 01</div>
+            <h1 class="comic-heading mt-2 text-3xl text-slate-900 sm:text-5xl">Scan your mind.</h1>
             <p class="mt-card-copy mt-3 text-sm sm:text-base">
-              Take a fast self-check, get a short interpretation, and keep moving. This is for reflection, not diagnosis.
+              Quick scan. Clear read. Keep moving.
             </p>
           </div>
         </div>
@@ -56,7 +56,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             <app-icon name="clipboard" className="text-lg"></app-icon>
           </div>
           <div>
-            <div class="mt-card-kicker">Question preview</div>
+            <div class="mt-card-kicker">Preview</div>
             <div class="mt-2 text-lg font-semibold text-slate-900">Small uncertainties make me feel restless.</div>
           </div>
         </div>
@@ -73,7 +73,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 })
 export class TestCenterPageComponent {
   tests$: Observable<TestSummary[]>;
-  choices = ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"];
+  choices = ["Nope", "Mostly no", "Mixed", "Mostly yes", "Yes"];
 
   constructor(private readonly testsService: TestsService) {
     this.tests$ = this.testsService.listTests();
