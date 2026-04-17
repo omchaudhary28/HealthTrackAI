@@ -14,7 +14,7 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
             <app-icon [name]="icon" className="text-lg"></app-icon>
           </div>
           <div>
-            <div class="comic-subline text-slate-500">{{ title }}</div>
+            <div class="mt-card-kicker">{{ title }}</div>
             <div *ngIf="badge" class="mt-chip mt-3">{{ badge }}</div>
           </div>
         </div>

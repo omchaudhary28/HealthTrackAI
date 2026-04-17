@@ -9,18 +9,24 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
   imports: [CommonModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <article class="mt-card mt-card-hover mt-card-intro h-full p-5 sm:p-6">
+    <article class="mt-card mt-card-hover mt-card-intro comic-corner-doodle h-full p-5 sm:p-6">
       <div class="mt-card-head">
         <div class="mt-card-brand">
           <div class="mt-card-icon">
-            <app-icon [name]="iconForCategory(exercise.category)" className="text-lg"></app-icon>
+            <app-icon [name]="iconForCategory(exercise.category)" className="text-lg icon-bounce-soft"></app-icon>
           </div>
           <div>
             <div class="mt-card-kicker">{{ categoryLabel(exercise.category) }}</div>
             <h3 class="mt-2 text-xl font-semibold text-slate-900">{{ exercise.title }}</h3>
           </div>
         </div>
-        <div class="mt-chip">{{ exercise.durationMinutes }} min</div>
+        <div class="flex flex-col items-end gap-2">
+          <div class="mt-chip">{{ exercise.durationMinutes }} min</div>
+          <svg viewBox="0 0 40 20" class="h-5 w-10 text-slate-300/80" aria-hidden="true">
+            <path d="M2 10c4-8 10-8 14 0s10 8 14 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+            <circle cx="34" cy="10" r="1.6" fill="currentColor"></circle>
+          </svg>
+        </div>
       </div>
 
       <p class="mt-card-copy mt-4 text-sm">{{ exercise.purpose || exercise.description }}</p>
@@ -52,7 +58,7 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
           type="button"
           (click)="start.emit(exercise)"
           class="btn-primary w-full rounded-2xl px-4 py-3 text-sm font-semibold sm:w-auto sm:min-w-[8rem]">
-          Start
+          Open
         </button>
       </div>
     </article>

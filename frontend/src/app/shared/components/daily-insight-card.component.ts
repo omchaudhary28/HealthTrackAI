@@ -23,28 +23,28 @@ export class DailyInsightCardComponent implements OnInit, OnDestroy {
   moodOptions: MoodOption[] = [
     {
       id: "great",
-      label: "Power up",
+      label: "Clear",
       icon: "sparkles",
       baseClass: "border-emerald-100 bg-white/82 text-emerald-700",
       activeClass: "border-emerald-200 bg-white/96 text-emerald-800 shadow-[0_24px_50px_-34px_rgba(5,150,105,0.34)]"
     },
     {
       id: "calm",
-      label: "Steady",
+      label: "Calm",
       icon: "spa",
       baseClass: "border-sky-100 bg-white/82 text-sky-700",
       activeClass: "border-sky-200 bg-white/96 text-sky-800 shadow-[0_24px_50px_-34px_rgba(2,132,199,0.34)]"
     },
     {
       id: "neutral",
-      label: "Mid mode",
+      label: "Steady",
       icon: "mood",
       baseClass: "border-slate-100 bg-white/82 text-slate-700",
       activeClass: "border-slate-200 bg-white/96 text-slate-800 shadow-[0_24px_50px_-34px_rgba(71,85,105,0.3)]"
     },
     {
       id: "stressed",
-      label: "Overload",
+      label: "Busy",
       icon: "pulse",
       baseClass: "border-amber-100 bg-white/82 text-amber-700",
       activeClass: "border-amber-200 bg-white/96 text-amber-800 shadow-[0_24px_50px_-34px_rgba(217,119,6,0.3)]"
@@ -59,11 +59,11 @@ export class DailyInsightCardComponent implements OnInit, OnDestroy {
   ];
 
   private readonly insights = [
-    "You're doing better today.",
-    "Let's slow things down.",
-    "One tiny win still counts.",
-    "Dump one thought. Clear one loop.",
-    "Calm first. Solve second."
+    "\"Tiny wins still win.\"",
+    "Keep it chill. One slow breath counts.",
+    "Low energy? One line in the journal is enough.",
+    "One steady moment can cut the spiral.",
+    "Gentle routines beat perfect ones."
   ];
 
   selectedMood = signal<string>("neutral");

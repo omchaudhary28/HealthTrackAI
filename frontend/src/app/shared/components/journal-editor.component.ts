@@ -34,9 +34,9 @@ interface JournalInsightCard {
             <app-icon name="journal" className="text-lg"></app-icon>
           </div>
           <div class="min-w-0">
-            <div class="comic-subline text-slate-500">Mission 02</div>
-            <div class="comic-heading mt-2 text-3xl text-slate-950">Dump your thoughts.</div>
-            <div class="mt-card-copy mt-2 text-sm">Short. Honest. Actionable.</div>
+            <div class="mt-card-kicker">Journal</div>
+            <div class="mt-2 text-xl font-semibold text-slate-950 sm:text-2xl">Private space. Real thoughts. No pressure.</div>
+            <div class="mt-card-copy mt-2 text-sm">Write enough to catch the pattern, then let the app turn it into one cleaner next step.</div>
           </div>
         </div>
         <button
@@ -44,11 +44,11 @@ interface JournalInsightCard {
           (click)="cyclePrompt()"
           class="btn-outline rounded-2xl px-4 py-2.5 text-sm font-semibold">
           <app-icon name="refresh" className="mr-2 text-sm"></app-icon>
-          New prompt
+          Swap prompt
         </button>
       </div>
 
-      <div class="speech-bubble mt-5 p-4 sm:p-5">
+      <div class="mt-card-soft mt-5 p-4 sm:p-5">
         <div class="mt-card-brand">
           <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
             <app-icon name="wand" className="text-base"></app-icon>
@@ -68,15 +68,15 @@ interface JournalInsightCard {
                 <app-icon name="pen" className="text-base"></app-icon>
               </div>
               <div>
-              <div class="text-sm font-semibold text-slate-900">Your note</div>
-                <div class="mt-1 text-xs font-medium leading-5 text-slate-500">What happened? What hit? What now?</div>
+                <div class="text-sm font-semibold text-slate-900">Your note</div>
+                <div class="mt-1 text-xs font-medium leading-5 text-slate-500">What happened? What hit? What do you need?</div>
               </div>
             </div>
             <textarea
               [ngModel]="content()"
               (ngModelChange)="content.set($event)"
               rows="10"
-              placeholder="Drop the raw thought..."
+              placeholder="What happened? What hit? What do you need?"
               class="app-textarea mt-3 block min-h-[14rem] w-full max-w-full"></textarea>
           </label>
 
@@ -106,14 +106,14 @@ interface JournalInsightCard {
               (click)="save()"
               [disabled]="!canSave()"
               class="btn-primary rounded-2xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50">
-              {{ saving() ? "Saving..." : savedEntry() ? "Saved" : "Lock dump" }}
+              {{ saving() ? "Saving..." : savedEntry() ? "Saved" : "Save note" }}
             </button>
             <button
               type="button"
               (click)="analyze()"
               [disabled]="!savedEntry() || analyzing()"
               class="btn-outline rounded-2xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50">
-              {{ analyzing() ? "Reading..." : "Scan vibe" }}
+              {{ analyzing() ? "Reading..." : "Read vibe" }}
             </button>
             <div class="text-xs text-slate-500 sm:ml-auto">Only you see this.</div>
           </div>
@@ -122,14 +122,14 @@ interface JournalInsightCard {
         <div class="mt-card-soft min-w-0 p-4 sm:p-5">
           <div class="mt-card-head">
             <div class="mt-card-brand min-w-0">
-                <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
-                  <app-icon name="insights" className="text-base"></app-icon>
-                </div>
-                <div class="min-w-0">
-                  <div class="text-sm font-semibold text-slate-900">Pattern read</div>
-                  <div class="mt-1 text-xs leading-5 text-slate-500">Loop, tone, next move.</div>
-                </div>
+              <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                <app-icon name="insights" className="text-base"></app-icon>
               </div>
+              <div class="min-w-0">
+                <div class="text-sm font-semibold text-slate-900">Pattern read</div>
+                <div class="mt-1 text-xs leading-5 text-slate-500">Quick read on loops, tone, and the next move.</div>
+              </div>
+            </div>
             <span *ngIf="insights()?.tone" class="theme-chip rounded-full px-3 py-1 text-xs font-semibold">
               {{ toneLabel(insights()?.tone) }}
             </span>
@@ -206,7 +206,7 @@ interface JournalInsightCard {
                 <div class="mt-card-icon h-10 w-10 rounded-[0.85rem]">
                   <app-icon name="sparkles" className="text-sm"></app-icon>
                 </div>
-                <div>Save a dump, then hit "Scan vibe." We'll keep it short.</div>
+                <div>Save a note, then hit "Read vibe." We'll keep it short.</div>
               </div>
             </div>
           </ng-template>

@@ -20,15 +20,15 @@ export interface MoodOption {
   template: `
     <div class="space-y-4">
       <div *ngIf="showHeader" class="flex items-start justify-between gap-3">
-          <div class="mt-card-brand">
-            <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
-              <app-icon name="mood" className="text-base"></app-icon>
-            </div>
-            <div>
-              <div class="text-sm font-semibold text-slate-900">Mood radar</div>
-              <div class="mt-1 text-xs leading-5 text-slate-500">Pick the current vibe.</div>
-            </div>
+        <div class="mt-card-brand">
+          <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+            <app-icon name="mood" className="text-base"></app-icon>
           </div>
+          <div>
+            <div class="text-sm font-semibold text-slate-900">Mood tracker</div>
+            <div class="mt-1 text-xs leading-5 text-slate-500">Pick the vibe right now. You can tweak it later.</div>
+          </div>
+        </div>
         <div class="hidden rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-slate-600 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.3)] sm:inline-flex">
           1 to 5
         </div>
@@ -57,7 +57,7 @@ export interface MoodOption {
           </div>
           <div class="mt-3 text-[11px] leading-5 text-slate-500">{{ opt.hint }}</div>
           <div class="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em]" [ngClass]="value === opt.value ? 'text-slate-900' : 'text-slate-400'">
-            {{ value === opt.value ? "Locked" : "Tap to lock" }}
+            {{ value === opt.value ? "Selected" : "Tap to choose" }}
           </div>
         </button>
       </div>

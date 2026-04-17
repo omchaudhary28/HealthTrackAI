@@ -20,10 +20,10 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             <app-icon name="exercises" className="text-xl"></app-icon>
           </div>
           <div>
-            <div class="comic-subline text-slate-500">Mission 03</div>
-            <h1 class="comic-heading mt-3 text-3xl text-slate-900 sm:text-5xl lg:text-6xl">Calm your mind.</h1>
+            <div class="mt-card-kicker">Exercise Library</div>
+            <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Tiny resets, ready when you are.</h1>
             <p class="mt-card-copy mt-3 text-sm sm:text-base">
-              Pick one reset. Run it. Log it.
+              Pick one, do it, leave a quick note. The library stays light, useful, and responsive.
             </p>
             <div class="mt-4 flex flex-wrap gap-2">
               <span class="mt-chip"><app-icon name="activity" className="text-xs"></app-icon> Activity</span>
@@ -41,8 +41,8 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               <app-icon name="sparkles" className="text-lg"></app-icon>
             </div>
             <div>
-              <div class="mt-card-kicker">Best mission for now</div>
-              <div class="mt-card-copy mt-2 text-sm">Picked from your latest signal.</div>
+              <div class="mt-card-kicker">Recommended for you</div>
+              <div class="mt-card-copy mt-2 text-sm">Best fit from your latest signal.</div>
             </div>
           </div>
           <button type="button" (click)="refreshRecommendations()" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Refresh</button>
@@ -50,11 +50,11 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
         <div class="mt-5 grid gap-4 lg:grid-cols-3">
           <ng-container *ngIf="recommended$ | async as recommended">
-            <article *ngFor="let exercise of recommended; let i = index" appScrollReveal [revealDelay]="i * 60" class="mt-card mt-card-hover p-5">
+            <article *ngFor="let exercise of recommended; let i = index" appScrollReveal [revealDelay]="i * 60" class="mt-card mt-card-hover comic-corner-doodle p-5">
               <div class="mt-card-head">
                 <div class="mt-card-brand">
                   <div class="mt-card-icon">
-                    <app-icon [name]="exercise.category === 'breathing' ? 'spa' : exercise.category === 'stress-release' ? 'activity' : 'heartbeat'" className="text-lg"></app-icon>
+                    <app-icon [name]="exercise.category === 'breathing' ? 'spa' : exercise.category === 'stress-release' ? 'activity' : 'heartbeat'" className="text-lg icon-bounce-soft"></app-icon>
                   </div>
                   <div>
                     <div class="mt-card-kicker">{{ label(exercise.category) }}</div>
@@ -64,6 +64,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                 <div class="mt-chip">{{ exercise.durationMinutes }}m</div>
               </div>
               <div class="mt-card-copy mt-4 text-sm">{{ exercise.purpose || exercise.description }}</div>
+              <div class="mt-2 text-xs text-slate-500">Take it at your pace. A short reset still helps.</div>
               <div class="mt-card-soft mt-4 p-4 text-sm leading-7 text-slate-700">
                 <div class="mt-card-kicker">Why it fits</div>
                 <div class="mt-2">{{ exercise.whyRecommended }}</div>
@@ -73,7 +74,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                 <div class="mt-2">{{ exercise.expectedOutcome }}</div>
               </div>
               <button type="button" (click)="open(exercise)" class="btn-primary mt-4 w-full rounded-2xl px-4 py-3 text-sm font-semibold">
-                Start mission
+                Open exercise
               </button>
             </article>
           </ng-container>
@@ -112,7 +113,13 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
       <ng-container *ngIf="exercises$ | async as exercises; else loading">
         <div *ngIf="!exercises.length" class="mt-card-soft p-6 text-sm text-slate-600">
-          No exercises here yet.
+          <div class="comic-empty-state">
+            <div class="comic-empty-illustration"></div>
+            <div>
+              <div class="font-semibold text-slate-700">No exercises here yet.</div>
+              <div class="mt-1 text-sm text-slate-600">Try another category and we will surface options.</div>
+            </div>
+          </div>
         </div>
 
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -127,7 +134,10 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
       <ng-template #loading>
         <div class="mt-card-soft p-6 text-sm text-slate-600">
-          Loading exercises...
+          <div class="comic-empty-state">
+            <div class="comic-empty-illustration"></div>
+            <div>Loading exercises...</div>
+          </div>
         </div>
       </ng-template>
 
@@ -211,12 +221,12 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                       <app-icon name="feedback" className="text-base"></app-icon>
                     </div>
                     <div>
-                  <div class="mt-card-kicker">Quick feedback</div>
-                      <div class="mt-card-copy mt-2 text-sm">Tell AI how this mission felt.</div>
+                      <div class="mt-card-kicker">Quick feedback</div>
+                      <div class="mt-card-copy mt-2 text-sm">Tell the recommender how this felt.</div>
                     </div>
                   </div>
                   <div class="mt-4">
-                    <div class="mt-card-kicker">How did it feel?</div>
+                    <div class="mt-card-kicker">How'd it feel?</div>
                     <div class="mt-3 flex flex-wrap gap-2">
                       <button *ngFor="let rating of [1,2,3,4,5]" type="button" (click)="feedbackRating = rating"
                         class="mt-chip transition"
@@ -229,7 +239,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                   </div>
 
                   <label class="mt-4 block text-sm font-medium text-slate-600">
-                    What changed after this mission?
+                    What changed after this?
                     <textarea [(ngModel)]="resultAfter" rows="3" class="app-textarea mt-2" placeholder="Example: Less tense. More clear."></textarea>
                   </label>
 
@@ -239,11 +249,11 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                   </label>
 
                   <div *ngIf="completionSuccess" class="mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                    Saved. You gained mission momentum.
+                    Saved. Future picks will learn from this.
                   </div>
 
                   <button type="button" (click)="completeActiveExercise()" [disabled]="completionPending" class="btn-primary mt-5 w-full rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60">
-                    {{ completionPending ? "Saving..." : "Complete mission" }}
+                    {{ completionPending ? "Saving..." : "Mark complete" }}
                   </button>
                 </div>
               </div>
