@@ -1,44 +1,57 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { Exercise } from "../../core/services/exercises.service";
+import { IconComponent, MindtrackIconName } from "./icon.component";
 
 @Component({
   selector: "app-exercise-card",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <article class="group rounded-[1.75rem] border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-lg active:scale-[0.99] sm:rounded-[2rem] sm:p-6">
-      <div class="flex items-start justify-between gap-4">
-        <div class="inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
-          <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
-          <span class="truncate">{{ categoryLabel(exercise.category) }}</span>
+    <article class="mt-card mt-card-hover mt-card-intro h-full p-5 sm:p-6">
+      <div class="mt-card-head">
+        <div class="mt-card-brand">
+          <div class="mt-card-icon">
+            <app-icon [name]="iconForCategory(exercise.category)" className="text-lg"></app-icon>
+          </div>
+          <div>
+            <div class="mt-card-kicker">{{ categoryLabel(exercise.category) }}</div>
+            <h3 class="mt-2 text-xl font-semibold text-slate-900">{{ exercise.title }}</h3>
+          </div>
         </div>
-        <div class="shrink-0 text-sm font-semibold text-slate-600">{{ exercise.durationMinutes }} min</div>
+        <div class="mt-chip">{{ exercise.durationMinutes }} min</div>
       </div>
 
-      <h3 class="mt-4 text-lg font-semibold text-slate-900">{{ exercise.title }}</h3>
-      <p class="mt-2 text-sm leading-7 text-slate-600">{{ exercise.purpose || exercise.description }}</p>
+      <p class="mt-card-copy mt-4 text-sm">{{ exercise.purpose || exercise.description }}</p>
 
-      <div *ngIf="exercise.expectedOutcome" class="mt-4 rounded-[1.35rem] bg-slate-50 px-4 py-4 text-sm leading-7 text-slate-700 sm:rounded-3xl">
-        <div class="font-semibold text-slate-900">What you get</div>
-        <div class="mt-1">{{ exercise.expectedOutcome }}</div>
+      <div *ngIf="exercise.expectedOutcome" class="mt-card-soft mt-5 p-4">
+        <div class="mt-card-brand">
+          <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+            <app-icon name="heartbeat" className="text-base"></app-icon>
+          </div>
+          <div>
+            <div class="mt-card-kicker">What you get</div>
+            <div class="mt-card-copy mt-2 text-sm">{{ exercise.expectedOutcome }}</div>
+          </div>
+        </div>
       </div>
 
-      <div *ngIf="exercise.tags?.length" class="mt-4 flex flex-wrap gap-2">
-        <span *ngFor="let tag of exercise.tags!.slice(0, 4)" class="rounded-full bg-[var(--mist)] px-3 py-1 text-xs font-semibold text-slate-600">
+      <div *ngIf="exercise.tags?.length" class="mt-5 flex flex-wrap gap-2">
+        <span *ngFor="let tag of exercise.tags!.slice(0, 4)" class="mt-chip">
           {{ tag }}
         </span>
       </div>
 
-      <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
-          {{ (exercise.difficulty || "easy") }}
+      <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="mt-chip">
+          <app-icon name="sparkles" className="text-xs"></app-icon>
+          {{ exercise.difficulty || "easy" }}
         </div>
         <button
           type="button"
           (click)="start.emit(exercise)"
-          class="w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-950 sm:w-auto sm:py-2.5">
+          class="btn-primary w-full rounded-2xl px-4 py-3 text-sm font-semibold sm:w-auto sm:min-w-[8rem]">
           Open
         </button>
       </div>
@@ -52,11 +65,33 @@ export class ExerciseCardComponent {
   categoryLabel(value: string): string {
     const trimmed = (value || "").trim();
     if (!trimmed) {
-      return "exercise";
+      return "Exercise";
     }
 
     return trimmed
       .replace(/[-_]+/g, " ")
       .replace(/\b\w/g, (match) => match.toUpperCase());
+  }
+
+  iconForCategory(value: string): MindtrackIconName {
+    const key = String(value || "").toLowerCase();
+
+    if (key.includes("breath")) {
+      return "spa";
+    }
+
+    if (key.includes("sleep")) {
+      return "heartbeat";
+    }
+
+    if (key.includes("journal") || key.includes("reflect")) {
+      return "brain";
+    }
+
+    if (key.includes("stress")) {
+      return "activity";
+    }
+
+    return "exercises";
   }
 }

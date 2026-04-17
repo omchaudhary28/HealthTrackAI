@@ -2,35 +2,40 @@
 import { Component } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { DailyInsightCardComponent } from "../../shared/components/daily-insight-card.component";
+import { IconComponent, MindtrackIconName } from "../../shared/components/icon.component";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 @Component({
   selector: "app-landing-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, RouterLink, DailyInsightCardComponent],
+  imports: [ScrollRevealDirective, CommonModule, RouterLink, IconComponent, DailyInsightCardComponent],
   templateUrl: "./landing-page.component.html"
 })
 export class LandingPageComponent {
-  features = [
+  features: Array<{ kicker: string; title: string; description: string; icon: MindtrackIconName }> = [
     {
       kicker: "Assess",
       title: "Quick vibe check",
-      description: "Start with a fast baseline so the app knows where you're at."
+      description: "Start with a fast baseline so the app knows where you're at.",
+      icon: "tests"
     },
     {
       kicker: "Reflect",
       title: "Journal, no essay",
-      description: "Drop a few lines, tag the mood, and let the app spot the loop."
+      description: "Drop a few lines, tag the mood, and let the app spot the loop.",
+      icon: "journal"
     },
     {
       kicker: "Improve",
       title: "Exercises that fit today",
-      description: "Breathing, grounding, and reset moves picked for your current state."
+      description: "Breathing, grounding, and reset moves picked for your current state.",
+      icon: "exercises"
     },
     {
       kicker: "Connect",
       title: "Low-key support feed",
-      description: "Post short updates, stay anonymous, and skip the oversharing."
+      description: "Post short updates, stay anonymous, and skip the oversharing.",
+      icon: "community"
     }
   ];
 

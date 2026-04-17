@@ -1,54 +1,68 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, computed, signal } from "@angular/core";
-import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 import { FormsModule } from "@angular/forms";
 import { MoodLog, MoodService } from "../../core/services/mood.service";
+import { IconComponent } from "../../shared/components/icon.component";
 import { MoodHeatmapComponent } from "../../shared/components/mood-heatmap.component";
 import { MoodTrackerComponent } from "../../shared/components/mood-tracker.component";
+import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 @Component({
   selector: "app-mood-calendar-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, FormsModule, MoodHeatmapComponent, MoodTrackerComponent],
+  imports: [ScrollRevealDirective, CommonModule, FormsModule, MoodHeatmapComponent, MoodTrackerComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section appScrollReveal class="page-stack">
-      <div class="page-hero rounded-[2rem] border border-white/70 bg-[linear-gradient(145deg,rgba(216,214,239,0.22),rgba(255,255,255,0.86))] shadow-[0_25px_70px_-45px_rgba(32,50,71,0.45)] sm:rounded-3xl">
-        <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Mood calendar</div>
-        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl">See the bigger vibe.</h1>
-        <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-          Quick logs add up. "One tap a day" is enough.
-        </p>
+      <div class="mt-card mt-card-hover page-hero">
+        <div class="mt-card-brand max-w-3xl">
+          <div class="mt-card-icon">
+            <app-icon name="mood" className="text-xl"></app-icon>
+          </div>
+          <div>
+            <div class="mt-card-kicker">Mood Calendar</div>
+            <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl">See the bigger vibe.</h1>
+            <p class="mt-card-copy mt-3 text-sm sm:text-base">
+              Quick logs add up. One tap a day is enough to turn mood, stress, and energy into a clearer trend.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span class="mt-chip"><app-icon name="smile" className="text-xs"></app-icon> Mood</span>
+              <span class="mt-chip"><app-icon name="heart" className="text-xs"></app-icon> Energy</span>
+              <span class="mt-chip"><app-icon name="brain" className="text-xs"></app-icon> Reflection</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <div class="space-y-4">
           <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div class="text-sm font-semibold text-slate-900">Month view</div>
+            <div class="mt-card-brand">
+              <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                <app-icon name="calendar" className="text-base"></app-icon>
+              </div>
+              <div>
+                <div class="mt-card-kicker">Month view</div>
+                <div class="mt-card-copy text-sm">Your recent emotional rhythm at a glance.</div>
+              </div>
+            </div>
             <div class="chip-scroll">
               <button
                 type="button"
                 (click)="prevMonth()"
-                class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"
+                class="btn-outline inline-flex h-10 w-10 items-center justify-center rounded-2xl"
                 aria-label="Previous month">
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M15 18l-6-6 6-6"></path>
-                </svg>
+                <app-icon name="arrow" className="text-sm rotate-180"></app-icon>
               </button>
-              <button
-                type="button"
-                (click)="goToday()"
-                class="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
+              <button type="button" (click)="goToday()" class="btn-outline rounded-2xl px-4 py-2 text-sm font-semibold">
                 Today
               </button>
               <button
                 type="button"
                 (click)="nextMonth()"
-                class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"
+                class="btn-outline inline-flex h-10 w-10 items-center justify-center rounded-2xl"
                 aria-label="Next month">
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 18l6-6-6-6"></path>
-                </svg>
+                <app-icon name="arrow" className="text-sm"></app-icon>
               </button>
             </div>
           </div>
@@ -56,13 +70,18 @@ import { MoodTrackerComponent } from "../../shared/components/mood-tracker.compo
           <app-mood-heatmap [month]="month()" [logs]="logs()" (selectDate)="selectDate($event)"></app-mood-heatmap>
         </div>
 
-        <div class="rounded-[1.75rem] border border-slate-200/70 bg-white/80 p-5 shadow-sm backdrop-blur sm:rounded-2xl sm:p-6">
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <div class="text-sm font-semibold text-slate-900">Daily check-in</div>
-              <div class="mt-1 text-xs leading-5 text-slate-500">{{ selectedLabel() }}</div>
+        <div class="mt-card mt-card-hover p-5 sm:p-6">
+          <div class="mt-card-head">
+            <div class="mt-card-brand">
+              <div class="mt-card-icon">
+                <app-icon name="heart" className="text-lg"></app-icon>
+              </div>
+              <div>
+                <div class="mt-card-kicker">Daily check-in</div>
+                <div class="mt-card-copy mt-2 text-sm">{{ selectedLabel() }}</div>
+              </div>
             </div>
-            <div *ngIf="saved()" class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Saved</div>
+            <div *ngIf="saved()" class="mt-chip">Saved</div>
           </div>
 
           <div class="mt-4">
@@ -113,11 +132,11 @@ import { MoodTrackerComponent } from "../../shared/components/mood-tracker.compo
             type="button"
             (click)="save()"
             [disabled]="saving()"
-            class="mt-5 w-full rounded-2xl bg-slate-900 px-5 py-4 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-950 disabled:cursor-not-allowed disabled:opacity-50">
+            class="btn-primary mt-5 w-full rounded-2xl px-5 py-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50">
             {{ saving() ? "Saving..." : "Save check-in" }}
           </button>
 
-          <div class="mt-4 rounded-2xl bg-slate-50 px-4 py-4 text-sm leading-7 text-slate-600">
+          <div class="mt-card-soft mt-4 p-4 text-sm leading-7 text-slate-600">
             This tracks trends. It is not a diagnosis.
           </div>
         </div>
@@ -191,7 +210,7 @@ export class MoodCalendarPageComponent {
     this.saving.set(true);
 
     const date = new Date(this.selectedDate());
-    date.setHours(12, 0, 0, 0); // avoid edge-case midnight TZ shifts when serializing
+    date.setHours(12, 0, 0, 0);
 
     this.moodService
       .upsert({
@@ -253,5 +272,3 @@ function dateKey(value: string | Date): string {
 
   return value.toISOString().slice(0, 10);
 }
-
-

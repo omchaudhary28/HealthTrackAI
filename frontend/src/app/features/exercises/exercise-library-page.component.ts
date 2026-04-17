@@ -1,55 +1,76 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
+import { FormsModule } from "@angular/forms";
 import { Observable, catchError, of } from "rxjs";
 import { Exercise, ExercisesService } from "../../core/services/exercises.service";
-import { ExerciseCardComponent } from "../../shared/components/exercise-card.component";
 import { BoxBreathingComponent } from "../../shared/components/box-breathing.component";
-import { FormsModule } from "@angular/forms";
+import { ExerciseCardComponent } from "../../shared/components/exercise-card.component";
+import { IconComponent } from "../../shared/components/icon.component";
+import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 @Component({
   selector: "app-exercise-library-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, ExerciseCardComponent, BoxBreathingComponent, FormsModule],
+  imports: [ScrollRevealDirective, CommonModule, ExerciseCardComponent, BoxBreathingComponent, FormsModule, IconComponent],
   template: `
     <section appScrollReveal class="page-stack">
-      <div class="glass-card page-hero bg-[linear-gradient(150deg,rgba(255,255,255,0.78),rgba(255,255,255,0.48),rgba(16,185,129,0.08))]">
-        <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Exercise Library</div>
-        <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Tiny resets, ready when you are.</h1>
-        <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-          Pick one, do it, leave a quick note. That's enough.
-        </p>
+      <div class="mt-card mt-card-hover page-hero">
+        <div class="mt-card-brand max-w-4xl">
+          <div class="mt-card-icon">
+            <app-icon name="exercises" className="text-xl"></app-icon>
+          </div>
+          <div>
+            <div class="mt-card-kicker">Exercise Library</div>
+            <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Tiny resets, ready when you are.</h1>
+            <p class="mt-card-copy mt-3 text-sm sm:text-base">
+              Pick one, do it, leave a quick note. The library stays light, useful, and responsive.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span class="mt-chip"><app-icon name="activity" className="text-xs"></app-icon> Activity</span>
+              <span class="mt-chip"><app-icon name="spa" className="text-xs"></app-icon> Calm</span>
+              <span class="mt-chip"><app-icon name="heartbeat" className="text-xs"></app-icon> Recovery</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="glass-card rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <div class="text-sm font-semibold text-slate-900">Recommended for you</div>
-            <div class="mt-1 text-xs leading-5 text-slate-500">Best fit from your latest signal.</div>
+      <div class="mt-card mt-card-hover p-5 sm:p-6">
+        <div class="mt-card-head">
+          <div class="mt-card-brand">
+            <div class="mt-card-icon">
+              <app-icon name="sparkles" className="text-lg"></app-icon>
+            </div>
+            <div>
+              <div class="mt-card-kicker">Recommended for you</div>
+              <div class="mt-card-copy mt-2 text-sm">Best fit from your latest signal.</div>
+            </div>
           </div>
           <button type="button" (click)="refreshRecommendations()" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Refresh</button>
         </div>
 
         <div class="mt-5 grid gap-4 lg:grid-cols-3">
           <ng-container *ngIf="recommended$ | async as recommended">
-            <article *ngFor="let exercise of recommended; let i = index" appScrollReveal [revealDelay]="i * 60" class="rounded-[2rem] border border-slate-100 bg-white/80 p-5 shadow-sm">
-              <div class="flex items-start justify-between gap-4">
-                <div>
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{{ label(exercise.category) }}</div>
-                  <div class="mt-2 text-lg font-semibold text-slate-900">{{ exercise.title }}</div>
+            <article *ngFor="let exercise of recommended; let i = index" appScrollReveal [revealDelay]="i * 60" class="mt-card mt-card-hover p-5">
+              <div class="mt-card-head">
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon">
+                    <app-icon [name]="exercise.category === 'breathing' ? 'spa' : exercise.category === 'stress-release' ? 'activity' : 'heartbeat'" className="text-lg"></app-icon>
+                  </div>
+                  <div>
+                    <div class="mt-card-kicker">{{ label(exercise.category) }}</div>
+                    <div class="mt-2 text-lg font-semibold text-slate-900">{{ exercise.title }}</div>
+                  </div>
                 </div>
-                <div class="rounded-full bg-[var(--mt-accent-soft)] px-3 py-1 text-xs font-semibold text-[var(--mt-accent-strong)]">
-                  {{ exercise.durationMinutes }}m
-                </div>
+                <div class="mt-chip">{{ exercise.durationMinutes }}m</div>
               </div>
-              <div class="mt-3 text-sm leading-7 text-slate-600">{{ exercise.purpose || exercise.description }}</div>
-              <div class="mt-4 rounded-3xl bg-slate-50 px-4 py-4 text-sm leading-7 text-slate-700">
-                <div class="font-semibold text-slate-900">Why it fits</div>
-                <div class="mt-1">{{ exercise.whyRecommended }}</div>
+              <div class="mt-card-copy mt-4 text-sm">{{ exercise.purpose || exercise.description }}</div>
+              <div class="mt-card-soft mt-4 p-4 text-sm leading-7 text-slate-700">
+                <div class="mt-card-kicker">Why it fits</div>
+                <div class="mt-2">{{ exercise.whyRecommended }}</div>
               </div>
-              <div class="mt-4 rounded-3xl bg-slate-950/[0.03] px-4 py-4 text-sm leading-7 text-slate-700">
-                <div class="font-semibold text-slate-900">What you get</div>
-                <div class="mt-1">{{ exercise.expectedOutcome }}</div>
+              <div class="mt-card-soft mt-4 p-4 text-sm leading-7 text-slate-700">
+                <div class="mt-card-kicker">What you get</div>
+                <div class="mt-2">{{ exercise.expectedOutcome }}</div>
               </div>
               <button type="button" (click)="open(exercise)" class="btn-primary mt-4 w-full rounded-2xl px-4 py-3 text-sm font-semibold">
                 Open exercise
@@ -59,11 +80,16 @@ import { FormsModule } from "@angular/forms";
         </div>
       </div>
 
-      <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
+      <div class="mt-card mt-card-hover p-4 sm:p-5">
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <div class="text-sm font-semibold text-slate-900">Browse by category</div>
-            <div class="mt-1 text-xs leading-5 text-slate-500">Pick one lane.</div>
+          <div class="mt-card-brand">
+            <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+              <app-icon name="clipboard" className="text-base"></app-icon>
+            </div>
+            <div>
+              <div class="mt-card-kicker">Browse by category</div>
+              <div class="mt-card-copy text-sm">Pick one lane.</div>
+            </div>
           </div>
           <button type="button" (click)="refresh()" class="btn-outline rounded-xl px-4 py-2 text-sm font-semibold">
             Refresh
@@ -75,17 +101,17 @@ import { FormsModule } from "@angular/forms";
             *ngFor="let cat of categories"
             type="button"
             (click)="selectCategory(cat.key)"
-            class="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 active:scale-[0.98]"
+            class="mt-chip transition"
             [class.bg-slate-900]="selectedCategory === cat.key"
-            [class.text-white]="selectedCategory === cat.key"
-            [class.border-slate-900]="selectedCategory === cat.key">
+            [class.border-slate-900]="selectedCategory === cat.key"
+            [class.text-white]="selectedCategory === cat.key">
             {{ cat.label }}
           </button>
         </div>
       </div>
 
       <ng-container *ngIf="exercises$ | async as exercises; else loading">
-        <div *ngIf="!exercises.length" class="glass-card rounded-[2rem] p-6 text-sm text-slate-600">
+        <div *ngIf="!exercises.length" class="mt-card-soft p-6 text-sm text-slate-600">
           No exercises here yet.
         </div>
 
@@ -100,29 +126,31 @@ import { FormsModule } from "@angular/forms";
       </ng-container>
 
       <ng-template #loading>
-        <div class="glass-card rounded-[2rem] p-6 text-sm text-slate-600">
+        <div class="mt-card-soft p-6 text-sm text-slate-600">
           Loading exercises...
         </div>
       </ng-template>
 
       <div *ngIf="activeExercise" class="fixed inset-0 z-50 flex items-end justify-center p-3 sm:p-4 sm:items-center">
         <div class="absolute inset-0 bg-slate-950/25 backdrop-blur-sm" (click)="activeExercise = null"></div>
-        <div class="relative max-h-[92vh] w-full max-w-3xl overflow-auto rounded-[1.75rem] border border-white/60 bg-white shadow-2xl sm:rounded-[2.25rem]">
-          <div class="sticky top-0 z-10 border-b border-slate-100 bg-white/92 px-4 py-4 backdrop-blur sm:px-6 sm:py-5">
+        <div class="relative max-h-[92vh] w-full max-w-3xl overflow-auto rounded-[1.75rem] border border-white/60 bg-white/96 shadow-2xl backdrop-blur sm:rounded-[2.25rem]">
+          <div class="sticky top-0 z-10 border-b border-white/60 bg-white/88 px-4 py-4 backdrop-blur sm:px-6 sm:py-5">
             <div class="flex items-start justify-between gap-3">
-              <div>
-                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{{ label(activeExercise.category) }} | {{ activeExercise.durationMinutes }} min</div>
-                <div class="mt-2 text-xl font-semibold text-slate-900 sm:text-2xl">{{ activeExercise.title }}</div>
+              <div class="mt-card-brand">
+                <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                  <app-icon [name]="activeExercise.category === 'breathing' ? 'spa' : activeExercise.category === 'stress-release' ? 'activity' : 'heartbeat'" className="text-base"></app-icon>
+                </div>
+                <div>
+                  <div class="mt-card-kicker">{{ label(activeExercise.category) }} | {{ activeExercise.durationMinutes }} min</div>
+                  <div class="mt-2 text-xl font-semibold text-slate-900 sm:text-2xl">{{ activeExercise.title }}</div>
+                </div>
               </div>
               <button
                 type="button"
                 (click)="activeExercise = null"
-                class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50"
+                class="btn-outline inline-flex h-10 w-10 items-center justify-center rounded-2xl"
                 aria-label="Close">
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 6L6 18"></path>
-                  <path d="M6 6l12 12"></path>
-                </svg>
+                <app-icon name="arrow" className="text-sm rotate-45"></app-icon>
               </button>
             </div>
           </div>
@@ -130,30 +158,30 @@ import { FormsModule } from "@angular/forms";
           <div class="px-4 py-4 sm:px-6 sm:py-6">
             <div class="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
               <div class="space-y-5">
-                <div class="rounded-[2rem] bg-slate-50 p-5">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Why</div>
-                  <p class="mt-2 text-sm leading-7 text-slate-700">{{ activeExercise.purpose || activeExercise.description }}</p>
+                <div class="mt-card-soft p-5">
+                  <div class="mt-card-kicker">Why</div>
+                  <p class="mt-card-copy mt-2 text-sm">{{ activeExercise.purpose || activeExercise.description }}</p>
                 </div>
 
-                <div class="rounded-[2rem] bg-slate-50 p-5">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">What you get</div>
-                  <p class="mt-2 text-sm leading-7 text-slate-700">{{ activeExercise.expectedOutcome || 'A calmer next step and a little more room to breathe.' }}</p>
+                <div class="mt-card-soft p-5">
+                  <div class="mt-card-kicker">What you get</div>
+                  <p class="mt-card-copy mt-2 text-sm">{{ activeExercise.expectedOutcome || "A calmer next step and a little more room to breathe." }}</p>
                 </div>
 
-                <div *ngIf="activeExercise.benefits?.length" class="rounded-[2rem] bg-slate-50 p-5">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Benefits</div>
+                <div *ngIf="activeExercise.benefits?.length" class="mt-card-soft p-5">
+                  <div class="mt-card-kicker">Benefits</div>
                   <div class="mt-3 flex flex-wrap gap-2">
-                    <span *ngFor="let benefit of activeExercise.benefits" class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-600 shadow-sm">
+                    <span *ngFor="let benefit of activeExercise.benefits" class="mt-chip">
                       {{ benefit }}
                     </span>
                   </div>
                 </div>
 
-                <div *ngIf="activeExercise.instructions?.length" class="rounded-[2rem] bg-slate-50 p-5">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Steps</div>
+                <div *ngIf="activeExercise.instructions?.length" class="mt-card-soft p-5">
+                  <div class="mt-card-kicker">Steps</div>
                   <ol class="mt-4 space-y-3 text-sm leading-7 text-slate-700">
                     <li *ngFor="let step of activeExercise.instructions; let i = index" class="flex gap-3">
-                      <div class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-slate-900 text-xs font-semibold text-white">{{ i + 1 }}</div>
+                      <div class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-slate-900 text-xs font-semibold text-white">{{ i + 1 }}</div>
                       <div>{{ step }}</div>
                     </li>
                   </ol>
@@ -161,27 +189,40 @@ import { FormsModule } from "@angular/forms";
               </div>
 
               <div class="space-y-5">
-                <div *ngIf="activeExercise.whyRecommended" class="rounded-[2rem] p-5" [ngStyle]="{ border: '1px solid var(--mt-accent-soft)', background: 'linear-gradient(135deg, var(--mt-accent-soft), rgba(255,255,255,0.65))' }">
-                  <div class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--mt-accent-strong)]">AI note</div>
-                  <p class="mt-2 text-sm leading-7 text-slate-700">{{ activeExercise.whyRecommended }}</p>
+                <div *ngIf="activeExercise.whyRecommended" class="mt-card-soft p-5">
+                  <div class="mt-card-brand">
+                    <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                      <app-icon name="sparkles" className="text-base"></app-icon>
+                    </div>
+                    <div>
+                      <div class="mt-card-kicker">AI note</div>
+                      <p class="mt-card-copy mt-2 text-sm">{{ activeExercise.whyRecommended }}</p>
+                    </div>
+                  </div>
                 </div>
 
-                <div *ngIf="activeExercise.category === 'breathing'" class="rounded-[2rem] border border-slate-100 bg-white p-4">
+                <div *ngIf="activeExercise.category === 'breathing'" class="mt-card-soft p-4">
                   <app-box-breathing></app-box-breathing>
                 </div>
 
-                <div class="rounded-[2rem] border border-slate-100 bg-white p-5">
-                  <div class="text-sm font-semibold text-slate-900">Quick feedback</div>
+                <div class="mt-card p-5">
+                  <div class="mt-card-brand">
+                    <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                      <app-icon name="feedback" className="text-base"></app-icon>
+                    </div>
+                    <div>
+                      <div class="mt-card-kicker">Quick feedback</div>
+                      <div class="mt-card-copy mt-2 text-sm">Tell the recommender how this felt.</div>
+                    </div>
+                  </div>
                   <div class="mt-4">
-                    <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">How'd it feel?</div>
+                    <div class="mt-card-kicker">How'd it feel?</div>
                     <div class="mt-3 flex flex-wrap gap-2">
                       <button *ngFor="let rating of [1,2,3,4,5]" type="button" (click)="feedbackRating = rating"
-                        class="rounded-full border px-3 py-1.5 text-xs font-semibold transition"
-                        [class.border-slate-900]="feedbackRating === rating"
+                        class="mt-chip transition"
                         [class.bg-slate-900]="feedbackRating === rating"
-                        [class.text-white]="feedbackRating === rating"
-                        [class.border-slate-200]="feedbackRating !== rating"
-                        [class.text-slate-600]="feedbackRating !== rating">
+                        [class.border-slate-900]="feedbackRating === rating"
+                        [class.text-white]="feedbackRating === rating">
                         {{ rating }}/5
                       </button>
                     </div>
@@ -202,7 +243,7 @@ import { FormsModule } from "@angular/forms";
                   </div>
 
                   <button type="button" (click)="completeActiveExercise()" [disabled]="completionPending" class="btn-primary mt-5 w-full rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60">
-                    {{ completionPending ? 'Saving...' : 'Mark complete' }}
+                    {{ completionPending ? "Saving..." : "Mark complete" }}
                   </button>
                 </div>
               </div>

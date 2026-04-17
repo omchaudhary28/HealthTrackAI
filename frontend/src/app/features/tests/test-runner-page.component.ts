@@ -1,10 +1,11 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { Component, OnDestroy, OnInit, computed, signal } from "@angular/core";
-import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
-import { Router, RouterLink, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Subscription } from "rxjs";
 import { AuthService } from "../../core/services/auth.service";
 import { TestAnswer, TestDefinition, TestsService } from "../../core/services/tests.service";
+import { IconComponent } from "../../shared/components/icon.component";
+import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 const CHOICES = [
   { value: 1, label: "Strongly disagree" },
@@ -17,99 +18,122 @@ const CHOICES = [
 @Component({
   selector: "app-test-runner-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, RouterLink],
+  imports: [ScrollRevealDirective, CommonModule, RouterLink, IconComponent],
   template: `
     <section appScrollReveal class="page-stack">
-      <div class="glass-card theme-hero-card page-hero">
-          <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div class="mt-card mt-card-hover page-hero">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div class="mt-card-brand max-w-3xl">
+            <div class="mt-card-icon">
+              <app-icon name="tests" className="text-xl"></app-icon>
+            </div>
             <div>
-              <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">{{ test()?.category || 'Assessment' }}</div>
-              <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">{{ test()?.title || 'Loading test...' }}</h1>
-              <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
-                {{ test()?.description || 'Quick self-check only. Not a diagnosis.' }}
+              <div class="mt-card-kicker">{{ test()?.category || "Assessment" }}</div>
+              <h1 class="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">{{ test()?.title || "Loading test..." }}</h1>
+              <p class="mt-card-copy mt-3 text-sm sm:text-base">
+                {{ test()?.description || "Quick self-check only. Not a diagnosis." }}
               </p>
             </div>
-            <a routerLink="/tests" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Back to tests</a>
           </div>
-          <div *ngIf="test()" class="mt-6">
-            <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
-              <span>Progress</span>
-              <span>{{ progressPercent() }}%</span>
-            </div>
-            <div class="mt-3 h-3 overflow-hidden rounded-full bg-slate-200/70">
-              <div class="h-full rounded-full bg-[linear-gradient(90deg,var(--mt-accent-strong),var(--mt-accent),#2dd4bf)] transition-all duration-300" [style.width.%]="progressPercent()"></div>
-            </div>
+          <a routerLink="/tests" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">Back to tests</a>
+        </div>
+
+        <div *ngIf="test()" class="mt-6">
+          <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+            <span>Progress</span>
+            <span>{{ progressPercent() }}%</span>
+          </div>
+          <div class="mt-3 h-3 overflow-hidden rounded-full bg-white/70">
+            <div class="h-full rounded-full bg-[linear-gradient(90deg,var(--mt-accent-strong),var(--mt-accent),#2dd4bf)] transition-all duration-300" [style.width.%]="progressPercent()"></div>
           </div>
         </div>
+      </div>
 
       <div *ngIf="error()" class="rounded-[2rem] border border-rose-100 bg-rose-50 p-6 text-sm text-rose-700">
         {{ error() }}
       </div>
 
       <div *ngIf="result(); else questionnaire" class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
-          <div class="text-sm font-medium text-slate-500">Results</div>
-          <div class="mt-4 flex flex-wrap gap-3">
-            <div class="rounded-3xl bg-slate-50 px-5 py-4">
-              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Score</div>
-              <div class="mt-2 text-3xl font-semibold text-slate-900">{{ displayedScore() }} / 100</div>
+        <div class="mt-card mt-card-hover p-5 sm:p-6">
+          <div class="mt-card-brand">
+            <div class="mt-card-icon">
+              <app-icon name="analytics" className="text-lg"></app-icon>
             </div>
-            <div *ngIf="classification()" class="rounded-3xl bg-[var(--mist)] px-5 py-4">
-              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">State</div>
-              <div class="mt-2 text-2xl font-semibold text-slate-900">{{ classification()?.mental_state }}</div>
-              <div class="mt-2 text-sm leading-7 text-slate-600">{{ classification()?.description }}</div>
+            <div>
+              <div class="mt-card-kicker">Results</div>
+              <div class="mt-card-copy mt-2 text-sm">Your assessment snapshot and suggested direction.</div>
             </div>
-            <div *ngIf="testResult()" class="rounded-3xl bg-[var(--mist)] px-5 py-4">
-              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Type</div>
-              <div class="mt-2 text-2xl font-semibold text-slate-900">{{ testResult()?.result_type }}</div>
-              <div class="mt-2 text-sm leading-7 text-slate-600">{{ testResult()?.description }}</div>
+          </div>
+
+          <div class="mt-5 flex flex-wrap gap-3">
+            <div class="mt-card-soft p-5">
+              <div class="mt-card-kicker">Score</div>
+              <div class="mt-card-stat mt-3 text-slate-900">{{ displayedScore() }} / 100</div>
+            </div>
+            <div *ngIf="classification()" class="mt-card-soft p-5">
+              <div class="mt-card-kicker">State</div>
+              <div class="mt-3 text-2xl font-semibold text-slate-900">{{ classification()?.mental_state }}</div>
+              <div class="mt-card-copy mt-2 text-sm">{{ classification()?.description }}</div>
+            </div>
+            <div *ngIf="testResult()" class="mt-card-soft p-5">
+              <div class="mt-card-kicker">Type</div>
+              <div class="mt-3 text-2xl font-semibold text-slate-900">{{ testResult()?.result_type }}</div>
+              <div class="mt-card-copy mt-2 text-sm">{{ testResult()?.description }}</div>
             </div>
           </div>
 
           <div *ngIf="classification()?.recommendations?.length" class="mt-6">
-            <div class="text-sm font-medium text-slate-500">Try next</div>
+            <div class="mt-card-kicker">Try next</div>
             <div class="mt-4 space-y-3">
-              <div *ngFor="let item of classification()?.recommendations" class="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-4 text-sm text-slate-700">
+              <div *ngFor="let item of classification()?.recommendations" class="mt-card-soft p-4 text-sm text-slate-700">
                 {{ item }}
               </div>
             </div>
           </div>
 
           <div *ngIf="testResult()?.strengths?.length" class="mt-6">
-            <div class="text-sm font-medium text-slate-500">Strengths</div>
+            <div class="mt-card-kicker">Strengths</div>
             <div class="mt-3 space-y-2">
-              <div *ngFor="let item of testResult()?.strengths" class="rounded-2xl border border-slate-100 bg-white px-4 py-3 text-sm text-slate-700">
+              <div *ngFor="let item of testResult()?.strengths" class="mt-card-soft p-4 text-sm text-slate-700">
                 {{ item }}
               </div>
             </div>
           </div>
 
           <div *ngIf="testResult()?.suggestions?.length" class="mt-6">
-            <div class="text-sm font-medium text-slate-500">Suggestions</div>
+            <div class="mt-card-kicker">Suggestions</div>
             <div class="mt-3 space-y-2">
-              <div *ngFor="let item of testResult()?.suggestions" class="rounded-2xl border border-slate-100 bg-white px-4 py-3 text-sm text-slate-700">
+              <div *ngFor="let item of testResult()?.suggestions" class="mt-card-soft p-4 text-sm text-slate-700">
                 {{ item }}
               </div>
             </div>
           </div>
 
           <div *ngIf="testResult()?.recommended_exercises?.length" class="mt-6">
-            <div class="text-sm font-medium text-slate-500">Exercises</div>
+            <div class="mt-card-kicker">Exercises</div>
             <div class="mt-3 flex flex-wrap gap-2">
-              <span *ngFor="let item of testResult()?.recommended_exercises" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                {{ item.replaceAll('_', ' ') }}
+              <span *ngFor="let item of testResult()?.recommended_exercises" class="mt-chip">
+                {{ item.replaceAll("_", " ") }}
               </span>
             </div>
           </div>
 
-          <div class="mt-6 rounded-3xl border border-white/70 bg-white/70 px-5 py-4 text-sm text-slate-600">
-            {{ result()?.disclaimer || 'MindTrack gives wellness support only.' }}
+          <div class="mt-card-soft mt-6 p-5 text-sm text-slate-600">
+            {{ result()?.disclaimer || "MindTrack gives wellness support only." }}
           </div>
         </div>
 
-        <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
-          <div class="text-sm font-medium text-slate-500">Next steps</div>
-          <div class="mt-4 space-y-3">
+        <div class="mt-card mt-card-hover p-5 sm:p-6">
+          <div class="mt-card-brand">
+            <div class="mt-card-icon">
+              <app-icon name="target" className="text-lg"></app-icon>
+            </div>
+            <div>
+              <div class="mt-card-kicker">Next steps</div>
+              <div class="mt-card-copy mt-2 text-sm">Keep the flow moving while the result is fresh.</div>
+            </div>
+          </div>
+          <div class="mt-5 space-y-3">
             <a routerLink="/dashboard" class="btn-primary block rounded-2xl px-4 py-4 text-center text-sm font-semibold">Open dashboard</a>
             <button type="button" (click)="restart()" class="btn-outline w-full rounded-2xl px-4 py-4 text-sm font-semibold">
               Retake this test
@@ -120,30 +144,30 @@ const CHOICES = [
 
       <ng-template #questionnaire>
         <div *ngIf="test()" class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-          <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
+          <div class="mt-card mt-card-hover p-5 sm:p-6">
             <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
               <span>Question {{ index() + 1 }} of {{ totalQuestions() }}</span>
               <span *ngIf="test()?.scoringScale">{{ test()?.scoringScale }}</span>
             </div>
 
-            <div class="mt-4 text-lg font-semibold text-slate-900 sm:text-xl">{{ currentQuestion()?.text }}</div>
+            <div class="mt-5 text-lg font-semibold text-slate-900 sm:text-xl">{{ currentQuestion()?.text }}</div>
             <div class="mt-5 grid gap-3 min-[430px]:grid-cols-2 lg:grid-cols-5">
               <button
                 *ngFor="let choice of choices"
                 type="button"
                 (click)="select(choice.value)"
                 [class]="choiceClass(choice.value)"
-                class="rounded-2xl border px-4 py-3 text-left text-sm font-medium transition sm:text-center">
+                class="rounded-[1.35rem] border px-4 py-4 text-left text-sm font-medium transition">
                 {{ choice.label }}
               </button>
             </div>
 
-            <div class="mt-4 rounded-3xl bg-slate-50 px-4 py-4 text-sm leading-7 text-slate-600">
+            <div class="mt-card-soft mt-4 p-4 text-sm leading-7 text-slate-600">
               {{ answerHint() }}
             </div>
 
             <div class="mt-6 flex flex-wrap gap-3">
-              <button type="button" (click)="back()" [disabled]="index() === 0 || pending()" class="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 disabled:opacity-50">
+              <button type="button" (click)="back()" [disabled]="index() === 0 || pending()" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold disabled:opacity-50">
                 Back
               </button>
               <button
@@ -151,7 +175,7 @@ const CHOICES = [
                 type="button"
                 (click)="next()"
                 [disabled]="!hasAnswer() || pending()"
-                class="rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white disabled:opacity-50">
+                class="btn-primary rounded-full px-6 py-3 text-sm font-semibold disabled:opacity-50">
                 Next
               </button>
               <button
@@ -159,18 +183,25 @@ const CHOICES = [
                 type="button"
                 (click)="submit()"
                 [disabled]="!canSubmit() || pending()"
-                class="rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white disabled:opacity-50">
-                {{ pending() ? 'Submitting...' : 'Submit' }}
+                class="btn-primary rounded-full px-6 py-3 text-sm font-semibold disabled:opacity-50">
+                {{ pending() ? "Submitting..." : "Submit" }}
               </button>
             </div>
           </div>
 
-          <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
-            <div class="text-sm font-medium text-slate-500">Keep in mind</div>
-            <p class="mt-4 text-sm leading-7 text-slate-600">
-              This is for self-reflection and habit support. Not treatment.
-            </p>
-            <div class="mt-5 rounded-3xl bg-[var(--mist)] px-5 py-4 text-sm text-slate-700">
+          <div class="mt-card mt-card-hover p-5 sm:p-6">
+            <div class="mt-card-brand">
+              <div class="mt-card-icon">
+                <app-icon name="shield" className="text-lg"></app-icon>
+              </div>
+              <div>
+                <div class="mt-card-kicker">Keep in mind</div>
+                <p class="mt-card-copy mt-3 text-sm">
+                  This is for self-reflection and habit support. It is not treatment or diagnosis.
+                </p>
+              </div>
+            </div>
+            <div class="mt-card-soft mt-5 p-5 text-sm text-slate-700">
               Tip: answer from your usual week, not one weird day.
             </div>
           </div>
@@ -279,8 +310,8 @@ export class TestRunnerPageComponent implements OnInit, OnDestroy {
   choiceClass(value: number): string {
     const selected = this.currentAnswerValue() === value;
     return selected
-      ? "border-slate-900 bg-slate-900 text-white"
-      : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50";
+      ? "border-slate-900 bg-slate-900 text-white shadow-[0_20px_34px_-24px_rgba(15,23,42,0.45)]"
+      : "border-white/70 bg-white/85 text-slate-700 hover:border-slate-300 hover:bg-white";
   }
 
   select(value: number): void {
@@ -360,5 +391,3 @@ export class TestRunnerPageComponent implements OnInit, OnDestroy {
     this.loadTest(key);
   }
 }
-
-

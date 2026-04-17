@@ -1,43 +1,47 @@
 import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from "@angular/core";
 import Chart from "chart.js/auto";
+import { IconComponent, MindtrackIconName } from "./icon.component";
 
 @Component({
   selector: "app-progress-chart",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   template: `
-    <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-4 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-5">
-      <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div class="text-sm font-medium text-slate-500">{{ title }}</div>
-          <div class="text-base font-semibold text-slate-800 sm:text-lg">{{ subtitle }}</div>
+    <div class="mt-card mt-card-hover h-full p-5 sm:p-6">
+      <div class="mt-card-head">
+        <div class="mt-card-brand">
+          <div class="mt-card-icon">
+            <app-icon [name]="icon" className="text-lg"></app-icon>
+          </div>
+          <div>
+            <div class="mt-card-kicker">{{ title }}</div>
+            <div class="mt-2 text-base font-semibold text-slate-900 sm:text-lg">{{ subtitle }}</div>
+          </div>
         </div>
+        <div *ngIf="latestValueText" class="mt-chip">{{ latestValueText }}</div>
       </div>
-      <div class="relative h-[220px] sm:h-[260px] lg:h-[280px]">
+
+      <div class="relative mt-5 h-[220px] sm:h-[260px] lg:h-[280px]">
         <canvas #canvas class="h-full w-full" [class.hidden]="!hasTrendData"></canvas>
 
-        <div *ngIf="!hasTrendData" class="flex h-full flex-col justify-between rounded-[1.5rem] border border-dashed border-slate-200 bg-slate-50/75 p-5">
+        <div *ngIf="!hasTrendData" class="mt-card-soft flex h-full flex-col justify-between p-5">
           <div>
-            <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{{ emptyEyebrow }}</div>
+            <div class="mt-card-kicker">{{ emptyEyebrow }}</div>
             <div class="mt-2 text-xl font-semibold text-slate-900">{{ emptyHeadline }}</div>
-            <div class="mt-2 max-w-md text-sm leading-7 text-slate-600">{{ emptyBody }}</div>
+            <div class="mt-card-copy mt-2 text-sm">{{ emptyBody }}</div>
           </div>
 
           <div *ngIf="latestValueText; else noData" class="flex items-end justify-between gap-4">
             <div>
-              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Latest entry</div>
-              <div class="mt-2 text-3xl font-semibold text-slate-900">{{ latestValueText }}</div>
+              <div class="mt-card-kicker">Latest entry</div>
+              <div class="mt-card-stat mt-2 text-slate-950">{{ latestValueText }}</div>
             </div>
-            <div class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-500 shadow-sm">
-              {{ latestLabel || "Most recent" }}
-            </div>
+            <div class="mt-chip">{{ latestLabel || "Most recent" }}</div>
           </div>
 
           <ng-template #noData>
-            <div class="rounded-full bg-white px-3 py-2 text-xs font-semibold text-slate-500 shadow-sm">
-              Waiting for your first entry
-            </div>
+            <div class="mt-chip">Waiting for your first entry</div>
           </ng-template>
         </div>
       </div>
@@ -51,6 +55,7 @@ export class ProgressChartComponent implements AfterViewInit, OnChanges, OnDestr
   @Input() labels: string[] = [];
   @Input() values: number[] = [];
   @Input() lineColor = "#8eb8d7";
+  @Input() icon: MindtrackIconName = "chart-line";
 
   private chart?: Chart;
   hasTrendData = false;

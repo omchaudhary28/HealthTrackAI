@@ -3,22 +3,28 @@ import { Component } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 import { CommunityPost, CommunityService, CommunityShareType } from "../../core/services/community.service";
+import { IconComponent } from "../../shared/components/icon.component";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 @Component({
   selector: "app-create-post-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink],
+  imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink, IconComponent],
   template: `
     <section appScrollReveal class="page-stack">
       <div class="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-        <div class="glass-card page-hero">
-          <div class="min-w-0">
-            <div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Create Post</div>
-            <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Share one clear update.</h1>
-            <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
-              No essay. Just the update. If it gets deep, keep that part in your journal.
-            </p>
+        <div class="mt-card mt-card-hover page-hero">
+          <div class="mt-card-brand min-w-0 max-w-3xl">
+            <div class="mt-card-icon">
+              <app-icon name="compose" className="text-xl"></app-icon>
+            </div>
+            <div class="min-w-0">
+              <div class="mt-card-kicker">Create Post</div>
+              <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">Share one clear update.</h1>
+              <p class="mt-card-copy mt-3 max-w-3xl text-sm sm:text-base">
+                No essay. Just the update. If it gets deep, keep that part in your journal.
+              </p>
+            </div>
 
             <div class="cluster-actions mt-6">
               <a routerLink="/mood" class="btn-primary rounded-full px-5 py-3 text-sm font-semibold">Log mood first</a>
@@ -28,22 +34,32 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           </div>
         </div>
 
-        <div class="glass-card rounded-[2rem] p-5 sm:rounded-[2.5rem] sm:p-6">
-          <div class="text-sm font-semibold text-slate-900">Before you post</div>
+        <div class="mt-card mt-card-hover p-5 sm:p-6">
+          <div class="mt-card-brand">
+            <div class="mt-card-icon">
+              <app-icon name="share" className="text-lg"></app-icon>
+            </div>
+            <div class="text-sm font-semibold text-slate-900">Before you post</div>
+          </div>
           <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
-            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">Say what changed, not the full lore.</div>
-            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">Anonymous mode is there when privacy wins.</div>
-            <div class="rounded-[1.4rem] bg-slate-50/90 px-4 py-4">If it's just for you, drop it in journal.</div>
+            <div class="mt-card-soft px-4 py-4">Say what changed, not the full lore.</div>
+            <div class="mt-card-soft px-4 py-4">Anonymous mode is there when privacy wins.</div>
+            <div class="mt-card-soft px-4 py-4">If it's just for you, drop it in journal.</div>
           </div>
         </div>
       </div>
 
       <div class="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-        <form class="glass-card rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6" (ngSubmit)="createPost()">
+        <form class="mt-card mt-card-hover p-5 sm:p-6" (ngSubmit)="createPost()">
           <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <div class="text-sm font-semibold text-slate-900">Simple composer</div>
-              <div class="mt-1 text-xs leading-5 text-slate-500">Title, short note, done.</div>
+            <div class="mt-card-brand">
+              <div class="mt-card-icon">
+                <app-icon name="pen" className="text-lg"></app-icon>
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-slate-900">Simple composer</div>
+                <div class="mt-1 text-xs leading-5 text-slate-500">Title, short note, done.</div>
+              </div>
             </div>
             <label class="inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600">
               <input [(ngModel)]="compose.isAnonymous" name="isAnonymous" type="checkbox" class="rounded border-slate-300 text-slate-900 focus:ring-slate-200" />
@@ -92,7 +108,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               <input [(ngModel)]="compose.anonymousAlias" name="anonymousAlias" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" placeholder="Optional. Example: Quiet Lantern" />
           </label>
 
-          <div *ngIf="compose.shareType !== 'reflection'" class="mt-5 rounded-[1.75rem] border border-slate-200 bg-slate-50/80 p-5">
+          <div *ngIf="compose.shareType !== 'reflection'" class="mt-card-soft mt-5 border border-slate-200 p-5">
             <div class="text-sm font-semibold text-slate-900">Optional progress details</div>
             <div class="mt-1 text-xs leading-5 text-slate-500">Only fill what adds clarity.</div>
 
@@ -134,29 +150,39 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
         </form>
 
         <div class="space-y-6">
-          <div class="glass-card rounded-[2rem] p-6">
-            <div class="text-sm font-semibold text-slate-900">Track before posting</div>
+          <div class="mt-card mt-card-hover p-6">
+            <div class="mt-card-brand">
+              <div class="mt-card-icon">
+                <app-icon name="analytics" className="text-lg"></app-icon>
+              </div>
+              <div class="text-sm font-semibold text-slate-900">Track before posting</div>
+            </div>
             <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
-              <a routerLink="/mood" class="block rounded-3xl bg-slate-50/80 px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100">
+              <a routerLink="/mood" class="mt-card-soft block px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100">
                 Mood check-in
               </a>
-              <a routerLink="/journal" class="block rounded-3xl bg-slate-50/80 px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100">
+              <a routerLink="/journal" class="mt-card-soft block px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100">
                 Journal entry
               </a>
-              <a routerLink="/progress" class="block rounded-3xl bg-slate-50/80 px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100">
+              <a routerLink="/progress" class="mt-card-soft block px-4 py-4 font-semibold text-slate-900 transition hover:bg-slate-100">
                 Progress page
               </a>
             </div>
           </div>
 
-          <div class="glass-card rounded-[2rem] p-6">
-            <div class="text-sm font-semibold text-slate-900">What works here</div>
-            <div class="mt-4 rounded-3xl bg-slate-50/80 px-4 py-4 text-sm leading-7 text-slate-600">
+          <div class="mt-card mt-card-hover p-6">
+            <div class="mt-card-brand">
+              <div class="mt-card-icon">
+                <app-icon name="comments" className="text-lg"></app-icon>
+              </div>
+              <div class="text-sm font-semibold text-slate-900">What works here</div>
+            </div>
+            <div class="mt-card-soft mt-4 px-4 py-4 text-sm leading-7 text-slate-600">
               Short posts hit better. Tiny wins, quick notes, and honest asks work best.
             </div>
           </div>
 
-          <div *ngIf="createdPost" class="glass-card rounded-[2rem] border border-emerald-100 bg-[linear-gradient(150deg,rgba(236,253,245,0.92),rgba(255,255,255,0.88))] p-6">
+          <div *ngIf="createdPost" class="mt-card mt-card-hover border border-emerald-100 bg-[linear-gradient(150deg,rgba(236,253,245,0.92),rgba(255,255,255,0.88))] p-6">
             <div class="text-sm font-semibold text-emerald-800">Post live</div>
             <div class="mt-3 text-2xl font-semibold text-slate-900">{{ createdPost.title }}</div>
             <div class="mt-3 text-sm leading-7 text-slate-600">{{ createdPost.content }}</div>

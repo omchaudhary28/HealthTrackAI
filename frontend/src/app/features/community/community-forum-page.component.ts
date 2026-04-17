@@ -15,12 +15,13 @@ import {
 } from "../../core/services/community.service";
 import { RealtimeService } from "../../core/services/realtime.service";
 import { shareTextSafely } from "../../core/utils/share";
+import { IconComponent } from "../../shared/components/icon.component";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 @Component({
   selector: "app-community-forum-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink],
+  imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink, IconComponent],
   templateUrl: "./community-forum-page.component.html"
 })
 export class CommunityForumPageComponent implements OnInit, OnDestroy {

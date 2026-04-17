@@ -4,14 +4,15 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService, SignupPayload } from "../../core/services/auth.service";
+import { IconComponent } from "../../shared/components/icon.component";
 
 @Component({
   selector: "app-auth-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, FormsModule],
+  imports: [ScrollRevealDirective, CommonModule, FormsModule, IconComponent],
   template: `
     <section appScrollReveal class="mx-auto grid max-w-6xl gap-4 sm:gap-6 lg:grid-cols-[0.98fr_1.02fr]">
-      <form class="order-1 glass-card rounded-[1.75rem] p-4 backdrop-blur sm:rounded-[2.25rem] sm:p-6 lg:order-2 lg:p-8" (ngSubmit)="submit()">
+      <form class="order-1 mt-card mt-card-hover rounded-[1.75rem] p-4 backdrop-blur sm:rounded-[2.25rem] sm:p-6 lg:order-2 lg:p-8" (ngSubmit)="submit()">
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-3 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between">
             <div>
@@ -36,7 +37,7 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
             </div>
           </div>
 
-          <div class="rounded-[1.5rem] border border-slate-200/70 bg-slate-50/85 p-4">
+          <div class="mt-card-soft border border-slate-200/70 p-4">
             <label class="block text-sm font-medium text-slate-700">
               Email
               <div class="relative mt-2">
@@ -98,7 +99,7 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
               placeholder="Enter your password" />
           </label>
 
-          <div *ngIf="mode === 'signup'" class="rounded-[1.6rem] border border-slate-200/80 bg-white/78 p-4">
+          <div *ngIf="mode === 'signup'" class="mt-card-soft border border-slate-200/80 bg-white/78 p-4">
             <button
               type="button"
               (click)="profileDetailsExpanded = !profileDetailsExpanded"
@@ -164,35 +165,42 @@ import { AuthService, SignupPayload } from "../../core/services/auth.service";
         </div>
       </form>
 
-      <div class="order-2 glass-card page-hero bg-[linear-gradient(155deg,rgba(255,255,255,0.72),rgba(255,255,255,0.48),rgba(14,165,233,0.08))] lg:order-1">
-        <div class="inline-flex rounded-full bg-white/75 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-          Secure access
+      <div class="order-2 mt-card mt-card-hover page-hero bg-[linear-gradient(155deg,rgba(255,255,255,0.72),rgba(255,255,255,0.48),rgba(14,165,233,0.08))] lg:order-1">
+        <div class="mt-card-brand max-w-xl">
+          <div class="mt-card-icon">
+            <app-icon name="shield" className="text-xl"></app-icon>
+          </div>
+          <div>
+            <div class="inline-flex rounded-full bg-white/75 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+              Secure access
+            </div>
+            <h1 class="mt-4 text-xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">
+              Private tracking, low friction.
+            </h1>
+            <p class="mt-card-copy mt-3 max-w-xl text-sm sm:text-base">
+              Check-ins, notes, tests, and exercises in one place. "No long setup" is the vibe.
+            </p>
+          </div>
         </div>
-        <h1 class="mt-4 text-xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">
-          Private tracking, low friction.
-        </h1>
-        <p class="mt-3 max-w-xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-          Check-ins, notes, tests, and exercises in one place. "No long setup" is the vibe.
-        </p>
 
-        <div class="mt-5 rounded-[1.5rem] border border-white/70 bg-white/72 px-4 py-4 text-sm leading-7 text-slate-600 lg:hidden">
+        <div class="mt-card-soft mt-5 border border-white/70 px-4 py-4 text-sm leading-7 text-slate-600 lg:hidden">
           Start fast now. Add the extra profile stuff later.
         </div>
 
         <div class="mt-6 hidden gap-4 sm:grid-cols-2 lg:grid">
-          <div class="rounded-3xl border border-white/70 bg-white/72 p-5">
+          <div class="mt-card-soft border border-white/70 p-5">
             <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Fast access</div>
             <div class="mt-2 text-lg font-semibold text-slate-900">Smart email check</div>
             <div class="mt-2 text-sm leading-7 text-slate-600">Type your email once. MindTrack points you to sign in or create.</div>
           </div>
-          <div class="rounded-3xl border border-white/70 bg-white/72 p-5">
+          <div class="mt-card-soft border border-white/70 p-5">
             <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Private by default</div>
             <div class="mt-2 text-lg font-semibold text-slate-900">Protected data</div>
             <div class="mt-2 text-sm leading-7 text-slate-600">Your journal, tests, and recommendations stay tied to your account.</div>
           </div>
         </div>
 
-        <div class="mt-6 rounded-3xl border border-white/70 bg-white/72 p-5 text-sm leading-7 text-slate-600">
+        <div class="mt-card-soft mt-6 border border-white/70 p-5 text-sm leading-7 text-slate-600">
           MindTrack supports reflection and habits. It is not medical advice.
         </div>
       </div>

@@ -1,49 +1,92 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 import { Observable, catchError, of } from "rxjs";
 import { AssessmentService, LatestAssessmentState } from "../../core/services/assessment.service";
+import { IconComponent } from "../../shared/components/icon.component";
+import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 @Component({
   selector: "app-mental-state-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule],
+  imports: [ScrollRevealDirective, CommonModule, IconComponent],
   template: `
     <section appScrollReveal class="page-stack">
       <ng-container *ngIf="latest$ | async as latest">
-        <div class="page-hero rounded-[2rem] border border-white/70 bg-[linear-gradient(145deg,rgba(216,214,239,0.45),rgba(255,255,255,0.9))] shadow-[0_25px_70px_-45px_rgba(32,50,71,0.55)] sm:rounded-[2.5rem]">
-          <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">Know your mental state</div>
-          <div class="mt-3 inline-flex rounded-full bg-white/85 px-4 py-2 text-sm font-semibold text-slate-700">
-            Mental state: {{ latest.mentalState?.mentalState || "Unknown" }}
+        <div class="mt-card mt-card-hover page-hero">
+          <div class="mt-card-brand max-w-4xl">
+            <div class="mt-card-icon">
+              <app-icon name="brain" className="text-xl"></app-icon>
+            </div>
+            <div>
+              <div class="mt-card-kicker">Know Your Mental State</div>
+              <div class="mt-chip mt-4">
+                <app-icon name="sparkles" className="text-xs"></app-icon>
+                Mental state: {{ latest.mentalState?.mentalState || "Unknown" }}
+              </div>
+              <p class="mt-card-copy mt-5 text-base sm:text-lg">
+                {{ latest.mentalState?.description || fallbackDescription }}
+              </p>
+            </div>
           </div>
-          <p class="mt-5 max-w-3xl text-base leading-7 text-slate-700 sm:text-lg sm:leading-8">
-            {{ latest.mentalState?.description || fallbackDescription }}
-          </p>
-          <div *ngIf="latest.suggestedAction" class="mt-5 rounded-3xl bg-white/80 px-5 py-4 text-sm leading-7 text-slate-700">
-            Next move: <span class="font-semibold text-slate-900">{{ latest.suggestedAction?.title }}</span>
-            <div class="mt-2 text-slate-600">{{ latest.suggestedAction?.whyRecommended }}</div>
+
+          <div *ngIf="latest.suggestedAction" class="mt-card-soft mt-6 p-5">
+            <div class="mt-card-brand">
+              <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                <app-icon name="target" className="text-base"></app-icon>
+              </div>
+              <div>
+                <div class="mt-card-kicker">Next move</div>
+                <div class="mt-2 text-lg font-semibold text-slate-900">{{ latest.suggestedAction?.title }}</div>
+                <div class="mt-card-copy mt-2 text-sm">{{ latest.suggestedAction?.whyRecommended }}</div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
-          <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
-            <div class="text-sm font-medium text-slate-500">Common signs</div>
-            <ul class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
-              <li *ngFor="let signal of signals" class="rounded-2xl bg-slate-50 px-4 py-3">{{ signal }}</li>
+          <div class="mt-card mt-card-hover p-5 sm:p-6">
+            <div class="mt-card-brand">
+              <div class="mt-card-icon">
+                <app-icon name="clipboard" className="text-lg"></app-icon>
+              </div>
+              <div>
+                <div class="mt-card-kicker">Common signs</div>
+                <div class="mt-card-copy mt-2 text-sm">Pattern cues that often show up around this state.</div>
+              </div>
+            </div>
+            <ul class="mt-5 space-y-3 text-sm leading-7 text-slate-600">
+              <li *ngFor="let signal of signals" class="mt-card-soft p-4">{{ signal }}</li>
             </ul>
           </div>
-          <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-5 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur sm:rounded-[2rem] sm:p-6">
-            <div class="text-sm font-medium text-slate-500">Try next</div>
-            <div class="mt-4 space-y-3">
-              <div *ngFor="let item of (latest.mentalState?.recommendations?.length ? latest.mentalState.recommendations : fallbackRecommendations)" class="rounded-2xl border border-slate-100 bg-slate-50 px-4 py-4 text-sm text-slate-700">
+
+          <div class="mt-card mt-card-hover p-5 sm:p-6">
+            <div class="mt-card-brand">
+              <div class="mt-card-icon">
+                <app-icon name="wand" className="text-lg"></app-icon>
+              </div>
+              <div>
+                <div class="mt-card-kicker">Try next</div>
+                <div class="mt-card-copy mt-2 text-sm">Small moves that support the current read.</div>
+              </div>
+            </div>
+            <div class="mt-5 space-y-3">
+              <div *ngFor="let item of (latest.mentalState?.recommendations?.length ? latest.mentalState.recommendations : fallbackRecommendations)" class="mt-card-soft p-4 text-sm text-slate-700">
                 {{ item }}
               </div>
             </div>
           </div>
         </div>
 
-        <div class="rounded-[2rem] border border-white/70 bg-white/80 p-6 text-sm text-slate-600 shadow-[0_20px_50px_-35px_rgba(32,50,71,0.45)] backdrop-blur">
-          MindTrack gives wellness support only. Not a diagnosis.
+        <div class="mt-card-soft p-5 text-sm text-slate-600">
+          <div class="mt-card-brand">
+            <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+              <app-icon name="shield" className="text-base"></app-icon>
+            </div>
+            <div>
+              <div class="mt-card-kicker">Support note</div>
+              <div class="mt-card-copy mt-2">MindTrack gives wellness support only. Not a diagnosis.</div>
+            </div>
+          </div>
         </div>
       </ng-container>
     </section>
@@ -78,5 +121,3 @@ export class MentalStatePageComponent {
     );
   }
 }
-
-

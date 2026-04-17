@@ -32,6 +32,10 @@
   --mt-accent-soft: rgba(221, 42, 123, 0.14);
   --mt-active-surface: rgba(253, 242, 248, 0.92);
   --mt-tab-gradient: linear-gradient(90deg, rgba(245, 133, 41, 0.98), rgba(221, 42, 123, 0.98), rgba(129, 52, 175, 0.96));
+  --mt-card-shadow: 0 30px 72px -46px rgba(15, 23, 42, 0.34);
+  --mt-card-shadow-hover: 0 42px 90px -48px rgba(15, 23, 42, 0.42);
+  --mt-card-outline: rgba(255, 255, 255, 0.72);
+  --mt-card-radius: 1.75rem;
 }
 
 html,
@@ -61,6 +65,10 @@ body {
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+:where(h1, h2, h3, h4, .display-font) {
+  font-family: "Sora", "Manrope", sans-serif;
 }
 
 app-root {
@@ -361,6 +369,240 @@ form {
   box-shadow: 0 32px 64px -36px rgba(15, 23, 42, 0.5);
 }
 
+.mt-card,
+.mt-card-soft,
+.mt-card-strong,
+.mt-card-interactive,
+.mt-card-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--mt-card-radius);
+}
+
+.mt-card,
+.mt-card-panel {
+  border: 1px solid var(--mt-card-outline);
+  background:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.78) 58%, var(--mt-accent-soft) 100%);
+  backdrop-filter: blur(24px);
+  box-shadow: var(--mt-card-shadow);
+}
+
+.mt-card-soft {
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  background:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.72) 56%, rgba(255, 255, 255, 0.6) 100%);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 24px 52px -40px rgba(15, 23, 42, 0.26);
+}
+
+.mt-card-strong {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(150deg, rgba(7, 16, 33, 0.94), rgba(15, 23, 42, 0.88) 42%, var(--mt-accent-strong) 100%);
+  color: #ffffff;
+  box-shadow: 0 38px 82px -46px rgba(15, 23, 42, 0.54);
+}
+
+.mt-card::before,
+.mt-card-soft::before,
+.mt-card-strong::before,
+.mt-card-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.36), transparent 34%),
+    radial-gradient(circle at bottom left, var(--mt-accent-soft), transparent 45%);
+  opacity: 0.9;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.mt-card::after,
+.mt-card-soft::after,
+.mt-card-strong::after,
+.mt-card-panel::after {
+  content: "";
+  position: absolute;
+  right: -18%;
+  bottom: -34%;
+  width: 13rem;
+  height: 13rem;
+  pointer-events: none;
+  border-radius: 999px;
+  background: radial-gradient(circle, var(--mt-accent-soft), transparent 70%);
+  filter: blur(12px);
+  opacity: 0.72;
+  transition: transform 0.45s ease, opacity 0.45s ease;
+}
+
+.mt-card > *,
+.mt-card-soft > *,
+.mt-card-strong > *,
+.mt-card-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.mt-card-hover {
+  transition:
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.42s ease,
+    border-color 0.42s ease,
+    background 0.42s ease;
+  will-change: transform, box-shadow;
+}
+
+.mt-card-hover:hover,
+.mt-card-hover:focus-within {
+  transform: translateY(-7px) scale(1.032);
+  box-shadow: var(--mt-card-shadow-hover);
+  border-color: rgba(255, 255, 255, 0.92);
+}
+
+.mt-card-hover:hover::before,
+.mt-card-hover:focus-within::before {
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+.mt-card-hover:hover::after,
+.mt-card-hover:focus-within::after {
+  transform: translate(-7%, -10%);
+  opacity: 0.92;
+}
+
+.mt-card-intro {
+  animation: mtCardEntry 0.72s cubic-bezier(0.18, 0.9, 0.28, 1) both;
+  animation-delay: var(--mt-entry-delay, 0ms);
+}
+
+.mt-card-brand {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.95rem;
+}
+
+.mt-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mt-card-icon {
+  position: relative;
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.76) 52%, var(--mt-accent-soft) 100%);
+  color: var(--mt-accent-strong);
+  box-shadow: 0 20px 36px -24px rgba(15, 23, 42, 0.28);
+  transition:
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.42s ease,
+    color 0.42s ease,
+    filter 0.42s ease;
+  animation: mtIconFloat 5.4s ease-in-out infinite;
+}
+
+.mt-card-icon::before {
+  content: "";
+  position: absolute;
+  inset: 0.28rem;
+  border-radius: 0.85rem;
+  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.78), transparent 68%);
+  opacity: 0.9;
+}
+
+.mt-card-icon > * {
+  position: relative;
+  z-index: 1;
+}
+
+.mt-card-strong .mt-card-icon,
+.mt-card-dark-icon {
+  border-color: rgba(255, 255, 255, 0.14);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.08) 56%, rgba(255, 255, 255, 0.04) 100%);
+  color: #ffffff;
+  box-shadow: 0 22px 36px -26px rgba(15, 23, 42, 0.38);
+}
+
+.mt-card-hover:hover .mt-card-icon,
+.mt-card-hover:focus-within .mt-card-icon {
+  transform: translateY(-3px) rotate(8deg) scale(1.08);
+  box-shadow: 0 28px 50px -30px rgba(15, 23, 42, 0.4);
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.28));
+}
+
+.mt-card-kicker {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(71, 85, 105, 0.78);
+}
+
+.mt-card-strong .mt-card-kicker {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.mt-card-copy {
+  color: #475569;
+  line-height: 1.72;
+}
+
+.mt-card-strong .mt-card-copy {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.mt-card-stat {
+  font-family: "Sora", "Manrope", sans-serif;
+  font-size: clamp(1.85rem, 4vw, 2.7rem);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.mt-card-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.mt-card-mini {
+  border-radius: 1.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 20px 36px -30px rgba(15, 23, 42, 0.2);
+}
+
+.mt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 0.5rem 0.85rem;
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: var(--mt-accent-strong);
+  box-shadow: 0 14px 28px -22px rgba(15, 23, 42, 0.22);
+}
+
+.mt-chip-dark {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
 .theme-chip {
   background: var(--mt-accent-soft);
   color: var(--mt-accent-strong);
@@ -448,6 +690,27 @@ form {
   }
 }
 
+@keyframes mtIconFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes mtCardEntry {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @media (min-width: 640px) {
   .page-stack {
     gap: 1.5rem;
@@ -523,7 +786,11 @@ form {
   .theme-hero-card,
   .theme-bento-card,
   .theme-bento-card-soft,
-  .theme-bento-card-strong {
+  .theme-bento-card-strong,
+  .mt-card,
+  .mt-card-soft,
+  .mt-card-strong,
+  .mt-card-panel {
     box-shadow: 0 24px 48px -38px rgba(15, 23, 42, 0.24);
   }
 
@@ -540,7 +807,11 @@ form {
   .social-nav-item:hover,
   .social-nav-item:focus-visible,
   .btn-primary:hover,
-  .btn-outline:hover {
+  .btn-outline:hover,
+  .mt-card-hover:hover,
+  .mt-card-hover:focus-within,
+  .mt-card-hover:hover .mt-card-icon,
+  .mt-card-hover:focus-within .mt-card-icon {
     transform: none;
     filter: none;
     box-shadow: inherit;

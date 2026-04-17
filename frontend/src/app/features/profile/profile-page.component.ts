@@ -7,18 +7,19 @@ import { AuthService, UserProfile } from "../../core/services/auth.service";
 import { CommunityPost, CommunityProfileResponse, CommunityService, CommunityShareType } from "../../core/services/community.service";
 import { DashboardService, DashboardSummary } from "../../core/services/dashboard.service";
 import { shareTextSafely } from "../../core/utils/share";
+import { IconComponent } from "../../shared/components/icon.component";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 @Component({
   selector: "app-profile-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink],
+  imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink, IconComponent],
   template: `
     <section appScrollReveal class="page-stack">
       <div *ngIf="loadingProfile" class="glass-card rounded-[2rem] p-8 text-sm text-slate-500">Loading profile...</div>
 
       <ng-container *ngIf="!loadingProfile && profileData as profile">
-        <div class="glass-card page-hero">
+        <div class="mt-card mt-card-hover page-hero">
           <div class="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
             <div class="flex min-w-0 flex-col gap-5 sm:flex-row sm:items-center">
               <div class="grid h-24 w-24 shrink-0 place-items-center rounded-full bg-[linear-gradient(135deg,#f58529,#dd2a7b,#8134af)] p-[3px] shadow-[0_24px_44px_-28px_rgba(129,52,175,0.55)]">
@@ -28,7 +29,12 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               </div>
 
               <div class="min-w-0">
-                <div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Profile</div>
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                    <app-icon name="profile" className="text-base"></app-icon>
+                  </div>
+                  <div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">Profile</div>
+                </div>
                 <h1 class="mt-3 text-2xl font-extrabold tracking-[-0.05em] text-slate-950 sm:text-3xl lg:text-4xl">{{ profile.profile.name }}</h1>
                 <div class="mt-2 text-base font-semibold text-[var(--mt-accent-strong)]">
                   {{ profile.profile.headline || "'One step at a time.'" }}
@@ -57,14 +63,19 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
         <div class="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_22rem]">
           <div class="space-y-6">
-            <div class="glass-card rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
+            <div class="mt-card mt-card-hover p-5 sm:p-6">
               <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                <div>
-                  <div class="text-sm font-semibold text-slate-950">
-                    {{ profile.isOwnProfile ? "Tracking summary" : "Public tracking summary" }}
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon">
+                    <app-icon name="analytics" className="text-lg"></app-icon>
                   </div>
-                  <div class="mt-1 text-xs leading-5 text-slate-500">
-                    {{ profile.isOwnProfile ? "Your main signals, minus the noise." : "Shared signals first." }}
+                  <div>
+                    <div class="text-sm font-semibold text-slate-950">
+                      {{ profile.isOwnProfile ? "Tracking summary" : "Public tracking summary" }}
+                    </div>
+                    <div class="mt-1 text-xs leading-5 text-slate-500">
+                      {{ profile.isOwnProfile ? "Your main signals, minus the noise." : "Shared signals first." }}
+                    </div>
                   </div>
                 </div>
                 <div class="rounded-full bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-600">
@@ -73,32 +84,32 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               </div>
 
               <div class="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <div class="rounded-[1.5rem] bg-slate-50/90 px-4 py-4">
+                <div class="mt-card-soft px-4 py-4">
                   <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Mood logs</div>
                   <div class="mt-2 text-2xl font-bold text-slate-950">
                     {{ profile.activitySummary ? profile.activitySummary.moodCheckIns30d : profile.isOwnProfile ? 0 : "Private" }}
                   </div>
                 </div>
-                <div class="rounded-[1.5rem] bg-slate-50/90 px-4 py-4">
+                <div class="mt-card-soft px-4 py-4">
                   <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Exercises</div>
                   <div class="mt-2 text-2xl font-bold text-slate-950">
                     {{ profile.activitySummary ? profile.activitySummary.exerciseCompleted30d : profile.isOwnProfile ? 0 : "Private" }}
                   </div>
                 </div>
-                <div class="rounded-[1.5rem] bg-slate-50/90 px-4 py-4">
+                <div class="mt-card-soft px-4 py-4">
                   <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Journal entries</div>
                   <div class="mt-2 text-2xl font-bold text-slate-950">
                     {{ profile.activitySummary ? profile.activitySummary.journalEntries30d : profile.isOwnProfile ? 0 : "Private" }}
                   </div>
                 </div>
-                <div class="rounded-[1.5rem] bg-slate-50/90 px-4 py-4">
+                <div class="mt-card-soft px-4 py-4">
                   <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Community posts</div>
                   <div class="mt-2 text-2xl font-bold text-slate-950">{{ profile.social.posts }}</div>
                 </div>
               </div>
 
               <div *ngIf="profile.isOwnProfile && summary?.aiInsightsHistory?.length" class="mt-5 grid gap-4 md:grid-cols-2">
-                <div *ngFor="let insight of (summary?.aiInsightsHistory || []).slice(0, 2)" class="rounded-[1.6rem] bg-slate-50/90 px-4 py-4">
+                <div *ngFor="let insight of (summary?.aiInsightsHistory || []).slice(0, 2)" class="mt-card-soft px-4 py-4">
                   <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">AI insight</div>
                   <div class="mt-2 text-base font-semibold text-slate-950">{{ insight.title }}</div>
                   <div class="mt-2 text-sm leading-7 text-slate-600">{{ insight.description }}</div>
@@ -106,33 +117,43 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               </div>
             </div>
 
-            <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
-              <div class="text-sm font-semibold text-slate-950">Community snapshot</div>
+            <div class="mt-card mt-card-hover p-4 sm:p-5">
+              <div class="mt-card-brand">
+                <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                  <app-icon name="users" className="text-base"></app-icon>
+                </div>
+                <div class="text-sm font-semibold text-slate-950">Community snapshot</div>
+              </div>
               <div class="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <div class="rounded-[1.4rem] border border-slate-100 bg-white px-4 py-4">
+                <div class="mt-card-soft border border-slate-100 bg-white px-4 py-4">
                   <div class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Followers</div>
                   <div class="mt-2 text-2xl font-bold text-slate-950">{{ profile.social.followers }}</div>
                 </div>
-                <div class="rounded-[1.4rem] border border-slate-100 bg-white px-4 py-4">
+                <div class="mt-card-soft border border-slate-100 bg-white px-4 py-4">
                   <div class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Following</div>
                   <div class="mt-2 text-2xl font-bold text-slate-950">{{ profile.social.following }}</div>
                 </div>
-                <div class="rounded-[1.4rem] border border-slate-100 bg-white px-4 py-4">
+                <div class="mt-card-soft border border-slate-100 bg-white px-4 py-4">
                   <div class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Posts</div>
                   <div class="mt-2 text-2xl font-bold text-slate-950">{{ profile.social.posts }}</div>
                 </div>
-                <div class="rounded-[1.4rem] border border-slate-100 bg-white px-4 py-4">
+                <div class="mt-card-soft border border-slate-100 bg-white px-4 py-4">
                   <div class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Progress shares</div>
                   <div class="mt-2 text-2xl font-bold text-slate-950">{{ profile.social.progressShares }}</div>
                 </div>
               </div>
             </div>
 
-            <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
+            <div class="mt-card mt-card-hover p-4 sm:p-5">
               <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <div class="text-sm font-semibold text-slate-950">Posts</div>
-                  <div class="mt-1 text-xs leading-5 text-slate-500">Short updates only.</div>
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                    <app-icon name="comments" className="text-base"></app-icon>
+                  </div>
+                  <div>
+                    <div class="text-sm font-semibold text-slate-950">Posts</div>
+                    <div class="mt-1 text-xs leading-5 text-slate-500">Short updates only.</div>
+                  </div>
                 </div>
 
                 <div class="chip-scroll">
@@ -183,15 +204,22 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             </div>
 
             <div *ngIf="profilePosts.length" class="space-y-4">
-              <article *ngFor="let post of profilePosts" class="glass-card rounded-[1.6rem] p-4 sm:rounded-[1.8rem] sm:p-5">
+              <article *ngFor="let post of profilePosts" class="mt-card mt-card-hover p-4 sm:p-5">
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div class="min-w-0">
                     <div class="flex flex-wrap items-center gap-2">
                       <span class="rounded-full bg-[var(--mt-accent-soft)] px-3 py-1 text-[11px] font-semibold text-[var(--mt-accent-strong)]">{{ post.mentalStateTag }}</span>
                       <span class="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-600">{{ post.shareType }}</span>
                     </div>
-                    <div class="mt-3 text-lg font-bold tracking-[-0.04em] text-slate-950 sm:text-xl">{{ post.title }}</div>
-                    <div class="mt-2 text-sm leading-7 text-slate-600">{{ post.content }}</div>
+                    <div class="mt-4 mt-card-brand">
+                      <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                        <app-icon [name]="post.shareType === 'reflection' ? 'comments' : post.shareType === 'progress' ? 'chart-line' : post.shareType === 'streak' ? 'streak' : 'share'" className="text-base"></app-icon>
+                      </div>
+                      <div>
+                        <div class="text-lg font-bold tracking-[-0.04em] text-slate-950 sm:text-xl">{{ post.title }}</div>
+                        <div class="mt-card-copy mt-2 text-sm">{{ post.content }}</div>
+                      </div>
+                    </div>
                   </div>
                   <div class="shrink-0 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
                     {{ post.createdAt | date: "MMM d" }}
@@ -220,33 +248,43 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
           <div class="space-y-6">
             <ng-container *ngIf="profile.isOwnProfile; else publicRail">
-              <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
-                <div class="text-sm font-semibold text-slate-950">Quick links</div>
+              <div class="mt-card mt-card-hover p-4 sm:p-5">
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                    <app-icon name="arrow" className="text-base"></app-icon>
+                  </div>
+                  <div class="text-sm font-semibold text-slate-950">Quick links</div>
+                </div>
                 <div class="mt-4 space-y-3">
-                  <a routerLink="/mood" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
+                  <a routerLink="/mood" class="mt-card-soft flex items-center justify-between px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
                     <span>Mood</span>
                     <span class="text-slate-400">Go</span>
                   </a>
-                  <a routerLink="/journal" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
+                  <a routerLink="/journal" class="mt-card-soft flex items-center justify-between px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
                     <span>Journal</span>
                     <span class="text-slate-400">Go</span>
                   </a>
-                  <a routerLink="/progress" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
+                  <a routerLink="/progress" class="mt-card-soft flex items-center justify-between px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
                     <span>Progress</span>
                     <span class="text-slate-400">Go</span>
                   </a>
-                  <a routerLink="/tests" class="flex items-center justify-between rounded-[1.35rem] bg-slate-50/90 px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
+                  <a routerLink="/tests" class="mt-card-soft flex items-center justify-between px-4 py-4 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
                     <span>Test center</span>
                     <span class="text-slate-400">Go</span>
                   </a>
                 </div>
               </div>
 
-              <form class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5" (ngSubmit)="save()">
+              <form class="mt-card mt-card-hover p-4 sm:p-5" (ngSubmit)="save()">
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <div class="text-sm font-semibold text-slate-950">Profile basics</div>
-                    <div class="mt-1 text-xs leading-5 text-slate-500">Keep it short. Keep it real.</div>
+                  <div class="mt-card-brand">
+                    <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                      <app-icon name="user-settings" className="text-base"></app-icon>
+                    </div>
+                    <div>
+                      <div class="text-sm font-semibold text-slate-950">Profile basics</div>
+                      <div class="mt-1 text-xs leading-5 text-slate-500">Keep it short. Keep it real.</div>
+                    </div>
                   </div>
                   <span *ngIf="saved" class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Saved</span>
                 </div>
@@ -318,19 +356,29 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             </ng-container>
 
             <ng-template #publicRail>
-              <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
-                <div class="text-sm font-semibold text-slate-950">About</div>
-                <div class="mt-4 rounded-[1.5rem] bg-slate-50/90 px-4 py-4 text-sm leading-7 text-slate-600">
+              <div class="mt-card mt-card-hover p-4 sm:p-5">
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                    <app-icon name="profile" className="text-base"></app-icon>
+                  </div>
+                  <div class="text-sm font-semibold text-slate-950">About</div>
+                </div>
+                <div class="mt-card-soft mt-4 px-4 py-4 text-sm leading-7 text-slate-600">
                   {{ profile.profile.bio || "No extra note yet." }}
                 </div>
               </div>
 
-              <div class="glass-card rounded-[1.75rem] p-4 sm:rounded-[2rem] sm:p-5">
-                <div class="text-sm font-semibold text-slate-950">Community settings</div>
-                <div class="mt-4 rounded-[1.5rem] bg-slate-50/90 px-4 py-4 text-sm text-slate-600">
+              <div class="mt-card mt-card-hover p-4 sm:p-5">
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                    <app-icon name="settings" className="text-base"></app-icon>
+                  </div>
+                  <div class="text-sm font-semibold text-slate-950">Community settings</div>
+                </div>
+                <div class="mt-card-soft mt-4 px-4 py-4 text-sm text-slate-600">
                   {{ profile.canMessage ? "DMs are open." : "DMs are off right now." }}
                 </div>
-                <div class="mt-3 rounded-[1.5rem] bg-slate-50/90 px-4 py-4 text-sm text-slate-600">
+                <div class="mt-card-soft mt-3 px-4 py-4 text-sm text-slate-600">
                   {{ profile.activitySummary ? "Some stats are public." : "Stats are private." }}
                 </div>
               </div>

@@ -7,11 +7,13 @@ import { Observable, catchError, of } from "rxjs";
 import { AuthService } from "../../core/services/auth.service";
 import { DashboardService, DashboardSummary } from "../../core/services/dashboard.service";
 import { MoodService } from "../../core/services/mood.service";
+import { IconComponent, MindtrackIconName } from "../../shared/components/icon.component";
 import { MoodTrackerComponent } from "../../shared/components/mood-tracker.component";
 import { ProgressChartComponent } from "../../shared/components/progress-chart.component";
 
 interface PatternInsightCard {
   key: string;
+  icon: MindtrackIconName;
   eyebrow: string;
   title: string;
   description: string;
@@ -23,7 +25,7 @@ interface PatternInsightCard {
 @Component({
   selector: "app-dashboard-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink, MoodTrackerComponent, ProgressChartComponent],
+  imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink, IconComponent, MoodTrackerComponent, ProgressChartComponent],
   template: `
     <ng-container *ngIf="summary$ | async as summary; else loading">
       <ng-container *ngIf="summary.error; else content">
@@ -35,16 +37,25 @@ interface PatternInsightCard {
 
       <ng-template #content>
         <section appScrollReveal class="page-stack">
-          <div class="glass-card theme-hero-card page-hero">
+          <div class="mt-card mt-card-hover page-hero">
             <div class="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-              <div class="min-w-0">
-                <div class="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">Dashboard</div>
-                <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">
-                  Welcome back, <span class="break-words">{{ displayName() }}</span>.
-                </h1>
-                <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-700 sm:text-base sm:leading-8">
-                  Your check-ins, notes, and exercises. One clean read. No chaos.
-                </p>
+              <div class="mt-card-brand min-w-0 max-w-3xl">
+                <div class="mt-card-icon">
+                  <app-icon name="dashboard" className="text-xl"></app-icon>
+                </div>
+                <div class="min-w-0">
+                  <div class="mt-card-kicker">Dashboard</div>
+                  <h1 class="mt-3 text-2xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">
+                    Welcome back, <span class="break-words">{{ displayName() }}</span>.
+                  </h1>
+                  <p class="mt-card-copy mt-3 max-w-2xl text-sm sm:text-base">
+                    Your check-ins, notes, and exercises. One clean read. No chaos.
+                  </p>
+                  <div class="mt-4 flex flex-wrap gap-2">
+                    <span class="mt-chip"><app-icon name="chart-line" className="text-xs"></app-icon> Analytics</span>
+                    <span class="mt-chip"><app-icon name="sparkles" className="text-xs"></app-icon> AI insights</span>
+                  </div>
+                </div>
               </div>
               <div class="cluster-actions">
                 <a routerLink="/tests/baseline" class="btn-outline rounded-full px-5 py-3 text-sm font-semibold">
@@ -57,12 +68,19 @@ interface PatternInsightCard {
             </div>
 
             <div class="mt-8 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-              <div class="theme-bento-card rounded-[2rem] p-6">
-                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Your current mental state</div>
-                <div class="theme-chip mt-3 inline-flex rounded-full px-4 py-2 text-sm font-semibold">
-                  {{ summary.currentMentalState?.mentalState || summary.currentMentalState?.mental_state || 'Balanced' }}
+              <div class="mt-card mt-card-hover p-6">
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon">
+                    <app-icon name="brain" className="text-lg"></app-icon>
+                  </div>
+                  <div>
+                    <div class="mt-card-kicker">Your current mental state</div>
+                    <div class="mt-chip mt-3">
+                      {{ summary.currentMentalState?.mentalState || summary.currentMentalState?.mental_state || 'Balanced' }}
+                    </div>
+                  </div>
                 </div>
-                <p class="mt-4 text-sm leading-8 text-slate-700">
+                <p class="mt-card-copy mt-4 text-sm">
                   {{ summary.currentMentalState?.description || 'Things look pretty steady. Keep the good stuff going.' }}
                 </p>
                 <div class="mt-4 flex flex-wrap gap-2">
@@ -72,10 +90,17 @@ interface PatternInsightCard {
                 </div>
               </div>
 
-              <div class="theme-bento-card-strong rounded-[2rem] p-6">
-                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-sky-100/70">Suggested action</div>
-                <div class="mt-3 text-2xl font-semibold">{{ summary.suggestedAction?.title || 'Keep a gentle routine' }}</div>
-                <div class="mt-3 text-sm leading-7 text-sky-50/85">{{ summary.suggestedAction?.whyRecommended || '"Small reset" beats trying to fix everything.' }}</div>
+              <div class="mt-card-strong mt-card-hover p-6">
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon">
+                    <app-icon name="target" className="text-lg"></app-icon>
+                  </div>
+                  <div>
+                    <div class="mt-card-kicker">Suggested action</div>
+                    <div class="mt-3 text-2xl font-semibold">{{ summary.suggestedAction?.title || 'Keep a gentle routine' }}</div>
+                  </div>
+                </div>
+                <div class="mt-card-copy mt-3 text-sm">{{ summary.suggestedAction?.whyRecommended || '"Small reset" beats trying to fix everything.' }}</div>
                 <div class="mt-4 rounded-3xl bg-white/10 px-4 py-4 text-sm leading-7 text-sky-50/85">
                   What you get: {{ summary.suggestedAction?.expectedOutcome || 'A steadier vibe and a clearer next move.' }}
                 </div>
@@ -84,25 +109,45 @@ interface PatternInsightCard {
           </div>
 
           <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <div class="theme-bento-card rounded-[2rem] p-5">
-              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Mental score</div>
-              <div class="mt-3 text-3xl font-semibold text-slate-900">{{ latestScore(summary) }}</div>
-              <div class="mt-2 text-sm text-slate-600">Latest baseline out of 100.</div>
+            <div class="mt-card mt-card-hover p-5">
+              <div class="mt-card-brand">
+                <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                  <app-icon name="chart-line" className="text-base"></app-icon>
+                </div>
+                <div class="mt-card-kicker">Mental score</div>
+              </div>
+              <div class="mt-card-stat mt-4 text-slate-900">{{ latestScore(summary) }}</div>
+              <div class="mt-card-copy mt-2 text-sm">Latest baseline out of 100.</div>
             </div>
-            <div class="theme-bento-card rounded-[2rem] p-5">
-              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Mood check-ins</div>
-              <div class="mt-3 text-3xl font-semibold text-slate-900">{{ summary.activitySummary?.moodCheckIns30d || 0 }}</div>
-              <div class="mt-2 text-sm text-slate-600">Logged in 30 days.</div>
+            <div class="mt-card mt-card-hover p-5">
+              <div class="mt-card-brand">
+                <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                  <app-icon name="smile" className="text-base"></app-icon>
+                </div>
+                <div class="mt-card-kicker">Mood check-ins</div>
+              </div>
+              <div class="mt-card-stat mt-4 text-slate-900">{{ summary.activitySummary?.moodCheckIns30d || 0 }}</div>
+              <div class="mt-card-copy mt-2 text-sm">Logged in 30 days.</div>
             </div>
-            <div class="theme-bento-card rounded-[2rem] p-5">
-              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Exercise streak</div>
-              <div class="mt-3 text-3xl font-semibold text-slate-900">{{ summary.activitySummary?.exerciseStreak || 0 }}d</div>
-              <div class="mt-2 text-sm text-slate-600">Current streak.</div>
+            <div class="mt-card mt-card-hover p-5">
+              <div class="mt-card-brand">
+                <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                  <app-icon name="streak" className="text-base"></app-icon>
+                </div>
+                <div class="mt-card-kicker">Exercise streak</div>
+              </div>
+              <div class="mt-card-stat mt-4 text-slate-900">{{ summary.activitySummary?.exerciseStreak || 0 }}d</div>
+              <div class="mt-card-copy mt-2 text-sm">Current streak.</div>
             </div>
-            <div class="theme-bento-card rounded-[2rem] p-5">
-              <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Journal entries</div>
-              <div class="mt-3 text-3xl font-semibold text-slate-900">{{ summary.activitySummary?.journalEntries30d || 0 }}</div>
-              <div class="mt-2 text-sm text-slate-600">Notes in 30 days.</div>
+            <div class="mt-card mt-card-hover p-5">
+              <div class="mt-card-brand">
+                <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                  <app-icon name="journal" className="text-base"></app-icon>
+                </div>
+                <div class="mt-card-kicker">Journal entries</div>
+              </div>
+              <div class="mt-card-stat mt-4 text-slate-900">{{ summary.activitySummary?.journalEntries30d || 0 }}</div>
+              <div class="mt-card-copy mt-2 text-sm">Notes in 30 days.</div>
             </div>
           </div>
 
@@ -113,7 +158,8 @@ interface PatternInsightCard {
                 subtitle="Recent score movement"
                 [labels]="summary.analytics?.scoreTrend?.labels || fallbackLabels"
                 [values]="summary.analytics?.scoreTrend?.values || fallbackValues"
-                lineColor="#0284c7"></app-progress-chart>
+                lineColor="#0284c7"
+                icon="analytics"></app-progress-chart>
 
               <div class="grid gap-6 lg:grid-cols-2">
                 <app-progress-chart
@@ -121,21 +167,28 @@ interface PatternInsightCard {
                   subtitle="Last 7 check-ins"
                   [labels]="summary.analytics?.moodTrend?.labels || fallbackLabels"
                   [values]="summary.analytics?.moodTrend?.values || [3,3,4,3,4,4,5]"
-                  lineColor="#10b981"></app-progress-chart>
+                  lineColor="#10b981"
+                  icon="smile"></app-progress-chart>
 
                 <app-progress-chart
                   title="Stress trend"
                   subtitle="Last 7 check-ins"
                   [labels]="summary.analytics?.stressTrend?.labels || fallbackLabels"
                   [values]="summary.analytics?.stressTrend?.values || [68,62,59,61,57,54,49]"
-                  lineColor="#f97316"></app-progress-chart>
+                  lineColor="#f97316"
+                  icon="heartbeat"></app-progress-chart>
               </div>
 
               <div class="theme-bento-card-soft rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <div class="text-sm font-semibold text-slate-900">Pattern read</div>
-                    <div class="mt-1 text-xs leading-5 text-slate-500">The short version of what your recent logs are saying.</div>
+                  <div class="mt-card-brand">
+                    <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                      <app-icon name="analytics" className="text-base"></app-icon>
+                    </div>
+                    <div>
+                      <div class="text-sm font-semibold text-slate-900">Pattern read</div>
+                      <div class="mt-1 text-xs leading-5 text-slate-500">The short version of what your recent logs are saying.</div>
+                    </div>
                   </div>
                   <span class="theme-kicker rounded-full px-3 py-1 text-xs font-semibold">Fresh read</span>
                 </div>
@@ -148,8 +201,13 @@ interface PatternInsightCard {
                     [class.theme-bento-card]="!card.dark">
                     <div class="flex items-start justify-between gap-4">
                       <div class="min-w-0">
-                        <div class="text-[11px] font-semibold uppercase tracking-[0.18em]" [ngClass]="card.dark ? 'text-white/65' : 'text-slate-400'">
-                          {{ card.eyebrow }}
+                        <div class="flex items-center gap-3">
+                          <div class="mt-card-icon h-10 w-10 rounded-[0.85rem]">
+                            <app-icon [name]="card.icon" className="text-sm"></app-icon>
+                          </div>
+                          <div class="text-[11px] font-semibold uppercase tracking-[0.18em]" [ngClass]="card.dark ? 'text-white/65' : 'text-slate-400'">
+                            {{ card.eyebrow }}
+                          </div>
                         </div>
                         <div class="mt-2 text-lg font-semibold tracking-[-0.03em]" [class.text-slate-950]="!card.dark" [class.text-white]="card.dark">
                           {{ card.title }}
@@ -177,9 +235,14 @@ interface PatternInsightCard {
             <div class="space-y-6">
               <div class="theme-bento-card-soft rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <div class="text-sm font-semibold text-slate-900">Daily check-in</div>
-                    <div class="mt-1 text-xs leading-5 text-slate-500">Quick check on stress, sleep, and energy.</div>
+                  <div class="mt-card-brand">
+                    <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                      <app-icon name="mood" className="text-base"></app-icon>
+                    </div>
+                    <div>
+                      <div class="text-sm font-semibold text-slate-900">Daily check-in</div>
+                      <div class="mt-1 text-xs leading-5 text-slate-500">Quick check on stress, sleep, and energy.</div>
+                    </div>
                   </div>
                   <span *ngIf="checkInSaved" class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Saved</span>
                 </div>
@@ -228,7 +291,12 @@ interface PatternInsightCard {
               </div>
 
               <div class="theme-bento-card-soft rounded-[1.75rem] p-5 sm:rounded-[2rem] sm:p-6">
-                <div class="text-sm font-semibold text-slate-900">AI notes</div>
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                    <app-icon name="sparkles" className="text-base"></app-icon>
+                  </div>
+                  <div class="text-sm font-semibold text-slate-900">AI notes</div>
+                </div>
                 <div class="mt-4 space-y-3">
                   <div *ngFor="let insight of (summary.aiInsightsHistory || []).slice(0, 3)" class="theme-bento-card rounded-[1.5rem] px-4 py-4">
                     <div class="flex items-start justify-between gap-4">
@@ -248,9 +316,14 @@ interface PatternInsightCard {
 
           <div class="glass-card theme-bento-card-soft rounded-[2rem] p-5 sm:rounded-[2.25rem] sm:p-6">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <div class="text-sm font-semibold text-slate-900">Recommended exercises</div>
-                <div class="mt-1 text-xs leading-5 text-slate-500">Short list. Best fit first.</div>
+              <div class="mt-card-brand">
+                <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                  <app-icon name="exercises" className="text-base"></app-icon>
+                </div>
+                <div>
+                  <div class="text-sm font-semibold text-slate-900">Recommended exercises</div>
+                  <div class="mt-1 text-xs leading-5 text-slate-500">Short list. Best fit first.</div>
+                </div>
               </div>
               <a routerLink="/exercises" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Browse all</a>
             </div>
@@ -258,9 +331,14 @@ interface PatternInsightCard {
             <div class="mt-5 grid gap-4 lg:grid-cols-2">
               <article *ngFor="let ex of (summary.recommendationCards || []).slice(0, 4)" class="theme-bento-card rounded-[2rem] p-5">
                 <div class="flex items-start justify-between gap-4">
-                  <div class="min-w-0">
-                    <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{{ label(ex.category) }}</div>
-                    <div class="mt-2 text-lg font-semibold text-slate-900">{{ ex.title }}</div>
+                  <div class="mt-card-brand min-w-0">
+                    <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                      <app-icon [name]="ex.category === 'breathing' ? 'spa' : ex.category === 'stress-release' ? 'activity' : 'heartbeat'" className="text-base"></app-icon>
+                    </div>
+                    <div class="min-w-0">
+                      <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{{ label(ex.category) }}</div>
+                      <div class="mt-2 text-lg font-semibold text-slate-900">{{ ex.title }}</div>
+                    </div>
                   </div>
                   <div class="theme-chip rounded-full px-3 py-1 text-xs font-semibold">
                     {{ ex.durationMinutes }}m
@@ -429,6 +507,7 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
     scoreDelta >= 5
       ? {
           key: "momentum",
+          icon: "chart-line",
           eyebrow: "Momentum",
           title: "Your score is climbing.",
           description: `You're up ${scoreDelta} points. The current routine is doing its thing.`,
@@ -438,6 +517,7 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
       : scoreDelta <= -5
         ? {
             key: "momentum",
+            icon: "chart-line",
             eyebrow: "Momentum",
             title: "Your baseline looks a bit strained.",
             description: `You're down ${Math.abs(scoreDelta)} points, so recovery matters more than pushing harder.`,
@@ -446,6 +526,7 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
           }
         : {
             key: "momentum",
+            icon: "chart-line",
             eyebrow: "Momentum",
             title: "Your baseline is pretty steady.",
             description: "The trend is flat, which usually means your maintenance habits are holding.",
@@ -457,6 +538,7 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
     latestStress >= 60 && latestMood <= 3
       ? {
           key: "pressure",
+          icon: "heartbeat",
           eyebrow: "Mood and stress",
           title: "Stress looks like the main issue.",
           description: "Mood is flatter while stress stays high. Reset first, solve stuff second.",
@@ -467,6 +549,7 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
       : latestStress <= 52 && latestMood >= 4
         ? {
             key: "pressure",
+            icon: "smile",
             eyebrow: "Mood and stress",
             title: "Mood is stabilizing.",
             description: "Recent check-ins look more balanced.",
@@ -475,6 +558,7 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
           }
         : {
             key: "pressure",
+            icon: "pulse",
             eyebrow: "Mood and stress",
             title: "Your signals are mixed.",
             description: "Mood and stress are moving, but not in a clean way yet.",
@@ -485,6 +569,7 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
   const journalCard: PatternInsightCard = primaryJournalPattern
     ? {
         key: "journal",
+        icon: "journal",
         eyebrow: "Journal signal",
         title: `Your writing keeps circling ${formatPattern(primaryJournalPattern)}.`,
         description: `The tone feels ${sentimentTone(sentiment)}, so that pattern may be carrying some weight right now.`,
@@ -493,6 +578,7 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
       }
     : {
         key: "journal",
+        icon: "journal",
         eyebrow: "Journal signal",
         title: "Not enough journal signal yet.",
         description: "A few more notes will make this read way better.",
@@ -504,6 +590,7 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
     exerciseStreak >= 3 || moodCheckIns >= 5
       ? {
           key: "routine",
+          icon: "streak",
           eyebrow: "Habit signal",
           title: "Consistency is helping.",
           description: `${exerciseStreak} day streak and ${moodCheckIns} mood logs give the app a cleaner read.`,
@@ -512,6 +599,7 @@ function buildPatternCards(summary: DashboardSummary): PatternInsightCard[] {
         }
       : {
           key: "routine",
+          icon: "target",
           eyebrow: "Habit signal",
           title: "Better signal beats more complexity.",
           description: "The app gets sharper when mood, notes, and exercises show up more often.",
