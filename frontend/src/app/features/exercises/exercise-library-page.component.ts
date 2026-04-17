@@ -64,40 +64,50 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           <button type="button" (click)="refreshRecommendations()" class="btn-outline rounded-full px-4 py-2 text-xs font-semibold">Refresh</button>
         </div>
 
-        <div class="mt-5 grid gap-4 lg:grid-cols-3">
+        <div class="mt-5 grid gap-6 lg:grid-cols-3">
           <ng-container *ngIf="recommended$ | async as recommended">
-            <article
+            <div
               *ngFor="let exercise of recommended; let i = index"
               appScrollReveal
               [revealDelay]="i * 60"
-              class="mt-card mt-card-hover comic-corner-doodle p-5"
-              [style.view-transition-name]="cardTransitionName('recommended', exercise, i)">
-              <div class="mt-card-head">
-                <div class="mt-card-brand">
-                  <div class="mt-card-icon">
-                    <app-icon [name]="exercise.category === 'breathing' ? 'spa' : exercise.category === 'stress-release' ? 'activity' : 'heartbeat'" className="text-lg icon-bounce-soft"></app-icon>
+              class="card-container h-full">
+              <div class="card-wrapper">
+                <article
+                  class="card mt-card mt-card-hover comic-corner-doodle"
+                  [style.view-transition-name]="cardTransitionName('recommended', exercise, i)">
+                  <div class="card-inner">
+                    <div class="mt-card-head">
+                      <div class="mt-card-brand">
+                        <div class="mt-card-icon">
+                          <app-icon [name]="exercise.category === 'breathing' ? 'spa' : exercise.category === 'stress-release' ? 'activity' : 'heartbeat'" className="text-lg icon-bounce-soft"></app-icon>
+                        </div>
+                        <div>
+                          <div class="mt-card-kicker">{{ label(exercise.category) }}</div>
+                          <div class="mt-2 text-lg font-semibold text-slate-900">{{ exercise.title }}</div>
+                        </div>
+                      </div>
+                      <div class="mt-chip">{{ exercise.durationMinutes }}m</div>
+                    </div>
+                    <div class="mt-card-copy mt-4 text-sm">{{ exercise.purpose || exercise.description }}</div>
+                    <div class="mt-2 text-xs text-slate-500">Take it at your pace. A short reset still helps.</div>
+                    <div class="exercise-note mt-4 p-4 text-sm leading-7 text-slate-700">
+                      <div class="mt-card-kicker">Why it fits</div>
+                      <div class="mt-2">{{ exercise.whyRecommended }}</div>
+                    </div>
+                    <div class="exercise-note mt-4 p-4 text-sm leading-7 text-slate-700">
+                      <div class="mt-card-kicker">What you get</div>
+                      <div class="mt-2">{{ exercise.expectedOutcome }}</div>
+                    </div>
+                    <button
+                      type="button"
+                      (click)="open(exercise, cardTransitionName('recommended', exercise, i))"
+                      class="btn-primary mt-4 w-full rounded-2xl px-4 py-3 text-sm font-semibold">
+                      Open exercise
+                    </button>
                   </div>
-                  <div>
-                    <div class="mt-card-kicker">{{ label(exercise.category) }}</div>
-                    <div class="mt-2 text-lg font-semibold text-slate-900">{{ exercise.title }}</div>
-                  </div>
-                </div>
-                <div class="mt-chip">{{ exercise.durationMinutes }}m</div>
+                </article>
               </div>
-              <div class="mt-card-copy mt-4 text-sm">{{ exercise.purpose || exercise.description }}</div>
-              <div class="mt-2 text-xs text-slate-500">Take it at your pace. A short reset still helps.</div>
-              <div class="mt-card-soft mt-4 p-4 text-sm leading-7 text-slate-700">
-                <div class="mt-card-kicker">Why it fits</div>
-                <div class="mt-2">{{ exercise.whyRecommended }}</div>
-              </div>
-              <div class="mt-card-soft mt-4 p-4 text-sm leading-7 text-slate-700">
-                <div class="mt-card-kicker">What you get</div>
-                <div class="mt-2">{{ exercise.expectedOutcome }}</div>
-              </div>
-              <button type="button" (click)="open(exercise, cardTransitionName('recommended', exercise, i))" class="btn-primary mt-4 w-full rounded-2xl px-4 py-3 text-sm font-semibold">
-                Open exercise
-              </button>
-            </article>
+            </div>
           </ng-container>
         </div>
       </div>
@@ -143,7 +153,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           </div>
         </div>
 
-        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <app-exercise-card
             *ngFor="let exercise of exercises; let i = index"
             appScrollReveal
@@ -191,19 +201,19 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           </div>
 
           <div class="px-4 py-4 sm:px-6 sm:py-6">
-            <div class="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+            <div class="exercise-layout">
               <div class="space-y-5">
-                <div class="mt-card-soft p-5">
+                <div class="exercise-note p-5">
                   <div class="mt-card-kicker">Why</div>
                   <p class="mt-card-copy mt-2 text-sm">{{ activeExercise.purpose || activeExercise.description }}</p>
                 </div>
 
-                <div class="mt-card-soft p-5">
+                <div class="exercise-note p-5">
                   <div class="mt-card-kicker">What you get</div>
                   <p class="mt-card-copy mt-2 text-sm">{{ activeExercise.expectedOutcome || "A calmer next step and a little more room to breathe." }}</p>
                 </div>
 
-                <div *ngIf="activeExercise.benefits?.length" class="mt-card-soft p-5">
+                <div *ngIf="activeExercise.benefits?.length" class="exercise-note p-5">
                   <div class="mt-card-kicker">Benefits</div>
                   <div class="mt-3 flex flex-wrap gap-2">
                     <span *ngFor="let benefit of activeExercise.benefits" class="mt-chip">
@@ -212,7 +222,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                   </div>
                 </div>
 
-                <div *ngIf="activeExercise.instructions?.length" class="mt-card-soft p-5">
+                <div *ngIf="activeExercise.instructions?.length" class="exercise-note p-5">
                   <div class="mt-card-kicker">Steps</div>
                   <ol class="mt-4 space-y-3 text-sm leading-7 text-slate-700">
                     <li *ngFor="let step of activeExercise.instructions; let i = index" class="flex gap-3">
@@ -224,7 +234,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               </div>
 
               <div class="space-y-5">
-                <div *ngIf="activeExercise.whyRecommended" class="mt-card-soft p-5">
+                <div *ngIf="activeExercise.whyRecommended" class="exercise-note p-5">
                   <div class="mt-card-brand">
                     <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
                       <app-icon name="sparkles" className="text-base"></app-icon>
@@ -236,7 +246,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                   </div>
                 </div>
 
-                <div *ngIf="activeExercise.category === 'breathing'" class="mt-card-soft p-4">
+                <div *ngIf="activeExercise.category === 'breathing'" class="breathing-card-shell">
                   <app-box-breathing></app-box-breathing>
                 </div>
 

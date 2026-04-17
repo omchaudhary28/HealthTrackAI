@@ -46,6 +46,7 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 html {
@@ -57,6 +58,7 @@ body {
   margin: 0;
   width: 100%;
   max-width: 100%;
+  overflow-x: clip;
   font-family: "Manrope", "Nunito Sans", sans-serif;
   color: var(--mt-ink);
   background:
@@ -79,12 +81,14 @@ app-root {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .app-container {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 * {
@@ -200,6 +204,64 @@ form {
 
 .page-stack > .grid {
   align-items: start;
+}
+
+.exercise-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.exercise-layout > * {
+  min-width: 0;
+}
+
+.card-container {
+  perspective: 1000px;
+  overflow: hidden;
+}
+
+.card-wrapper {
+  height: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.card {
+  height: 100%;
+  min-height: 100%;
+  padding: 24px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.card-inner {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.card:hover .card-inner,
+.card:focus-within .card-inner {
+  transform: scale(1.04);
+}
+
+.exercise-note {
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(248, 251, 255, 0.86);
+}
+
+.breathing-card-shell {
+  margin: 0 auto;
 }
 
 .auto-fit-grid {
@@ -1384,6 +1446,15 @@ form {
 }
 
 @media (max-width: 768px) {
+  .exercise-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card:hover,
+  .card:focus-within {
+    transform: scale(1.01);
+  }
+
   .page-stack,
   .section {
     max-width: 100%;

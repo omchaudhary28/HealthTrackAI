@@ -1,12 +1,10 @@
-<section class="w-full rounded-[1.75rem] bg-gradient-to-br from-blue-50 to-emerald-50 p-4 sm:rounded-3xl sm:p-6">
-  <div class="flex flex-col items-center justify-center rounded-[1.5rem] bg-white p-5 shadow-lg sm:rounded-2xl sm:p-8">
+<section class="breathing-card">
+  <div class="breathing-content">
     <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Box Breathing Exercise</div>
     <div class="mt-2 text-xl font-semibold text-slate-700">{{ instruction() }}</div>
 
-    <div class="mt-6 flex items-center justify-center">
-      <div
-        class="breathing-shape h-32 w-32 rounded-full bg-blue-300 transition-all duration-4000 sm:h-40 sm:w-40"
-        [ngClass]="shapeScaleClass()"></div>
+    <div class="breathing-shape-frame mt-6">
+      <div class="breathing-shape h-32 w-32 rounded-full bg-blue-300 sm:h-40 sm:w-40" [ngClass]="shapeScaleClass()"></div>
     </div>
 
     <div class="mt-6 text-2xl font-semibold text-slate-700 tabular-nums sm:text-3xl">
