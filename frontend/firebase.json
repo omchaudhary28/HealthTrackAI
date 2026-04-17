@@ -6,6 +6,28 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "redirects": [
+      {
+        "source": "/health",
+        "destination": "https://healthtrackai-v1ug.onrender.com/health",
+        "type": 302
+      },
+      {
+        "source": "/ready",
+        "destination": "https://healthtrackai-v1ug.onrender.com/ready",
+        "type": 302
+      },
+      {
+        "source": "/api",
+        "destination": "https://healthtrackai-v1ug.onrender.com/api/v1",
+        "type": 302
+      },
+      {
+        "source": "/api/**",
+        "destination": "https://healthtrackai-v1ug.onrender.com/api/:splat",
+        "type": 302
+      }
+    ],
     "rewrites": [
       {
         "source": "**",
