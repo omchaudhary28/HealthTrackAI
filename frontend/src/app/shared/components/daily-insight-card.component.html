@@ -1,34 +1,47 @@
-﻿<div class="rounded-[2.5rem] border border-white/70 bg-gradient-to-br from-blue-50 to-emerald-50 p-6 shadow-[0_25px_70px_-45px_rgba(32,50,71,0.45)]">
-  <div class="space-y-5 rounded-2xl bg-white p-6 shadow-lg">
-    <div>
-      <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Mood check</div>
-      <div class="mt-4 flex flex-wrap gap-3">
-        <button
-          *ngFor="let mood of moodOptions"
-          type="button"
-          (click)="selectMood(mood)"
-          [attr.aria-pressed]="selectedMood() === mood.id"
-          [ngClass]="buttonClass(mood)"
-          class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition hover:scale-105 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">
-          <span class="text-lg">{{ mood.emoji }}</span>
-          <span>{{ mood.label }}</span>
-        </button>
+<div class="mt-card mt-card-hover p-5 sm:p-6">
+  <div class="mt-card-head flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div class="mt-card-brand min-w-0">
+      <div class="mt-card-icon">
+        <app-icon name="insights" className="text-lg"></app-icon>
+      </div>
+      <div class="min-w-0">
+        <div class="mt-card-kicker">Daily insight</div>
+        <div class="mt-2 text-xl font-semibold text-slate-950 sm:text-2xl">Quick reset before the scroll starts.</div>
+        <div class="mt-card-copy mt-2 text-sm">Pick the nearest vibe and use the prompt if you want a cleaner next step.</div>
       </div>
     </div>
 
-    <div>
-      <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Quick note</div>
-      <div class="mt-3 rounded-xl bg-blue-50 p-4 text-sm text-slate-700">
-        {{ currentInsight() }}
-      </div>
-    </div>
+    <a routerLink="/journal" class="btn-primary rounded-2xl px-4 py-3 text-sm font-semibold">
+      Open journal
+    </a>
+  </div>
 
-    <div>
-      <a
-        routerLink="/journal"
-        class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-emerald-400 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]">
-        Journal now <span class="ml-2">&rarr;</span>
-      </a>
+  <div class="mt-5 grid gap-3 sm:grid-cols-5">
+    <button
+      *ngFor="let mood of moodOptions"
+      type="button"
+      (click)="selectMood(mood)"
+      [attr.aria-pressed]="selectedMood() === mood.id"
+      [ngClass]="buttonClass(mood)"
+      class="mt-card-soft mt-card-hover flex min-h-[5.5rem] items-center gap-3 rounded-[1.35rem] border px-4 py-3 text-left text-sm font-semibold transition focus-visible:outline-none">
+      <div class="mt-card-icon h-10 w-10 rounded-[0.85rem]">
+        <app-icon [name]="mood.icon" className="text-sm"></app-icon>
+      </div>
+      <span>{{ mood.label }}</span>
+    </button>
+  </div>
+
+  <div class="mt-card-soft mt-5 p-4">
+    <div class="mt-card-brand">
+      <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+        <app-icon name="wand" className="text-base"></app-icon>
+      </div>
+      <div class="min-w-0">
+        <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Quick note</div>
+        <div class="mt-2 text-sm leading-7 text-slate-700">
+          {{ currentInsight() }}
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -43,17 +43,18 @@ body {
   min-height: 100%;
   width: 100%;
   max-width: 100%;
+  overflow-x: hidden;
 }
 
 html {
-  overflow-x: clip;
+  overflow-x: hidden;
   overscroll-behavior-x: none;
 }
 
 body {
   margin: 0;
   width: 100%;
-  max-width: 100vw;
+  max-width: 100%;
   font-family: "Manrope", "Nunito Sans", sans-serif;
   color: var(--mt-ink);
   background:
@@ -62,7 +63,7 @@ body {
     radial-gradient(circle at bottom center, rgba(14, 165, 233, 0.08), transparent 28%),
     #f7f6f3;
   line-height: 1.5;
-  overflow-x: clip;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -75,7 +76,7 @@ app-root {
   display: block;
   width: 100%;
   max-width: 100%;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 
 * {
@@ -128,6 +129,19 @@ input,
 select,
 textarea {
   max-width: 100%;
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+.container {
+  width: 100%;
+  max-width: 100%;
+  padding-inline: 16px;
+  box-sizing: border-box;
 }
 
 main,
@@ -255,6 +269,21 @@ form {
     transform: none;
     transition: none;
   }
+
+  .glass-card,
+  .theme-hero-card,
+  .theme-bento-card,
+  .theme-bento-card-soft,
+  .theme-bento-card-strong,
+  .mt-card,
+  .mt-card-soft,
+  .mt-card-strong,
+  .mt-card-panel,
+  .card,
+  .mt-card-icon {
+    animation: none;
+    transition: none;
+  }
 }
 
 .social-nav-item {
@@ -334,39 +363,70 @@ form {
 .glass-card {
   border: 1px solid rgba(15, 23, 42, 0.06);
   background:
-    linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.84) 54%, var(--mt-accent-soft) 100%);
-  backdrop-filter: blur(22px);
-  box-shadow: 0 32px 70px -52px rgba(15, 23, 42, 0.34);
+    linear-gradient(140deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.78) 44%, rgba(255, 255, 255, 0.66) 68%, var(--mt-accent-soft) 100%);
+  backdrop-filter: blur(22px) saturate(1.16);
+  box-shadow: 0 34px 76px -52px rgba(15, 23, 42, 0.34);
 }
 
 .theme-hero-card {
   border: 1px solid rgba(255, 255, 255, 0.72);
   background:
-    linear-gradient(150deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.58) 46%, var(--mt-active-surface) 78%, var(--mt-accent-soft) 100%);
-  backdrop-filter: blur(24px);
-  box-shadow: 0 30px 72px -48px rgba(15, 23, 42, 0.34);
+    linear-gradient(138deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.62) 42%, var(--mt-active-surface) 76%, var(--mt-accent-soft) 100%);
+  backdrop-filter: blur(24px) saturate(1.18);
+  box-shadow: 0 34px 78px -48px rgba(15, 23, 42, 0.35);
 }
 
 .theme-bento-card {
   border: 1px solid rgba(255, 255, 255, 0.74);
   background:
-    linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.78) 52%, var(--mt-accent-soft) 100%);
-  box-shadow: 0 26px 52px -38px rgba(15, 23, 42, 0.24);
+    linear-gradient(140deg, rgba(255, 255, 255, 0.97), rgba(255, 255, 255, 0.82) 48%, rgba(255, 255, 255, 0.68) 72%, var(--mt-accent-soft) 100%);
+  backdrop-filter: blur(20px) saturate(1.14);
+  box-shadow: 0 30px 60px -40px rgba(15, 23, 42, 0.24);
 }
 
 .theme-bento-card-soft {
   border: 1px solid rgba(15, 23, 42, 0.06);
   background:
-    linear-gradient(155deg, var(--mt-active-surface), rgba(255, 255, 255, 0.92) 58%, rgba(255, 255, 255, 0.78) 100%);
-  box-shadow: 0 22px 44px -34px rgba(15, 23, 42, 0.18);
+    linear-gradient(140deg, rgba(255, 255, 255, 0.92), var(--mt-active-surface) 38%, rgba(255, 255, 255, 0.82) 72%, rgba(255, 255, 255, 0.7) 100%);
+  backdrop-filter: blur(20px) saturate(1.16);
+  box-shadow: 0 24px 50px -34px rgba(15, 23, 42, 0.19);
 }
 
 .theme-bento-card-strong {
   border: 1px solid rgba(255, 255, 255, 0.14);
   background:
-    linear-gradient(155deg, rgba(15, 23, 42, 0.94), var(--mt-accent-strong) 58%, var(--mt-accent) 100%);
+    linear-gradient(145deg, rgba(7, 16, 33, 0.96), rgba(15, 23, 42, 0.9) 32%, var(--mt-accent-strong) 68%, var(--mt-accent) 100%);
   color: #ffffff;
   box-shadow: 0 32px 64px -36px rgba(15, 23, 42, 0.5);
+}
+
+.glass-card,
+.theme-hero-card,
+.theme-bento-card,
+.theme-bento-card-soft,
+.theme-bento-card-strong,
+.mt-card,
+.mt-card-soft,
+.mt-card-strong,
+.mt-card-interactive,
+.mt-card-panel,
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background-position: 0% 50%;
+  background-size: 140% 140%;
+  animation: mtCardEntry 0.72s cubic-bezier(0.18, 0.9, 0.28, 1) both;
+  animation-delay: var(--mt-entry-delay, 0ms);
+  transition:
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.42s ease,
+    border-color 0.42s ease,
+    background-position 0.46s ease,
+    filter 0.42s ease;
+  will-change: transform, box-shadow, background-position;
 }
 
 .mt-card,
@@ -374,8 +434,6 @@ form {
 .mt-card-strong,
 .mt-card-interactive,
 .mt-card-panel {
-  position: relative;
-  overflow: hidden;
   border-radius: var(--mt-card-radius);
 }
 
@@ -404,73 +462,139 @@ form {
   box-shadow: 0 38px 82px -46px rgba(15, 23, 42, 0.54);
 }
 
+.glass-card::before,
+.theme-hero-card::before,
+.theme-bento-card::before,
+.theme-bento-card-soft::before,
+.theme-bento-card-strong::before,
 .mt-card::before,
 .mt-card-soft::before,
 .mt-card-strong::before,
-.mt-card-panel::before {
+.mt-card-panel::before,
+.card::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at top right, rgba(255, 255, 255, 0.36), transparent 34%),
-    radial-gradient(circle at bottom left, var(--mt-accent-soft), transparent 45%);
-  opacity: 0.9;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+    radial-gradient(circle at 16% 18%, rgba(255, 255, 255, 0.72), transparent 24%),
+    radial-gradient(circle at 88% 14%, rgba(255, 255, 255, 0.22), transparent 26%),
+    radial-gradient(circle at 74% 84%, var(--mt-accent-soft), transparent 44%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 55%);
+  opacity: 0.92;
+  transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
 }
 
+.glass-card::after,
+.theme-hero-card::after,
+.theme-bento-card::after,
+.theme-bento-card-soft::after,
+.theme-bento-card-strong::after,
 .mt-card::after,
 .mt-card-soft::after,
 .mt-card-strong::after,
-.mt-card-panel::after {
+.mt-card-panel::after,
+.card::after {
   content: "";
   position: absolute;
-  right: -18%;
-  bottom: -34%;
-  width: 13rem;
-  height: 13rem;
+  right: -26%;
+  bottom: -44%;
+  width: 17rem;
+  height: 17rem;
   pointer-events: none;
   border-radius: 999px;
-  background: radial-gradient(circle, var(--mt-accent-soft), transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.64) 0, rgba(255, 255, 255, 0.14) 26%, transparent 70%);
   filter: blur(12px);
-  opacity: 0.72;
+  opacity: 0.68;
   transition: transform 0.45s ease, opacity 0.45s ease;
 }
 
+.glass-card > *,
+.theme-hero-card > *,
+.theme-bento-card > *,
+.theme-bento-card-soft > *,
+.theme-bento-card-strong > *,
 .mt-card > *,
 .mt-card-soft > *,
 .mt-card-strong > *,
-.mt-card-panel > * {
+.mt-card-panel > *,
+.card > * {
   position: relative;
   z-index: 1;
 }
 
-.mt-card-hover {
+.mt-card-hover,
+.glass-card,
+.theme-hero-card,
+.theme-bento-card,
+.theme-bento-card-soft,
+.theme-bento-card-strong,
+.card {
   transition:
     transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.42s ease,
     border-color 0.42s ease,
-    background 0.42s ease;
+    background-position 0.46s ease,
+    filter 0.42s ease;
   will-change: transform, box-shadow;
 }
 
 .mt-card-hover:hover,
-.mt-card-hover:focus-within {
-  transform: translateY(-7px) scale(1.032);
+.mt-card-hover:focus-within,
+.glass-card:hover,
+.glass-card:focus-within,
+.theme-hero-card:hover,
+.theme-hero-card:focus-within,
+.theme-bento-card:hover,
+.theme-bento-card:focus-within,
+.theme-bento-card-soft:hover,
+.theme-bento-card-soft:focus-within,
+.theme-bento-card-strong:hover,
+.theme-bento-card-strong:focus-within,
+.card:hover,
+.card:focus-within {
+  transform: perspective(1200px) translateY(-8px) scale(1.034) rotateX(1.25deg) rotateY(-1deg);
   box-shadow: var(--mt-card-shadow-hover);
   border-color: rgba(255, 255, 255, 0.92);
+  background-position: 100% 50%;
+  filter: saturate(1.04);
 }
 
 .mt-card-hover:hover::before,
-.mt-card-hover:focus-within::before {
+.mt-card-hover:focus-within::before,
+.glass-card:hover::before,
+.glass-card:focus-within::before,
+.theme-hero-card:hover::before,
+.theme-hero-card:focus-within::before,
+.theme-bento-card:hover::before,
+.theme-bento-card:focus-within::before,
+.theme-bento-card-soft:hover::before,
+.theme-bento-card-soft:focus-within::before,
+.theme-bento-card-strong:hover::before,
+.theme-bento-card-strong:focus-within::before,
+.card:hover::before,
+.card:focus-within::before {
   opacity: 1;
-  transform: scale(1.04);
+  transform: scale(1.05);
+  filter: saturate(1.08);
 }
 
 .mt-card-hover:hover::after,
-.mt-card-hover:focus-within::after {
-  transform: translate(-7%, -10%);
-  opacity: 0.92;
+.mt-card-hover:focus-within::after,
+.glass-card:hover::after,
+.glass-card:focus-within::after,
+.theme-hero-card:hover::after,
+.theme-hero-card:focus-within::after,
+.theme-bento-card:hover::after,
+.theme-bento-card:focus-within::after,
+.theme-bento-card-soft:hover::after,
+.theme-bento-card-soft:focus-within::after,
+.theme-bento-card-strong:hover::after,
+.theme-bento-card-strong:focus-within::after,
+.card:hover::after,
+.card:focus-within::after {
+  transform: translate(-8%, -12%);
+  opacity: 0.96;
 }
 
 .mt-card-intro {
@@ -521,6 +645,17 @@ form {
   opacity: 0.9;
 }
 
+.mt-card-icon::after {
+  content: "";
+  position: absolute;
+  inset: -16%;
+  border-radius: inherit;
+  background: conic-gradient(from 130deg, transparent 0deg, rgba(255, 255, 255, 0.7) 90deg, transparent 180deg);
+  opacity: 0;
+  transform: rotate(-22deg);
+  transition: opacity 0.42s ease, transform 0.42s ease;
+}
+
 .mt-card-icon > * {
   position: relative;
   z-index: 1;
@@ -536,10 +671,40 @@ form {
 }
 
 .mt-card-hover:hover .mt-card-icon,
-.mt-card-hover:focus-within .mt-card-icon {
+.mt-card-hover:focus-within .mt-card-icon,
+.glass-card:hover .mt-card-icon,
+.glass-card:focus-within .mt-card-icon,
+.theme-hero-card:hover .mt-card-icon,
+.theme-hero-card:focus-within .mt-card-icon,
+.theme-bento-card:hover .mt-card-icon,
+.theme-bento-card:focus-within .mt-card-icon,
+.theme-bento-card-soft:hover .mt-card-icon,
+.theme-bento-card-soft:focus-within .mt-card-icon,
+.theme-bento-card-strong:hover .mt-card-icon,
+.theme-bento-card-strong:focus-within .mt-card-icon,
+.card:hover .mt-card-icon,
+.card:focus-within .mt-card-icon {
   transform: translateY(-3px) rotate(8deg) scale(1.08);
   box-shadow: 0 28px 50px -30px rgba(15, 23, 42, 0.4);
   filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.28));
+}
+
+.mt-card-hover:hover .mt-card-icon::after,
+.mt-card-hover:focus-within .mt-card-icon::after,
+.glass-card:hover .mt-card-icon::after,
+.glass-card:focus-within .mt-card-icon::after,
+.theme-hero-card:hover .mt-card-icon::after,
+.theme-hero-card:focus-within .mt-card-icon::after,
+.theme-bento-card:hover .mt-card-icon::after,
+.theme-bento-card:focus-within .mt-card-icon::after,
+.theme-bento-card-soft:hover .mt-card-icon::after,
+.theme-bento-card-soft:focus-within .mt-card-icon::after,
+.theme-bento-card-strong:hover .mt-card-icon::after,
+.theme-bento-card-strong:focus-within .mt-card-icon::after,
+.card:hover .mt-card-icon::after,
+.card:focus-within .mt-card-icon::after {
+  opacity: 0.92;
+  transform: rotate(10deg);
 }
 
 .mt-card-kicker {
@@ -810,10 +975,49 @@ form {
   .btn-outline:hover,
   .mt-card-hover:hover,
   .mt-card-hover:focus-within,
+  .glass-card:hover,
+  .glass-card:focus-within,
+  .theme-hero-card:hover,
+  .theme-hero-card:focus-within,
+  .theme-bento-card:hover,
+  .theme-bento-card:focus-within,
+  .theme-bento-card-soft:hover,
+  .theme-bento-card-soft:focus-within,
+  .theme-bento-card-strong:hover,
+  .theme-bento-card-strong:focus-within,
+  .card:hover,
+  .card:focus-within,
   .mt-card-hover:hover .mt-card-icon,
-  .mt-card-hover:focus-within .mt-card-icon {
+  .mt-card-hover:focus-within .mt-card-icon,
+  .glass-card:hover .mt-card-icon,
+  .glass-card:focus-within .mt-card-icon,
+  .theme-hero-card:hover .mt-card-icon,
+  .theme-hero-card:focus-within .mt-card-icon,
+  .theme-bento-card:hover .mt-card-icon,
+  .theme-bento-card:focus-within .mt-card-icon,
+  .theme-bento-card-soft:hover .mt-card-icon,
+  .theme-bento-card-soft:focus-within .mt-card-icon,
+  .theme-bento-card-strong:hover .mt-card-icon,
+  .theme-bento-card-strong:focus-within .mt-card-icon,
+  .card:hover .mt-card-icon,
+  .card:focus-within .mt-card-icon {
     transform: none;
     filter: none;
     box-shadow: inherit;
+  }
+}
+
+@media (max-width: 768px) {
+  .card,
+  .glass-card,
+  .theme-hero-card,
+  .theme-bento-card,
+  .theme-bento-card-soft,
+  .theme-bento-card-strong,
+  .mt-card,
+  .mt-card-soft,
+  .mt-card-strong,
+  .mt-card-panel {
+    width: 100%;
   }
 }

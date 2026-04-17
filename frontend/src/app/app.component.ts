@@ -32,7 +32,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
     ])
   ],
   template: `
-    <div class="mindtrack-shell min-h-screen w-full overflow-x-clip" [ngStyle]="themeStyles()">
+    <div class="mindtrack-shell min-h-screen w-full overflow-x-hidden" [ngStyle]="themeStyles()">
       <div class="pointer-events-none fixed inset-0 -z-30 transition-opacity duration-700" [style.background]="activeTheme().shellGradient"></div>
       <div
         *ngIf="fadingTheme()"
@@ -91,8 +91,8 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
 
       <div class="mx-auto flex w-full max-w-[var(--mt-shell-max)] min-w-0 gap-3 px-[var(--mt-shell-gutter)] pb-[calc(var(--mt-safe-bottom)+1rem)] pt-3 sm:gap-4 sm:pt-4 lg:gap-8 lg:pb-10 lg:pt-8">
         <app-side-nav *ngIf="!isPublicRoute()"></app-side-nav>
-        <main class="min-w-0 flex-1 overflow-x-clip">
-          <div [@routeAnimations]="prepareRoute(outlet)" class="route-stage relative w-full min-w-0 overflow-x-clip">
+        <main class="min-w-0 flex-1 overflow-x-hidden">
+          <div [@routeAnimations]="prepareRoute(outlet)" class="route-stage relative w-full min-w-0 overflow-x-hidden">
             <router-outlet #outlet="outlet"></router-outlet>
           </div>
         </main>
@@ -119,7 +119,7 @@ import { TopNavComponent } from "./shared/components/top-nav.component";
       .mindtrack-shell {
         position: relative;
         width: 100%;
-        overflow-x: clip;
+        overflow-x: hidden;
         color: var(--mt-ink);
         isolation: isolate;
       }

@@ -3,12 +3,13 @@ import { Component } from "@angular/core";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 import { Observable, catchError, of } from "rxjs";
 import { JournalEntry, JournalService } from "../../core/services/journal.service";
+import { IconComponent } from "../../shared/components/icon.component";
 import { JournalEditorComponent } from "../../shared/components/journal-editor.component";
 
 @Component({
   selector: "app-journal-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, JournalEditorComponent],
+  imports: [ScrollRevealDirective, CommonModule, IconComponent, JournalEditorComponent],
   template: `
     <section appScrollReveal class="page-stack">
       <div class="theme-hero-card page-hero">
@@ -21,12 +22,17 @@ import { JournalEditorComponent } from "../../shared/components/journal-editor.c
 
       <app-journal-editor (saved)="refresh()"></app-journal-editor>
 
-      <div class="theme-bento-card-soft rounded-[2rem] p-5 backdrop-blur sm:rounded-[2.25rem] sm:p-6">
+      <div class="mt-card mt-card-hover p-5 sm:p-6">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div class="mt-card-brand">
+            <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+              <app-icon name="journal" className="text-base"></app-icon>
+            </div>
             <div>
               <div class="text-sm font-semibold text-slate-900">Recent entries</div>
               <div class="mt-1 text-xs leading-5 text-slate-500">Short reads from your earlier notes.</div>
             </div>
+          </div>
           <button
             type="button"
             (click)="refresh()"
@@ -37,14 +43,22 @@ import { JournalEditorComponent } from "../../shared/components/journal-editor.c
 
         <div class="mt-5 grid gap-3">
           <ng-container *ngIf="entries$ | async as entries; else loading">
-            <div *ngIf="!entries.length" class="theme-bento-card rounded-[1.6rem] px-4 py-4 text-sm text-slate-600">
+            <div *ngIf="!entries.length" class="mt-card-soft px-4 py-4 text-sm text-slate-600">
               No entries yet. "One line is enough."
             </div>
 
-            <article *ngFor="let entry of entries; let i = index" appScrollReveal [revealDelay]="i * 60" class="theme-bento-card rounded-[1.75rem] px-4 py-4">
-              <div class="flex flex-wrap items-center justify-between gap-3">
-                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
-                  {{ entry.createdAt ? (entry.createdAt | date : "mediumDate") : "Saved" }}
+            <article *ngFor="let entry of entries; let i = index" appScrollReveal [revealDelay]="i * 60" class="mt-card mt-card-hover p-4">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="mt-card-brand min-w-0">
+                  <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                    <app-icon name="journal" className="text-base"></app-icon>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
+                      {{ entry.createdAt ? (entry.createdAt | date : "mediumDate") : "Saved" }}
+                    </div>
+                    <div class="mt-2 text-sm leading-7 text-slate-700">{{ snippet(entry.content) }}</div>
+                  </div>
                 </div>
                 <div class="flex flex-wrap gap-2">
                   <span *ngFor="let tag of (entry.moodTags || []).slice(0, 4)" class="theme-chip-outline rounded-full px-3 py-1 text-xs font-semibold">
@@ -52,21 +66,27 @@ import { JournalEditorComponent } from "../../shared/components/journal-editor.c
                   </span>
                 </div>
               </div>
-              <div class="mt-2 text-sm leading-7 text-slate-700">{{ snippet(entry.content) }}</div>
-              <div *ngIf="entry.aiInsights?.patterns?.length || entry.aiInsights?.suggestions?.length" class="theme-bento-card-soft mt-4 rounded-[1.4rem] px-4 py-4">
-                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">AI insights</div>
-                <div class="mt-2 text-sm text-slate-700">
-                  {{ (entry.aiInsights?.patterns || []).join(', ') || 'reflection' }}
-                </div>
-                <div *ngIf="entry.aiInsights?.suggestions?.length" class="mt-2 text-sm leading-7 text-slate-600">
-                  {{ entry.aiInsights?.suggestions?.[0] }}
+              <div *ngIf="entry.aiInsights?.patterns?.length || entry.aiInsights?.suggestions?.length" class="mt-card-soft mt-4 px-4 py-4">
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon h-10 w-10 rounded-[0.85rem]">
+                    <app-icon name="insights" className="text-sm"></app-icon>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">AI insights</div>
+                    <div class="mt-2 text-sm text-slate-700">
+                      {{ (entry.aiInsights?.patterns || []).join(', ') || 'reflection' }}
+                    </div>
+                    <div *ngIf="entry.aiInsights?.suggestions?.length" class="mt-2 text-sm leading-7 text-slate-600">
+                      {{ entry.aiInsights?.suggestions?.[0] }}
+                    </div>
+                  </div>
                 </div>
               </div>
             </article>
           </ng-container>
 
           <ng-template #loading>
-            <div class="theme-bento-card rounded-[1.6rem] px-4 py-4 text-sm text-slate-600">Loading entries...</div>
+            <div class="mt-card-soft px-4 py-4 text-sm text-slate-600">Loading entries...</div>
           </ng-template>
         </div>
       </div>

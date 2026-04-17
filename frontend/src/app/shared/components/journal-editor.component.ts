@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, computed, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { JournalEntry, JournalInsights, JournalService } from "../../core/services/journal.service";
+import { IconComponent, MindtrackIconName } from "./icon.component";
 
 const PROMPTS = [
   "What felt good today, even a little?",
@@ -14,6 +15,7 @@ const PROMPTS = [
 const COMMON_TAGS = ["calm", "stressed", "tired", "grateful", "overthinking", "social", "focus", "sleep", "self-kindness"];
 
 interface JournalInsightCard {
+  icon: MindtrackIconName;
   eyebrow: string;
   title: string;
   description: string;
@@ -22,38 +24,60 @@ interface JournalInsightCard {
 @Component({
   selector: "app-journal-editor",
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="theme-bento-card-soft rounded-[1.9rem] p-4 backdrop-blur sm:rounded-[2.25rem] sm:p-6">
-      <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <div class="text-sm font-semibold text-slate-900">Journal</div>
-          <div class="mt-1 text-xs leading-5 text-slate-500">Private space. Real thoughts. No pressure.</div>
+    <div class="mt-card mt-card-hover p-4 sm:p-6">
+      <div class="mt-card-head flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div class="mt-card-brand min-w-0">
+          <div class="mt-card-icon">
+            <app-icon name="journal" className="text-lg"></app-icon>
+          </div>
+          <div class="min-w-0">
+            <div class="mt-card-kicker">Journal</div>
+            <div class="mt-2 text-xl font-semibold text-slate-950 sm:text-2xl">Private space. Real thoughts. No pressure.</div>
+            <div class="mt-card-copy mt-2 text-sm">Write enough to catch the pattern, then let the app turn it into one cleaner next step.</div>
+          </div>
         </div>
         <button
           type="button"
           (click)="cyclePrompt()"
-          class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
+          class="btn-outline rounded-2xl px-4 py-2.5 text-sm font-semibold">
+          <app-icon name="refresh" className="mr-2 text-sm"></app-icon>
           Swap prompt
         </button>
       </div>
 
-      <div class="theme-bento-card rounded-[1.5rem] px-4 py-4 text-sm leading-7 text-slate-700 sm:rounded-[1.75rem]">
-        <div class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Prompt</div>
-        <div class="mt-2">{{ prompt() }}</div>
+      <div class="mt-card-soft mt-5 p-4 sm:p-5">
+        <div class="mt-card-brand">
+          <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+            <app-icon name="wand" className="text-base"></app-icon>
+          </div>
+          <div class="min-w-0">
+            <div class="mt-card-kicker">Prompt</div>
+            <div class="mt-2 text-sm leading-7 text-slate-700">{{ prompt() }}</div>
+          </div>
+        </div>
       </div>
 
-      <div class="mt-5 grid gap-4 lg:grid-cols-[1fr_0.95fr]">
-        <div>
-          <label class="block text-sm font-semibold text-slate-800">
-            Your note
+      <div class="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)]">
+        <div class="min-w-0">
+          <label class="block min-w-0 text-sm font-semibold text-slate-800">
+            <div class="mt-card-brand">
+              <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                <app-icon name="pen" className="text-base"></app-icon>
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-slate-900">Your note</div>
+                <div class="mt-1 text-xs font-medium leading-5 text-slate-500">What happened? What hit? What do you need?</div>
+              </div>
+            </div>
             <textarea
               [ngModel]="content()"
               (ngModelChange)="content.set($event)"
               rows="10"
               placeholder="What happened? What hit? What do you need?"
-              class="app-textarea mt-2"></textarea>
+              class="app-textarea mt-3 block min-h-[14rem] w-full max-w-full"></textarea>
           </label>
 
           <div class="mt-4">
@@ -81,25 +105,30 @@ interface JournalInsightCard {
               type="button"
               (click)="save()"
               [disabled]="!canSave()"
-              class="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-950 disabled:cursor-not-allowed disabled:opacity-50">
+              class="btn-primary rounded-2xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50">
               {{ saving() ? "Saving..." : savedEntry() ? "Saved" : "Save note" }}
             </button>
             <button
               type="button"
               (click)="analyze()"
               [disabled]="!savedEntry() || analyzing()"
-              class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50">
+              class="btn-outline rounded-2xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-50">
               {{ analyzing() ? "Reading..." : "Read vibe" }}
             </button>
             <div class="text-xs text-slate-500 sm:ml-auto">Only you see this.</div>
           </div>
         </div>
 
-        <div class="theme-bento-card-soft rounded-[1.75rem] px-4 py-4 sm:rounded-[2rem] sm:px-5 sm:py-5">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <div class="text-sm font-semibold text-slate-900">Pattern read</div>
-              <div class="mt-1 text-xs leading-5 text-slate-500">Quick read on loops, tone, and the next move.</div>
+        <div class="mt-card-soft min-w-0 p-4 sm:p-5">
+          <div class="mt-card-head">
+            <div class="mt-card-brand min-w-0">
+              <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                <app-icon name="insights" className="text-base"></app-icon>
+              </div>
+              <div class="min-w-0">
+                <div class="text-sm font-semibold text-slate-900">Pattern read</div>
+                <div class="mt-1 text-xs leading-5 text-slate-500">Quick read on loops, tone, and the next move.</div>
+              </div>
             </div>
             <span *ngIf="insights()?.tone" class="theme-chip rounded-full px-3 py-1 text-xs font-semibold">
               {{ toneLabel(insights()?.tone) }}
@@ -107,9 +136,16 @@ interface JournalInsightCard {
           </div>
 
           <ng-container *ngIf="insights() as insightData; else empty">
-            <div class="theme-bento-card mt-4 rounded-[1.75rem] px-4 py-5">
-              <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Standout</div>
-              <div class="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950">{{ analysisHeadline(insightData) }}</div>
+            <div class="mt-card mt-4 p-4 sm:p-5">
+              <div class="mt-card-brand">
+                <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
+                  <app-icon name="brain" className="text-base"></app-icon>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Standout</div>
+                  <div class="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950">{{ analysisHeadline(insightData) }}</div>
+                </div>
+              </div>
               <div class="mt-3 text-sm leading-7 text-slate-600">{{ analysisSummary(insightData) }}</div>
             </div>
 
@@ -123,29 +159,55 @@ interface JournalInsightCard {
             </div>
 
             <div class="mt-4 grid gap-3 sm:grid-cols-2">
-              <div *ngFor="let card of insightCards(insightData)" class="theme-bento-card rounded-[1.5rem] px-4 py-4">
-                <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">{{ card.eyebrow }}</div>
-                <div class="mt-2 text-base font-semibold text-slate-950">{{ card.title }}</div>
-                <div class="mt-2 text-sm leading-7 text-slate-600">{{ card.description }}</div>
+              <div *ngFor="let card of insightCards(insightData)" class="mt-card-soft p-4">
+                <div class="mt-card-brand">
+                  <div class="mt-card-icon h-10 w-10 rounded-[0.85rem]">
+                    <app-icon [name]="card.icon" className="text-sm"></app-icon>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">{{ card.eyebrow }}</div>
+                    <div class="mt-2 text-base font-semibold text-slate-950">{{ card.title }}</div>
+                  </div>
+                </div>
+                <div class="mt-3 text-sm leading-7 text-slate-600">{{ card.description }}</div>
               </div>
             </div>
 
             <div class="mt-4 space-y-3">
-              <div *ngFor="let tip of insightSuggestions(insightData); let i = index" class="theme-bento-card-soft rounded-[1.4rem] px-4 py-4 text-sm leading-7 text-slate-700">
-                <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Next {{ i + 1 }}</div>
-                <div class="mt-1">{{ tip }}</div>
+              <div *ngFor="let tip of insightSuggestions(insightData); let i = index" class="mt-card-soft px-4 py-4 text-sm leading-7 text-slate-700">
+                <div class="flex items-start gap-3">
+                  <div class="mt-card-icon h-10 w-10 rounded-[0.85rem]">
+                    <app-icon name="target" className="text-sm"></app-icon>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Next {{ i + 1 }}</div>
+                    <div class="mt-1">{{ tip }}</div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="theme-bento-card mt-4 rounded-[1.5rem] px-4 py-4 text-sm leading-7 text-slate-700">
-              <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Use next time</div>
-              <div class="mt-2 font-semibold text-slate-950">{{ followUpPrompt(insightData) }}</div>
+            <div class="mt-card mt-4 px-4 py-4 text-sm leading-7 text-slate-700">
+              <div class="mt-card-brand">
+                <div class="mt-card-icon h-10 w-10 rounded-[0.85rem]">
+                  <app-icon name="wand" className="text-sm"></app-icon>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Use next time</div>
+                  <div class="mt-2 font-semibold text-slate-950">{{ followUpPrompt(insightData) }}</div>
+                </div>
+              </div>
             </div>
           </ng-container>
 
           <ng-template #empty>
-            <div class="theme-bento-card mt-4 rounded-[1.6rem] px-4 py-4 text-sm leading-7 text-slate-600">
-              Save a note, then hit "Read vibe." We'll keep it short.
+            <div class="mt-card mt-4 px-4 py-4 text-sm leading-7 text-slate-600">
+              <div class="mt-card-brand">
+                <div class="mt-card-icon h-10 w-10 rounded-[0.85rem]">
+                  <app-icon name="sparkles" className="text-sm"></app-icon>
+                </div>
+                <div>Save a note, then hit "Read vibe." We'll keep it short.</div>
+              </div>
             </div>
           </ng-template>
         </div>
@@ -204,21 +266,25 @@ export class JournalEditorComponent {
 
     return [
       {
+        icon: "brain",
         eyebrow: "Main loop",
         title: this.patternLabel(pattern),
         description: patternCopy.cardDetail
       },
       {
+        icon: "pulse",
         eyebrow: "Tone",
         title: this.toneLabel(insights.tone),
         description: toneGuidance(insights.tone)
       },
       {
+        icon: "target",
         eyebrow: "Next move",
         title: "Keep it small",
         description: this.insightSuggestions(insights)[0]
       },
       {
+        icon: "wand",
         eyebrow: "Next prompt",
         title: "Go one layer deeper",
         description: patternCopy.prompt

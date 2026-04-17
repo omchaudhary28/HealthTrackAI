@@ -1,11 +1,12 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, computed, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
+import { IconComponent, MindtrackIconName } from "./icon.component";
 
 interface MoodOption {
   id: string;
   label: string;
-  emoji: string;
+  icon: MindtrackIconName;
   baseClass: string;
   activeClass: string;
 }
@@ -13,7 +14,7 @@ interface MoodOption {
 @Component({
   selector: "app-daily-insight-card",
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, IconComponent],
   templateUrl: "./daily-insight-card.component.html",
   styleUrls: ["./daily-insight-card.component.css"],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -22,38 +23,38 @@ export class DailyInsightCardComponent implements OnInit, OnDestroy {
   moodOptions: MoodOption[] = [
     {
       id: "great",
-      label: "Great",
-      emoji: "\u{1F600}",
-      baseClass: "bg-emerald-50 text-emerald-700",
-      activeClass: "bg-emerald-100 text-emerald-800 ring-2 ring-emerald-300"
+      label: "Clear",
+      icon: "sparkles",
+      baseClass: "border-emerald-100 bg-white/82 text-emerald-700",
+      activeClass: "border-emerald-200 bg-white/96 text-emerald-800 shadow-[0_24px_50px_-34px_rgba(5,150,105,0.34)]"
     },
     {
       id: "calm",
       label: "Calm",
-      emoji: "\u{1F642}",
-      baseClass: "bg-blue-50 text-blue-700",
-      activeClass: "bg-blue-100 text-blue-800 ring-2 ring-blue-300"
+      icon: "spa",
+      baseClass: "border-sky-100 bg-white/82 text-sky-700",
+      activeClass: "border-sky-200 bg-white/96 text-sky-800 shadow-[0_24px_50px_-34px_rgba(2,132,199,0.34)]"
     },
     {
       id: "neutral",
-      label: "Neutral",
-      emoji: "\u{1F610}",
-      baseClass: "bg-slate-50 text-slate-700",
-      activeClass: "bg-slate-100 text-slate-800 ring-2 ring-slate-300"
+      label: "Steady",
+      icon: "mood",
+      baseClass: "border-slate-100 bg-white/82 text-slate-700",
+      activeClass: "border-slate-200 bg-white/96 text-slate-800 shadow-[0_24px_50px_-34px_rgba(71,85,105,0.3)]"
     },
     {
       id: "stressed",
-      label: "Stressed",
-      emoji: "\u{1F61F}",
-      baseClass: "bg-amber-50 text-amber-700",
-      activeClass: "bg-amber-100 text-amber-800 ring-2 ring-amber-300"
+      label: "Busy",
+      icon: "pulse",
+      baseClass: "border-amber-100 bg-white/82 text-amber-700",
+      activeClass: "border-amber-200 bg-white/96 text-amber-800 shadow-[0_24px_50px_-34px_rgba(217,119,6,0.3)]"
     },
     {
       id: "low",
       label: "Low",
-      emoji: "\u{1F614}",
-      baseClass: "bg-rose-50 text-rose-700",
-      activeClass: "bg-rose-100 text-rose-800 ring-2 ring-rose-300"
+      icon: "shield",
+      baseClass: "border-fuchsia-100 bg-white/82 text-fuchsia-700",
+      activeClass: "border-fuchsia-200 bg-white/96 text-fuchsia-800 shadow-[0_24px_50px_-34px_rgba(192,38,211,0.32)]"
     }
   ];
 

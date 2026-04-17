@@ -88,7 +88,9 @@ app.use("/api/v1/tests", testsRoutes);
 app.use("/api/v1/assessment", assessmentRoutes);
 app.use("/api/v1/exercises", exercisesRoutes);
 app.use("/api/v1/mood-logs", moodRoutes);
+app.use("/api/v1/mood", moodRoutes);
 app.use("/api/v1/journal", journalRoutes);
+app.use("/api/v1/forum", forumRoutes);
 app.use("/api/v1/forum-posts", forumRoutes);
 app.use("/api/v1/community", forumRoutes);
 app.use("/api/v1/feedback", feedbackRoutes);
@@ -98,5 +100,9 @@ app.use("/api/v1/chatbot", chatbotRoutes);
 app.use("/api/v1/admin", adminRoutes);
 
 app.use("/api/chat", chatRoutes);
+
+app.use("*", (_req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
 
 app.use(errorHandler);

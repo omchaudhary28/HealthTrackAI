@@ -9,6 +9,8 @@ import { authInterceptor } from "./core/api/auth.interceptor";
 import { AppErrorHandler } from "./core/errors/app-error-handler";
 import { AuthService } from "./core/services/auth.service";
 
+const RENDER_API_BASE_URL = "https://healthtrackai-v1ug.onrender.com/api/v1";
+
 declare global {
   interface Window {
     __mindtrackApiBaseUrl?: string;
@@ -32,12 +34,10 @@ function resolveApiBaseUrl(): string {
       return "http://localhost:4000/api/v1";
     }
 
-    if (window.location.hostname.endsWith("onrender.com")) {
-      return `${window.location.origin.replace(/\/$/, "")}/api/v1`;
-    }
+    return RENDER_API_BASE_URL;
   }
 
-  return "https://healthtrackai-v1ug.onrender.com/api/v1";
+  return RENDER_API_BASE_URL;
 }
 
 function initializeAuth(authService: AuthService): () => Promise<void> {
