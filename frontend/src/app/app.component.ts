@@ -67,13 +67,13 @@ function buildParticle(
     trigger("routeAnimations", [
       transition("* <=> *", [
         query(":enter, :leave", style({ position: "absolute", inset: 0, width: "100%" }), { optional: true }),
-        query(":enter", style({ opacity: 0, transform: "translateY(22px)" }), { optional: true }),
+        query(":enter", style({ opacity: 0, transform: "translateY(10px)" }), { optional: true }),
         query(":leave", style({ opacity: 1, transform: "translateY(0)" }), { optional: true }),
         group([
-          query(":leave", animate("320ms cubic-bezier(0.4, 0, 1, 1)", style({ opacity: 0, transform: "translateY(-16px)" })), {
+          query(":leave", animate("200ms ease-in", style({ opacity: 0, transform: "translateY(6px)" })), {
             optional: true
           }),
-          query(":enter", animate("420ms 45ms cubic-bezier(0.22, 1, 0.36, 1)", style({ opacity: 1, transform: "translateY(0)" })), {
+          query(":enter", animate("260ms 20ms ease-out", style({ opacity: 1, transform: "translateY(0)" })), {
             optional: true
           })
         ])
@@ -202,7 +202,6 @@ function buildParticle(
           radial-gradient(circle at 46% 84%, rgba(129, 52, 175, 0.22), transparent 56%);
         filter: blur(18px) saturate(1.08);
         transform-origin: center;
-        animation: mtLiquidDrift 18s ease-in-out infinite;
       }
 
       .mindtrack-ambient {
@@ -218,7 +217,6 @@ function buildParticle(
         height: 26rem;
         width: 26rem;
         opacity: 0.72;
-        animation: mtAmbientFloatA 14s ease-in-out infinite;
       }
 
       .mindtrack-ambient-b {
@@ -227,7 +225,6 @@ function buildParticle(
         height: 24rem;
         width: 24rem;
         opacity: 0.62;
-        animation: mtAmbientFloatB 17s ease-in-out infinite;
       }
 
       .mindtrack-particle-field {
@@ -245,9 +242,6 @@ function buildParticle(
           radial-gradient(circle at center, var(--mt-accent-soft), transparent 70%);
         filter: blur(0.6px);
         transform: translate3d(0, 0, 0);
-        animation-name: mtParticleFloat;
-        animation-timing-function: ease-in-out;
-        animation-iteration-count: infinite;
       }
 
       .mindtrack-grain {
@@ -444,7 +438,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.runtimeService.markReady();
-    this.setupInteractiveMotion();
   }
 
   ngOnDestroy(): void {
@@ -452,7 +445,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     if (this.fadeTimer) {
       clearTimeout(this.fadeTimer);
     }
-    this.teardownInteractiveMotion();
   }
 
   isPublicRoute(): boolean {

@@ -11,7 +11,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, RouterLink, IconComponent],
   template: `
-    <section appScrollReveal class="page-stack">
+    <section appScrollReveal class="page-stack motion-zone">
       <div class="mt-card mt-card-hover page-hero">
         <div class="mt-card-brand max-w-3xl">
           <div class="mt-card-icon">

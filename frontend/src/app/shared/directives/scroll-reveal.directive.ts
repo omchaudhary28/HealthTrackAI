@@ -24,6 +24,11 @@ export class ScrollRevealDirective implements AfterViewInit, OnDestroy {
     }
 
     const el = this.elementRef.nativeElement;
+    if (!el.closest(".motion-zone")) {
+      this.renderer.addClass(el, "reveal-visible");
+      return;
+    }
+
     this.renderer.addClass(el, "reveal");
 
     if (this.revealDelay > 0) {

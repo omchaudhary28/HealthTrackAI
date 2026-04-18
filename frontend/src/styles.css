@@ -1477,3 +1477,255 @@ form {
     width: 100%;
   }
 }
+
+/* Performance-first motion overrides */
+.card-container {
+  perspective: none;
+}
+
+.card,
+.card-inner {
+  will-change: auto;
+}
+
+.card-inner {
+  transition: none;
+  transform: none;
+}
+
+.card:hover .card-inner,
+.card:focus-within .card-inner {
+  transform: none;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 240ms ease, transform 240ms ease;
+  will-change: opacity, transform;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+  will-change: auto;
+}
+
+.btn-primary:active,
+.btn-outline:active {
+  transform: translateY(1px);
+}
+
+.btn-primary::after,
+.btn-outline::after,
+.mobile-tab-link::after,
+.social-nav-item::after,
+[data-ripple]::after {
+  content: none;
+}
+
+.btn-primary.mt-ripple-active,
+.btn-outline.mt-ripple-active,
+.mobile-tab-link.mt-ripple-active,
+.social-nav-item.mt-ripple-active,
+[data-ripple].mt-ripple-active {
+  animation: none;
+}
+
+:is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card) {
+  animation: none;
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, opacity 220ms ease;
+  transform: none;
+  scale: 1;
+  filter: none;
+  will-change: auto;
+  background-position: 0% 50%;
+}
+
+:is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):hover,
+:is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):focus-within,
+.mt-tilt-active {
+  transform: none;
+  scale: 1;
+  filter: none;
+  background-position: 0% 50%;
+  box-shadow: inherit;
+}
+
+.mt-card-intro {
+  animation: none;
+}
+
+:is(.glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .mt-card, .mt-card-soft, .mt-card-strong, .mt-card-panel, .card)::before,
+:is(.glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .mt-card, .mt-card-soft, .mt-card-strong, .mt-card-panel, .card)::after {
+  transition: opacity 220ms ease;
+  transform: none;
+  filter: none;
+}
+
+:is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):hover::before,
+:is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):focus-within::before {
+  opacity: 0.92;
+  transform: none;
+  filter: none;
+}
+
+:is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):hover::after,
+:is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):focus-within::after {
+  opacity: 0.68;
+  transform: none;
+}
+
+.mt-card-icon {
+  animation: none;
+  transition: transform 220ms ease, box-shadow 220ms ease, color 220ms ease;
+}
+
+:is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):hover .mt-card-icon,
+:is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):focus-within .mt-card-icon {
+  transform: none;
+  filter: none;
+}
+
+:is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):hover .mt-card-icon::after,
+:is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):focus-within .mt-card-icon::after {
+  opacity: 0;
+  transform: rotate(-22deg);
+}
+
+.assistant-avatar,
+.assistant-avatar-sm,
+.typing-dot,
+.skeleton::after {
+  animation: none;
+}
+
+.icon-bounce-soft {
+  transition: transform 220ms ease;
+}
+
+.mt-card-hover:hover .icon-bounce-soft,
+.mt-card-hover:focus-within .icon-bounce-soft,
+.btn-primary:hover .icon-bounce-soft,
+.btn-outline:hover .icon-bounce-soft {
+  animation: none;
+  transform: none;
+}
+
+.motion-zone .card-inner {
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.motion-zone .card:hover .card-inner,
+.motion-zone .card:focus-within .card-inner {
+  transform: translateY(-2px);
+}
+
+.motion-zone :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):hover,
+.motion-zone :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):focus-within {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    var(--mt-card-shadow-hover);
+  border-color: rgba(255, 255, 255, 0.84);
+}
+
+.motion-zone :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):hover .mt-card-icon,
+.motion-zone :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):focus-within .mt-card-icon {
+  transform: translateY(-2px);
+}
+
+.motion-zone .mt-card-hover:hover .icon-bounce-soft,
+.motion-zone .mt-card-hover:focus-within .icon-bounce-soft,
+.motion-zone .btn-primary:hover .icon-bounce-soft,
+.motion-zone .btn-outline:hover .icon-bounce-soft {
+  transform: translateY(-2px);
+}
+
+.message-in {
+  animation: mtMessageInSoft 240ms ease-out both;
+}
+
+.mt-success-pop {
+  animation: mtSuccessPopSoft 240ms ease-out both;
+}
+
+.typing-dot {
+  opacity: 0.65;
+}
+
+@keyframes mtMessageInSoft {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mtSuccessPopSoft {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@supports (view-transition-name: mindtrack-shared) {
+  ::view-transition-group(*) {
+    animation-duration: 260ms;
+    animation-timing-function: ease-out;
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 260ms;
+    animation-timing-function: ease-out;
+  }
+}
+
+@media (max-width: 768px) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .exercise-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-stack,
+  .section {
+    max-width: 100%;
+  }
+
+  .auto-fit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):hover,
+  :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):focus-within,
+  .card:hover .card-inner,
+  .card:focus-within .card-inner {
+    transform: none !important;
+    scale: 1 !important;
+  }
+
+  .card,
+  .glass-card,
+  .theme-hero-card,
+  .theme-bento-card,
+  .theme-bento-card-soft,
+  .theme-bento-card-strong,
+  .mt-card,
+  .mt-card-soft,
+  .mt-card-strong,
+  .mt-card-panel {
+    width: 100%;
+  }
+}

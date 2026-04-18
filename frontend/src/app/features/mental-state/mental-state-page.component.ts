@@ -10,7 +10,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
   standalone: true,
   imports: [ScrollRevealDirective, CommonModule, IconComponent],
   template: `
-    <section appScrollReveal class="page-stack">
+    <section appScrollReveal class="page-stack motion-zone">
       <ng-container *ngIf="latest$ | async as latest">
         <div class="mt-card mt-card-hover page-hero">
           <div class="mt-card-brand max-w-4xl">

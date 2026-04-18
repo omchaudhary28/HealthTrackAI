@@ -15,21 +15,21 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
   imports: [ScrollRevealDirective, CommonModule, ExerciseCardComponent, BoxBreathingComponent, FormsModule, IconComponent],
   animations: [
     trigger("exerciseOverlay", [
-      transition(":enter", [style({ opacity: 0 }), animate("320ms ease-out", style({ opacity: 1 }))]),
-      transition(":leave", [animate("260ms ease-in", style({ opacity: 0 }))])
+      transition(":enter", [style({ opacity: 0 }), animate("220ms ease-out", style({ opacity: 1 }))]),
+      transition(":leave", [animate("180ms ease-in", style({ opacity: 0 }))])
     ]),
     trigger("exercisePanel", [
       transition(":enter", [
-        style({ opacity: 0, transform: "translateY(26px) scale(0.98)" }),
-        animate("420ms cubic-bezier(0.22, 1, 0.36, 1)", style({ opacity: 1, transform: "translateY(0) scale(1)" }))
+        style({ opacity: 0, transform: "translateY(10px)" }),
+        animate("260ms ease-out", style({ opacity: 1, transform: "translateY(0)" }))
       ]),
       transition(":leave", [
-        animate("320ms cubic-bezier(0.4, 0, 1, 1)", style({ opacity: 0, transform: "translateY(16px) scale(0.985)" }))
+        animate("200ms ease-in", style({ opacity: 0, transform: "translateY(6px)" }))
       ])
     ])
   ],
   template: `
-    <section appScrollReveal class="page-stack">
+    <section appScrollReveal class="page-stack motion-zone">
       <div class="mt-card mt-card-hover page-hero">
         <div class="mt-card-brand max-w-4xl">
           <div class="mt-card-icon">
