@@ -29,6 +29,10 @@ function applyRuntimeConfig() {
   if (!process.env.OPENAI_MODEL && config.openai?.model) {
     process.env.OPENAI_MODEL = config.openai.model;
   }
+
+  if (!process.env.CORS_ALLOWED_ORIGINS && config.cors?.allowed_origins) {
+    process.env.CORS_ALLOWED_ORIGINS = config.cors.allowed_origins;
+  }
 }
 
 async function initApp() {
@@ -42,11 +46,11 @@ async function initApp() {
   const rootApp = express();
 
   rootApp.use((req, _res, next) => {
-    if (req.path === "/" || req.path === "/health" || req.path.startsWith("/api")) {
+    if (req.path === "/" || req.path === "/health" || req.path === "/ready" || req.path.startsWith("/api")) {
       return next();
     }
 
-    req.url = `/api${req.url}`;
+    req.url = `/api/v1${req.url}`;
     return next();
   });
 

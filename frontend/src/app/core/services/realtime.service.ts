@@ -39,6 +39,11 @@ export class RealtimeService implements OnDestroy {
   readonly presenceSnapshot$: Observable<PresenceItem[]> = this.presenceSnapshotSubject.asObservable();
 
   ensureConnected(): void {
+    if (!supportsRealtime(this.apiBaseUrl)) {
+      this.disconnect();
+      return;
+    }
+
     const token = this.authService.token();
     if (!token) {
       this.disconnect();
@@ -131,4 +136,17 @@ function resolveRealtimeTransports(socketBaseUrl: string): Array<"websocket" | "
   }
 
   return ["polling"];
+}
+
+function supportsRealtime(apiBaseUrl: string): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  if (apiBaseUrl.startsWith("/")) {
+    return false;
+  }
+
+  const host = window.location.hostname;
+  return !(host.endsWith("web.app") || host.endsWith("firebaseapp.com"));
 }

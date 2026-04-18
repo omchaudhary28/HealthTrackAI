@@ -1,0 +1,413 @@
+[debug] [2026-03-24T11:42:08.828Z] ----------------------------------------------------------------------
+[debug] [2026-03-24T11:42:08.830Z] Command:       C:\nvm4w\nodejs\node.exe C:\Users\OMADITI\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2026-03-24T11:42:08.830Z] CLI Version:   15.10.1
+[debug] [2026-03-24T11:42:08.830Z] Platform:      win32
+[debug] [2026-03-24T11:42:08.830Z] Node Version:  v24.12.0
+[debug] [2026-03-24T11:42:08.830Z] Time:          Tue Mar 24 2026 17:12:08 GMT+0530 (India Standard Time)
+[debug] [2026-03-24T11:42:08.830Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-24T11:42:10.949Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-24T11:42:10.949Z] > authorizing via signed-in user (omchaudhary2111@gmail.com)
+[debug] [2026-03-24T11:42:10.950Z] [iam] checking project healthtrackai-23752 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-03-24T11:42:10.951Z] Checked if tokens are valid: false, expires at: 1774350086849
+[debug] [2026-03-24T11:42:10.951Z] Checked if tokens are valid: false, expires at: 1774350086849
+[debug] [2026-03-24T11:42:10.951Z] > refreshing access token with scopes: []
+[debug] [2026-03-24T11:42:10.954Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-03-24T11:42:10.954Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-03-24T11:42:11.122Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-03-24T11:42:11.123Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-03-24T11:42:11.139Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/healthtrackai-23752:testIamPermissions [none]
+[debug] [2026-03-24T11:42:11.139Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/healthtrackai-23752:testIamPermissions  x-goog-user-project=healthtrackai-23752
+[debug] [2026-03-24T11:42:11.139Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/healthtrackai-23752:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-24T11:42:12.592Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/healthtrackai-23752:testIamPermissions 200
+[debug] [2026-03-24T11:42:12.592Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/healthtrackai-23752:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-24T11:42:12.593Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:12.593Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:12.593Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/healthtrackai-23752 [none]
+[debug] [2026-03-24T11:42:13.917Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/healthtrackai-23752 200
+[debug] [2026-03-24T11:42:13.917Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/healthtrackai-23752 {"projectId":"healthtrackai-23752","projectNumber":"653093331033","displayName":"HealthTrackAI","name":"projects/healthtrackai-23752","resources":{"hostingSite":"healthtrackai-23752"},"state":"ACTIVE","etag":"1_e2c39748-eb4a-4d52-8d27-a42991532951"}
+[info] 
+[info] === Deploying to 'healthtrackai-23752'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-03-24T11:42:13.922Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:13.922Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:13.922Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions [none]
+[debug] [2026-03-24T11:42:13.922Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-03-24T11:42:15.803Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions 200
+[debug] [2026-03-24T11:42:15.803Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions {"name":"projects/653093331033/sites/healthtrackai-23752/versions/76a1b2275bc16fcd","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[healthtrackai-23752]: beginning deploy... 
+[info] i  hosting[healthtrackai-23752]: found 31 files in dist/mindtrack-ai/browser 
+[debug] [2026-03-24T11:42:15.821Z] [hosting] uploading with 200 concurrency
+[debug] [2026-03-24T11:42:15.847Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:15.847Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:15.848Z] [hosting] hash cache [ZGlzdFxtaW5kdHJhY2stYWlcYnJvd3Nlcg] stored for 31 files
+[debug] [2026-03-24T11:42:15.849Z] [hosting][hash queue][FINAL] {"max":15,"min":8,"avg":9.290322580645164,"active":0,"complete":31,"success":31,"errored":0,"retried":0,"total":31,"elapsed":21}
+[debug] [2026-03-24T11:42:15.849Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/76a1b2275bc16fcd:populateFiles [none]
+[debug] [2026-03-24T11:42:15.849Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/76a1b2275bc16fcd:populateFiles {"files":{"/chunk-ZG2ZLEMU.js":"a80d9bad00708ba00a1650611cf36be208cebbf657e5eddf452e58c2468e6615","/index.html":"884b701050f29ade388c2b09fa80f3390585a292e8d1d8af04e2dc5d2e1c1d09","/chunk-Y3P3DRLM.js":"c085adfd70978ca6a460d9883c75bcf26385c3c0add45cd1e497b81a59808d83","/chunk-UHIFGOHH.js":"449f3eb2b8970edca38b970545787cc9a8b6f5fd991d5f27c3583d0f0ab90ccb","/chunk-U3KRY7FC.js":"b571b5f6780ab0afecc05eb38f9b4059f1d3252f9b0b053803a46ed83b74be0e","/chunk-YT7OEVNT.js":"8dc2a64377ea0806566da88f07d1ae4e2689c5e1f7e1c5305cece244ba1d1437","/styles-XSKZI3VL.css":"2682ec1084b29cbd00909c4cff9c11a078d492f709a2750f92382fba8a2c1e6e","/chunk-QWBXGDAE.js":"9622df80d7270e92f0a260e366a8be0da4ae8c1dda1efda9a92018442b12f53d","/chunk-NREQKUYV.js":"14838e9ea7e1a1e829763bb063c5eda2fb67cfaa2952d59c42993aeb45ad645a","/chunk-QK5ORPUL.js":"7919870b810ab48304fa21c54d4118d643dba9d08a18b20057d52f1f90031cef","/polyfills-DOYHMSTV.js":"c3f1e61a5be7a7fcb648aaf3c15db12b8881f38150ddd9f602baf0744e34aa28","/chunk-MXAZUII5.js":"28771dacadda7e51977e29b866fb35aa5740aa1bfd3fb06dea25ecd2d65b68e5","/chunk-MQ64SDF4.js":"44b900383263ac9c10389bb26f53bd01d8d1e92b36b494a7fd66d5850ff1fd96","/chunk-NZACSCRV.js":"9abbce1c393612fd51b645841d31094eb9ac97e037f730da432e8e15141f03a6","/chunk-SVQRSPIE.js":"e507459c3132e48dbdbbe41ef171ecf96b69e8cab3c612ac61b591032ea6c336","/chunk-L4BYVSEQ.js":"c375374bbb55f48279bcc82ddd6deca479bd3a77405f3e0bea59b2066d258717","/chunk-LMHALDEG.js":"d8521b7fe6aa5a203282e700163d6b2a67f56a3977631f4db9920e3155cbe673","/chunk-KJO6OL7E.js":"ed5da24440f143f199d01fc14c741ca5f9e2dd204304e2767e8aec1a06300d45","/chunk-HQEB3M2M.js":"989010d5e0fae5dcc9f66ce81a6051e6165a5070c695ff7342dda8fcb8a87a46","/chunk-GCJXNV6K.js":"da2d66683bc5832167f16d768f332d26cd0a3bc0ead441cef06807f76e718d79","/chunk-KITU27ZY.js":"791653a7c57a8aa3951908d7b7d1c095cb8cd436d93886369ef9dc13c08c3396","/chunk-F2EFQ2AD.js":"b2a6e91fb1133722bb9c8c809ce206efce3bc48b18f7b8c77eea21bb70e0cbd3","/chunk-5JIJMQBF.js":"d1b7277d7b5822e70cd1670f0830780476277d93e0135092885c18a184e5adf7","/chunk-3JALAPBJ.js":"03a7001314aa849659746ec6074aa5c2853a873412276fa6ee565e64fdd5e094","/chunk-2ET7KDDB.js":"72a345c6c48a4edc0fd6eafe108e113001f357dcda81c5615056bbed191f6c6f","/chunk-2QZPC2QH.js":"39590012facfb0d59b7cd4a181afb17179d33c3932ac97cefb0a730b89976694","/chunk-G2UFTCJ2.js":"f7b2ebad631d55bb8b6da7a5a97a661b312ce8d3c11aac121de928691f40be82","/chunk-ERWKS3EM.js":"7cdf87ca1160957ae55096a8acb95c54f8f094b8559d4ace7691b0ac6d152188","/main-244NMUDP.js":"e07a36a8e0fc4963f108985a45afc5109b3f4c6ea69b3792d4a929d755be8d22","/chunk-GOH4OSAE.js":"5af4e8633486a2e623afde4903fe2d37c9b22b4276b3d3d93b936732e6e504fb","/chunk-I2OZQEUR.js":"387b68e54c63fa5c94341c96a18d1f8844692e7e35c8d51492490254c10037c7"}}
+[debug] [2026-03-24T11:42:16.775Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/76a1b2275bc16fcd:populateFiles 200
+[debug] [2026-03-24T11:42:16.775Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/76a1b2275bc16fcd:populateFiles {"uploadRequiredHashes":["2682ec1084b29cbd00909c4cff9c11a078d492f709a2750f92382fba8a2c1e6e","7cdf87ca1160957ae55096a8acb95c54f8f094b8559d4ace7691b0ac6d152188","884b701050f29ade388c2b09fa80f3390585a292e8d1d8af04e2dc5d2e1c1d09","e07a36a8e0fc4963f108985a45afc5109b3f4c6ea69b3792d4a929d755be8d22","791653a7c57a8aa3951908d7b7d1c095cb8cd436d93886369ef9dc13c08c3396"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files"}
+[debug] [2026-03-24T11:42:16.775Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:16.776Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:16.776Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:16.776Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:16.776Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:16.776Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:16.776Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:16.776Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:16.777Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:16.777Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:16.777Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/2682ec1084b29cbd00909c4cff9c11a078d492f709a2750f92382fba8a2c1e6e [none]
+[debug] [2026-03-24T11:42:16.777Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/2682ec1084b29cbd00909c4cff9c11a078d492f709a2750f92382fba8a2c1e6e [stream]
+[debug] [2026-03-24T11:42:16.778Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/7cdf87ca1160957ae55096a8acb95c54f8f094b8559d4ace7691b0ac6d152188 [none]
+[debug] [2026-03-24T11:42:16.778Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/7cdf87ca1160957ae55096a8acb95c54f8f094b8559d4ace7691b0ac6d152188 [stream]
+[debug] [2026-03-24T11:42:16.779Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/884b701050f29ade388c2b09fa80f3390585a292e8d1d8af04e2dc5d2e1c1d09 [none]
+[debug] [2026-03-24T11:42:16.779Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/884b701050f29ade388c2b09fa80f3390585a292e8d1d8af04e2dc5d2e1c1d09 [stream]
+[debug] [2026-03-24T11:42:16.780Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/e07a36a8e0fc4963f108985a45afc5109b3f4c6ea69b3792d4a929d755be8d22 [none]
+[debug] [2026-03-24T11:42:16.780Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/e07a36a8e0fc4963f108985a45afc5109b3f4c6ea69b3792d4a929d755be8d22 [stream]
+[debug] [2026-03-24T11:42:16.781Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/791653a7c57a8aa3951908d7b7d1c095cb8cd436d93886369ef9dc13c08c3396 [none]
+[debug] [2026-03-24T11:42:16.782Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/791653a7c57a8aa3951908d7b7d1c095cb8cd436d93886369ef9dc13c08c3396 [stream]
+[debug] [2026-03-24T11:42:16.783Z] [hosting][populate queue][FINAL] {"max":930,"min":930,"avg":930,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":936}
+[debug] [2026-03-24T11:42:16.783Z] [hosting] uploads queued: 5
+[info] i  hosting: uploading new files [0/5] (0%) 
+[debug] [2026-03-24T11:42:18.251Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/884b701050f29ade388c2b09fa80f3390585a292e8d1d8af04e2dc5d2e1c1d09 200
+[debug] [2026-03-24T11:42:18.251Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/884b701050f29ade388c2b09fa80f3390585a292e8d1d8af04e2dc5d2e1c1d09 [stream]
+[debug] [2026-03-24T11:42:18.382Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/7cdf87ca1160957ae55096a8acb95c54f8f094b8559d4ace7691b0ac6d152188 200
+[debug] [2026-03-24T11:42:18.382Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/7cdf87ca1160957ae55096a8acb95c54f8f094b8559d4ace7691b0ac6d152188 [stream]
+[debug] [2026-03-24T11:42:18.418Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/e07a36a8e0fc4963f108985a45afc5109b3f4c6ea69b3792d4a929d755be8d22 200
+[debug] [2026-03-24T11:42:18.418Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/e07a36a8e0fc4963f108985a45afc5109b3f4c6ea69b3792d4a929d755be8d22 [stream]
+[debug] [2026-03-24T11:42:18.495Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/791653a7c57a8aa3951908d7b7d1c095cb8cd436d93886369ef9dc13c08c3396 200
+[debug] [2026-03-24T11:42:18.495Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/791653a7c57a8aa3951908d7b7d1c095cb8cd436d93886369ef9dc13c08c3396 [stream]
+[debug] [2026-03-24T11:42:18.597Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/2682ec1084b29cbd00909c4cff9c11a078d492f709a2750f92382fba8a2c1e6e 200
+[debug] [2026-03-24T11:42:18.597Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/76a1b2275bc16fcd/files/2682ec1084b29cbd00909c4cff9c11a078d492f709a2750f92382fba8a2c1e6e [stream]
+[debug] [2026-03-24T11:42:18.597Z] [hosting][upload queue][FINAL] {"max":1822,"min":1475,"avg":1652.8,"active":0,"complete":5,"success":5,"errored":0,"retried":0,"total":5,"elapsed":1822}
+[info] i  hosting: upload complete 
+[info] +  hosting[healthtrackai-23752]: file upload complete 
+[debug] [2026-03-24T11:42:18.597Z] [hosting] deploy completed after 2791ms
+[debug] [2026-03-24T11:42:18.597Z] [
+  {
+    "config": {
+      "public": "dist/mindtrack-ai/browser",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "healthtrackai-23752"
+    },
+    "version": "projects/653093331033/sites/healthtrackai-23752/versions/76a1b2275bc16fcd"
+  }
+]
+[info] i  hosting[healthtrackai-23752]: finalizing version... 
+[debug] [2026-03-24T11:42:18.598Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:18.598Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:18.598Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/76a1b2275bc16fcd updateMask=status%2Cconfig
+[debug] [2026-03-24T11:42:18.599Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/76a1b2275bc16fcd {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2026-03-24T11:42:19.427Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/76a1b2275bc16fcd 200
+[debug] [2026-03-24T11:42:19.428Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/76a1b2275bc16fcd {"name":"projects/653093331033/sites/healthtrackai-23752/versions/76a1b2275bc16fcd","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-03-24T11:42:11.592067Z","createUser":{"email":"omchaudhary2111@gmail.com"},"finalizeTime":"2026-03-24T11:42:15.701895Z","finalizeUser":{"email":"omchaudhary2111@gmail.com"}}
+[debug] [2026-03-24T11:42:19.428Z] [hosting] finalized version for healthtrackai-23752:[object Object]
+[info] +  hosting[healthtrackai-23752]: version finalized 
+[info] i  hosting[healthtrackai-23752]: releasing new version... 
+[debug] [2026-03-24T11:42:19.428Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:19.428Z] Checked if tokens are valid: true, expires at: 1774356130123
+[debug] [2026-03-24T11:42:19.428Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases versionName=projects%2F653093331033%2Fsites%2Fhealthtrackai-23752%2Fversions%2F76a1b2275bc16fcd
+[debug] [2026-03-24T11:42:19.428Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases {}
+[debug] [2026-03-24T11:42:20.224Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases 200
+[debug] [2026-03-24T11:42:20.225Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases {"name":"projects/653093331033/sites/healthtrackai-23752/channels/live/releases/1774352535828000","version":{"name":"projects/653093331033/sites/healthtrackai-23752/versions/76a1b2275bc16fcd","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-03-24T11:42:11.592067Z","createUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"},"finalizeTime":"2026-03-24T11:42:15.701895Z","finalizeUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}},"type":"DEPLOY","releaseTime":"2026-03-24T11:42:15.828Z","releaseUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}}
+[debug] [2026-03-24T11:42:20.225Z] [hosting] release: {"name":"projects/653093331033/sites/healthtrackai-23752/channels/live/releases/1774352535828000","version":{"name":"projects/653093331033/sites/healthtrackai-23752/versions/76a1b2275bc16fcd","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-03-24T11:42:11.592067Z","createUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"},"finalizeTime":"2026-03-24T11:42:15.701895Z","finalizeUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}},"type":"DEPLOY","releaseTime":"2026-03-24T11:42:15.828Z","releaseUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}}
+[info] +  hosting[healthtrackai-23752]: release complete 
+[info] 
+[info] +  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/healthtrackai-23752/overview
+[info] Hosting URL: https://healthtrackai-23752.web.app
+[debug] [2026-04-08T09:46:39.879Z] ----------------------------------------------------------------------
+[debug] [2026-04-08T09:46:39.885Z] Command:       C:\nvm4w\nodejs\node.exe C:\Users\OMADITI\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2026-04-08T09:46:39.886Z] CLI Version:   15.10.1
+[debug] [2026-04-08T09:46:39.886Z] Platform:      win32
+[debug] [2026-04-08T09:46:39.887Z] Node Version:  v24.12.0
+[debug] [2026-04-08T09:46:39.887Z] Time:          Wed Apr 08 2026 15:16:39 GMT+0530 (India Standard Time)
+[debug] [2026-04-08T09:46:39.888Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-08T09:46:39.895Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-04-08T09:48:18.641Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-08T09:48:18.644Z] > authorizing via signed-in user (omchaudhary2111@gmail.com)
+[debug] [2026-04-08T09:48:18.644Z] [iam] checking project healthtrackai-23752 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-04-08T09:48:18.646Z] Checked if tokens are valid: false, expires at: 1774356130123
+[debug] [2026-04-08T09:48:18.648Z] Checked if tokens are valid: false, expires at: 1774356130123
+[debug] [2026-04-08T09:48:18.649Z] > refreshing access token with scopes: []
+[debug] [2026-04-08T09:48:18.657Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-04-08T09:48:18.659Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-04-08T09:48:19.110Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-04-08T09:48:19.111Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-04-08T09:48:19.163Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/healthtrackai-23752:testIamPermissions [none]
+[debug] [2026-04-08T09:48:19.164Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/healthtrackai-23752:testIamPermissions  x-goog-user-project=healthtrackai-23752
+[debug] [2026-04-08T09:48:19.164Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/healthtrackai-23752:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-04-08T09:48:19.706Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-04-08T09:48:19.707Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-04-08T09:48:22.331Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/healthtrackai-23752:testIamPermissions 200
+[debug] [2026-04-08T09:48:22.331Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/healthtrackai-23752:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-04-08T09:48:22.333Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:22.333Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:22.335Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/healthtrackai-23752 [none]
+[debug] [2026-04-08T09:48:24.666Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/healthtrackai-23752 200
+[debug] [2026-04-08T09:48:24.667Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/healthtrackai-23752 {"projectId":"healthtrackai-23752","projectNumber":"653093331033","displayName":"HealthTrackAI","name":"projects/healthtrackai-23752","resources":{"hostingSite":"healthtrackai-23752"},"state":"ACTIVE","etag":"1_e2c39748-eb4a-4d52-8d27-a42991532951"}
+[info] 
+[info] === Deploying to 'healthtrackai-23752'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-04-08T09:48:24.681Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:24.681Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:24.682Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions [none]
+[debug] [2026-04-08T09:48:24.682Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-04-08T09:48:30.933Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions 200
+[debug] [2026-04-08T09:48:30.933Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions {"name":"projects/653093331033/sites/healthtrackai-23752/versions/85486e05581721f3","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[healthtrackai-23752]: beginning deploy... 
+[info] i  hosting[healthtrackai-23752]: found 31 files in dist/mindtrack-ai/browser 
+[debug] [2026-04-08T09:48:30.974Z] [hosting] uploading with 200 concurrency
+[debug] [2026-04-08T09:48:31.116Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:31.116Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:31.120Z] [hosting] hash cache [ZGlzdFxtaW5kdHJhY2stYWlcYnJvd3Nlcg] stored for 31 files
+[debug] [2026-04-08T09:48:31.121Z] [hosting][hash queue][FINAL] {"max":107,"min":71,"avg":77.5483870967742,"active":0,"complete":31,"success":31,"errored":0,"retried":0,"total":31,"elapsed":121}
+[debug] [2026-04-08T09:48:31.123Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/85486e05581721f3:populateFiles [none]
+[debug] [2026-04-08T09:48:31.123Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/85486e05581721f3:populateFiles {"files":{"/styles-XSKZI3VL.css":"2682ec1084b29cbd00909c4cff9c11a078d492f709a2750f92382fba8a2c1e6e","/polyfills-DOYHMSTV.js":"c3f1e61a5be7a7fcb648aaf3c15db12b8881f38150ddd9f602baf0744e34aa28","/index.html":"539f8c2507798ea7acd427327c964f3a0e6dc61d035c4dce6619a89c100261ad","/chunk-R76UGYRG.js":"325983890c5c732451473063e0e85c217d5b37f5a4b353649dd9934abcd38023","/chunk-QUHUHVNZ.js":"5c0cec9a7df39618f9f704bbb924f42055cd14b2b91def70700968b0eb9b701e","/chunk-QRRETUIN.js":"d937e8f3f9a88500813335b6065ad7e5cb4f6c9073dbb0035ab91fe5cb8a5b05","/chunk-PDXASITR.js":"4a635419370db28b9a9dcff15accfa5dc23b22c0b88f1b1911c8c281e4b3c20e","/chunk-PBFB3X6N.js":"29333a8a520b4a2ca800f235574952c4f5c6df61db693d517e10245058859e9b","/chunk-MXBYLQVH.js":"a44c5d67bf53f5f4653e54f43404f9c8ec5e19ea44d517b15133adc648b743f7","/chunk-OQ6PZL3T.js":"bf76402e4c9262b59fe2f528bdb08f0a181420a66ac3c46f6a68543aef683fd6","/chunk-LMATMP2X.js":"3edb733c4f6a804525adfada8bf048bcd2d65c3081ba103b65fa318e2b7ab061","/chunk-L2BNBUPU.js":"289b7432dc534a7d52dac59f79e1e1a4be1a5d43cb6a7da2fd7f9bacc26b14f9","/chunk-JUDQ2Q4S.js":"ac837a0a203df14829e1957828d2fa531cb7865287bec827435c9810e8b40081","/chunk-J5B3RM7D.js":"292fd753a6acd4189ad472542949f535685409e60d2f6d9e54c87ebff0797f39","/chunk-IPZJTJTO.js":"1576264b1768075b59ff9dff1995bb19d7c7c3037a45f383989bd51fc55f1726","/chunk-H2C5H3YL.js":"4e9559e3f0f840629dcefe6d03a1e49d350323d03f3f4be94865dd5a943a0708","/chunk-FSRPLZ62.js":"b9d7d1c967022edbe4757f6eb445a4f9e20d719c9ed4a084d9c249b657352dba","/chunk-FEOW2BOY.js":"81f0c67fdc069e0cba5727f7a40ed504079bb2110d4ab85a8f5720f5f37bcc1d","/chunk-EAVDEMHP.js":"fc2603e15079e1dd1c81a787adbad28a29e76539353336928da8527f182edc26","/chunk-CO7BRZT6.js":"22c3f4782e59b986b98b75c9b875dddc7ef7f0cd541bf8b93e1f3a54051a744c","/chunk-76LY4ASY.js":"c33558e8c5979ae234a3464ea3e509df76d8ffc379f5c2e6a4ab95b415e7d0ee","/chunk-7HQP2LJE.js":"a4d27deb0023274cfc804e8f600c6fba8524ee42e3aaea34224444e3a70f8db1","/chunk-75FR5G74.js":"ec4780eb46956d8b44b224d61eeba2a18db918994d8fc310805e42e9301f0ab0","/chunk-4BAYZ3FI.js":"81414543ad0799b93bf946f0ddfc5a5d48023468fd12fec2eb00f25bc5f3d4cc","/chunk-47H5FYSD.js":"0c49ad8f2bf6605fe7d09597e285dc4820a8e2bdd5a46d5b42d8da51b88adfa6","/chunk-43UBU3LQ.js":"e0ad9433ea686a1cd5da5878add4dd407a39af7ffb1acb7109ed02e17bccbfb5","/main-G3FPGLET.js":"7d61c13b5c2aeb07744c223df2bb788c6d262bc6a787f5e4ce9edbd2ba3e6a0e","/chunk-PPQRPN5E.js":"f3cb8747a6c33bb6a50b85015daf940ecd83da9f3795ce29b485bbc5fb1b9263","/chunk-LPVS66LJ.js":"ba043d4c9b7173b094f0c924daf9d0ee470b05200273b6e4ff19be6dfbf55443","/chunk-ZSIGJ2MS.js":"9d7c9ea7a6d066b99926b2c3906fda4cacb4280a4733726924637e967765d9f4","/chunk-UOVYNWBT.js":"a5963d9157a65044984fdc2492374ed8a2c49370a7e1a6fa427fc26c17e8cb5f"}}
+[debug] [2026-04-08T09:48:32.122Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/85486e05581721f3:populateFiles 200
+[debug] [2026-04-08T09:48:32.122Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/85486e05581721f3:populateFiles {"uploadRequiredHashes":["e0ad9433ea686a1cd5da5878add4dd407a39af7ffb1acb7109ed02e17bccbfb5","29333a8a520b4a2ca800f235574952c4f5c6df61db693d517e10245058859e9b","ec4780eb46956d8b44b224d61eeba2a18db918994d8fc310805e42e9301f0ab0","0c49ad8f2bf6605fe7d09597e285dc4820a8e2bdd5a46d5b42d8da51b88adfa6","a5963d9157a65044984fdc2492374ed8a2c49370a7e1a6fa427fc26c17e8cb5f","7d61c13b5c2aeb07744c223df2bb788c6d262bc6a787f5e4ce9edbd2ba3e6a0e","d937e8f3f9a88500813335b6065ad7e5cb4f6c9073dbb0035ab91fe5cb8a5b05","81f0c67fdc069e0cba5727f7a40ed504079bb2110d4ab85a8f5720f5f37bcc1d","4e9559e3f0f840629dcefe6d03a1e49d350323d03f3f4be94865dd5a943a0708","81414543ad0799b93bf946f0ddfc5a5d48023468fd12fec2eb00f25bc5f3d4cc","1576264b1768075b59ff9dff1995bb19d7c7c3037a45f383989bd51fc55f1726","a4d27deb0023274cfc804e8f600c6fba8524ee42e3aaea34224444e3a70f8db1","325983890c5c732451473063e0e85c217d5b37f5a4b353649dd9934abcd38023","539f8c2507798ea7acd427327c964f3a0e6dc61d035c4dce6619a89c100261ad","5c0cec9a7df39618f9f704bbb924f42055cd14b2b91def70700968b0eb9b701e","3edb733c4f6a804525adfada8bf048bcd2d65c3081ba103b65fa318e2b7ab061","fc2603e15079e1dd1c81a787adbad28a29e76539353336928da8527f182edc26","c33558e8c5979ae234a3464ea3e509df76d8ffc379f5c2e6a4ab95b415e7d0ee","b9d7d1c967022edbe4757f6eb445a4f9e20d719c9ed4a084d9c249b657352dba","f3cb8747a6c33bb6a50b85015daf940ecd83da9f3795ce29b485bbc5fb1b9263","289b7432dc534a7d52dac59f79e1e1a4be1a5d43cb6a7da2fd7f9bacc26b14f9","bf76402e4c9262b59fe2f528bdb08f0a181420a66ac3c46f6a68543aef683fd6","292fd753a6acd4189ad472542949f535685409e60d2f6d9e54c87ebff0797f39","ba043d4c9b7173b094f0c924daf9d0ee470b05200273b6e4ff19be6dfbf55443","ac837a0a203df14829e1957828d2fa531cb7865287bec827435c9810e8b40081","22c3f4782e59b986b98b75c9b875dddc7ef7f0cd541bf8b93e1f3a54051a744c","a44c5d67bf53f5f4653e54f43404f9c8ec5e19ea44d517b15133adc648b743f7","9d7c9ea7a6d066b99926b2c3906fda4cacb4280a4733726924637e967765d9f4","4a635419370db28b9a9dcff15accfa5dc23b22c0b88f1b1911c8c281e4b3c20e"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files"}
+[debug] [2026-04-08T09:48:32.124Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.124Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.125Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.125Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.126Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.126Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.127Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.127Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.127Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.128Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.128Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.128Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.129Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.129Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.130Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.130Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.130Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.131Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.131Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.131Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.132Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.132Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.133Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.133Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.134Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.134Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.134Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.135Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.135Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.135Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.136Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.136Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.137Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.137Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.138Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.138Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.138Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.139Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.139Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.139Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.140Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.140Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.141Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.141Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.142Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.142Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.142Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.143Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.143Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.143Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.144Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.144Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.145Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.145Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.145Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.145Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.146Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.146Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:32.147Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/e0ad9433ea686a1cd5da5878add4dd407a39af7ffb1acb7109ed02e17bccbfb5 [none]
+[debug] [2026-04-08T09:48:32.147Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/e0ad9433ea686a1cd5da5878add4dd407a39af7ffb1acb7109ed02e17bccbfb5 [stream]
+[debug] [2026-04-08T09:48:32.151Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/29333a8a520b4a2ca800f235574952c4f5c6df61db693d517e10245058859e9b [none]
+[debug] [2026-04-08T09:48:32.151Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/29333a8a520b4a2ca800f235574952c4f5c6df61db693d517e10245058859e9b [stream]
+[debug] [2026-04-08T09:48:32.154Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ec4780eb46956d8b44b224d61eeba2a18db918994d8fc310805e42e9301f0ab0 [none]
+[debug] [2026-04-08T09:48:32.154Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ec4780eb46956d8b44b224d61eeba2a18db918994d8fc310805e42e9301f0ab0 [stream]
+[debug] [2026-04-08T09:48:32.157Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/0c49ad8f2bf6605fe7d09597e285dc4820a8e2bdd5a46d5b42d8da51b88adfa6 [none]
+[debug] [2026-04-08T09:48:32.157Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/0c49ad8f2bf6605fe7d09597e285dc4820a8e2bdd5a46d5b42d8da51b88adfa6 [stream]
+[debug] [2026-04-08T09:48:32.160Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a5963d9157a65044984fdc2492374ed8a2c49370a7e1a6fa427fc26c17e8cb5f [none]
+[debug] [2026-04-08T09:48:32.160Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a5963d9157a65044984fdc2492374ed8a2c49370a7e1a6fa427fc26c17e8cb5f [stream]
+[debug] [2026-04-08T09:48:32.162Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/7d61c13b5c2aeb07744c223df2bb788c6d262bc6a787f5e4ce9edbd2ba3e6a0e [none]
+[debug] [2026-04-08T09:48:32.163Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/7d61c13b5c2aeb07744c223df2bb788c6d262bc6a787f5e4ce9edbd2ba3e6a0e [stream]
+[debug] [2026-04-08T09:48:32.167Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/d937e8f3f9a88500813335b6065ad7e5cb4f6c9073dbb0035ab91fe5cb8a5b05 [none]
+[debug] [2026-04-08T09:48:32.167Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/d937e8f3f9a88500813335b6065ad7e5cb4f6c9073dbb0035ab91fe5cb8a5b05 [stream]
+[debug] [2026-04-08T09:48:32.169Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/81f0c67fdc069e0cba5727f7a40ed504079bb2110d4ab85a8f5720f5f37bcc1d [none]
+[debug] [2026-04-08T09:48:32.170Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/81f0c67fdc069e0cba5727f7a40ed504079bb2110d4ab85a8f5720f5f37bcc1d [stream]
+[debug] [2026-04-08T09:48:32.173Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/4e9559e3f0f840629dcefe6d03a1e49d350323d03f3f4be94865dd5a943a0708 [none]
+[debug] [2026-04-08T09:48:32.173Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/4e9559e3f0f840629dcefe6d03a1e49d350323d03f3f4be94865dd5a943a0708 [stream]
+[debug] [2026-04-08T09:48:32.176Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/81414543ad0799b93bf946f0ddfc5a5d48023468fd12fec2eb00f25bc5f3d4cc [none]
+[debug] [2026-04-08T09:48:32.176Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/81414543ad0799b93bf946f0ddfc5a5d48023468fd12fec2eb00f25bc5f3d4cc [stream]
+[debug] [2026-04-08T09:48:32.180Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/1576264b1768075b59ff9dff1995bb19d7c7c3037a45f383989bd51fc55f1726 [none]
+[debug] [2026-04-08T09:48:32.180Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/1576264b1768075b59ff9dff1995bb19d7c7c3037a45f383989bd51fc55f1726 [stream]
+[debug] [2026-04-08T09:48:32.182Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a4d27deb0023274cfc804e8f600c6fba8524ee42e3aaea34224444e3a70f8db1 [none]
+[debug] [2026-04-08T09:48:32.183Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a4d27deb0023274cfc804e8f600c6fba8524ee42e3aaea34224444e3a70f8db1 [stream]
+[debug] [2026-04-08T09:48:32.185Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/325983890c5c732451473063e0e85c217d5b37f5a4b353649dd9934abcd38023 [none]
+[debug] [2026-04-08T09:48:32.185Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/325983890c5c732451473063e0e85c217d5b37f5a4b353649dd9934abcd38023 [stream]
+[debug] [2026-04-08T09:48:32.188Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/539f8c2507798ea7acd427327c964f3a0e6dc61d035c4dce6619a89c100261ad [none]
+[debug] [2026-04-08T09:48:32.189Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/539f8c2507798ea7acd427327c964f3a0e6dc61d035c4dce6619a89c100261ad [stream]
+[debug] [2026-04-08T09:48:32.191Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/5c0cec9a7df39618f9f704bbb924f42055cd14b2b91def70700968b0eb9b701e [none]
+[debug] [2026-04-08T09:48:32.192Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/5c0cec9a7df39618f9f704bbb924f42055cd14b2b91def70700968b0eb9b701e [stream]
+[debug] [2026-04-08T09:48:32.195Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/3edb733c4f6a804525adfada8bf048bcd2d65c3081ba103b65fa318e2b7ab061 [none]
+[debug] [2026-04-08T09:48:32.195Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/3edb733c4f6a804525adfada8bf048bcd2d65c3081ba103b65fa318e2b7ab061 [stream]
+[debug] [2026-04-08T09:48:32.198Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/fc2603e15079e1dd1c81a787adbad28a29e76539353336928da8527f182edc26 [none]
+[debug] [2026-04-08T09:48:32.199Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/fc2603e15079e1dd1c81a787adbad28a29e76539353336928da8527f182edc26 [stream]
+[debug] [2026-04-08T09:48:32.202Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/c33558e8c5979ae234a3464ea3e509df76d8ffc379f5c2e6a4ab95b415e7d0ee [none]
+[debug] [2026-04-08T09:48:32.209Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/c33558e8c5979ae234a3464ea3e509df76d8ffc379f5c2e6a4ab95b415e7d0ee [stream]
+[debug] [2026-04-08T09:48:32.215Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/b9d7d1c967022edbe4757f6eb445a4f9e20d719c9ed4a084d9c249b657352dba [none]
+[debug] [2026-04-08T09:48:32.218Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/b9d7d1c967022edbe4757f6eb445a4f9e20d719c9ed4a084d9c249b657352dba [stream]
+[debug] [2026-04-08T09:48:32.227Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/f3cb8747a6c33bb6a50b85015daf940ecd83da9f3795ce29b485bbc5fb1b9263 [none]
+[debug] [2026-04-08T09:48:32.229Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/f3cb8747a6c33bb6a50b85015daf940ecd83da9f3795ce29b485bbc5fb1b9263 [stream]
+[debug] [2026-04-08T09:48:32.351Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/289b7432dc534a7d52dac59f79e1e1a4be1a5d43cb6a7da2fd7f9bacc26b14f9 [none]
+[debug] [2026-04-08T09:48:32.361Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/289b7432dc534a7d52dac59f79e1e1a4be1a5d43cb6a7da2fd7f9bacc26b14f9 [stream]
+[debug] [2026-04-08T09:48:32.367Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/bf76402e4c9262b59fe2f528bdb08f0a181420a66ac3c46f6a68543aef683fd6 [none]
+[debug] [2026-04-08T09:48:32.368Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/bf76402e4c9262b59fe2f528bdb08f0a181420a66ac3c46f6a68543aef683fd6 [stream]
+[debug] [2026-04-08T09:48:32.400Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/292fd753a6acd4189ad472542949f535685409e60d2f6d9e54c87ebff0797f39 [none]
+[debug] [2026-04-08T09:48:32.401Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/292fd753a6acd4189ad472542949f535685409e60d2f6d9e54c87ebff0797f39 [stream]
+[debug] [2026-04-08T09:48:32.403Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ba043d4c9b7173b094f0c924daf9d0ee470b05200273b6e4ff19be6dfbf55443 [none]
+[debug] [2026-04-08T09:48:32.404Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ba043d4c9b7173b094f0c924daf9d0ee470b05200273b6e4ff19be6dfbf55443 [stream]
+[debug] [2026-04-08T09:48:32.407Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ac837a0a203df14829e1957828d2fa531cb7865287bec827435c9810e8b40081 [none]
+[debug] [2026-04-08T09:48:32.407Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ac837a0a203df14829e1957828d2fa531cb7865287bec827435c9810e8b40081 [stream]
+[debug] [2026-04-08T09:48:32.410Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/22c3f4782e59b986b98b75c9b875dddc7ef7f0cd541bf8b93e1f3a54051a744c [none]
+[debug] [2026-04-08T09:48:32.411Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/22c3f4782e59b986b98b75c9b875dddc7ef7f0cd541bf8b93e1f3a54051a744c [stream]
+[debug] [2026-04-08T09:48:32.414Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a44c5d67bf53f5f4653e54f43404f9c8ec5e19ea44d517b15133adc648b743f7 [none]
+[debug] [2026-04-08T09:48:32.414Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a44c5d67bf53f5f4653e54f43404f9c8ec5e19ea44d517b15133adc648b743f7 [stream]
+[debug] [2026-04-08T09:48:32.417Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/9d7c9ea7a6d066b99926b2c3906fda4cacb4280a4733726924637e967765d9f4 [none]
+[debug] [2026-04-08T09:48:32.417Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/9d7c9ea7a6d066b99926b2c3906fda4cacb4280a4733726924637e967765d9f4 [stream]
+[debug] [2026-04-08T09:48:32.420Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/4a635419370db28b9a9dcff15accfa5dc23b22c0b88f1b1911c8c281e4b3c20e [none]
+[debug] [2026-04-08T09:48:32.420Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/4a635419370db28b9a9dcff15accfa5dc23b22c0b88f1b1911c8c281e4b3c20e [stream]
+[debug] [2026-04-08T09:48:32.423Z] [hosting][populate queue][FINAL] {"max":1031,"min":1031,"avg":1031,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":1308}
+[debug] [2026-04-08T09:48:32.423Z] [hosting] uploads queued: 29
+[info] i  hosting: uploading new files [0/29] (0%) 
+[info] i  hosting: uploading new files [0/29] (0%) 
+[debug] [2026-04-08T09:48:35.459Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/4a635419370db28b9a9dcff15accfa5dc23b22c0b88f1b1911c8c281e4b3c20e 200
+[debug] [2026-04-08T09:48:35.459Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/4a635419370db28b9a9dcff15accfa5dc23b22c0b88f1b1911c8c281e4b3c20e [stream]
+[debug] [2026-04-08T09:48:35.489Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a4d27deb0023274cfc804e8f600c6fba8524ee42e3aaea34224444e3a70f8db1 200
+[debug] [2026-04-08T09:48:35.489Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a4d27deb0023274cfc804e8f600c6fba8524ee42e3aaea34224444e3a70f8db1 [stream]
+[debug] [2026-04-08T09:48:35.552Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/292fd753a6acd4189ad472542949f535685409e60d2f6d9e54c87ebff0797f39 200
+[debug] [2026-04-08T09:48:35.552Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/292fd753a6acd4189ad472542949f535685409e60d2f6d9e54c87ebff0797f39 [stream]
+[debug] [2026-04-08T09:48:35.554Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ac837a0a203df14829e1957828d2fa531cb7865287bec827435c9810e8b40081 200
+[debug] [2026-04-08T09:48:35.554Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ac837a0a203df14829e1957828d2fa531cb7865287bec827435c9810e8b40081 [stream]
+[debug] [2026-04-08T09:48:35.583Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/3edb733c4f6a804525adfada8bf048bcd2d65c3081ba103b65fa318e2b7ab061 200
+[debug] [2026-04-08T09:48:35.584Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/3edb733c4f6a804525adfada8bf048bcd2d65c3081ba103b65fa318e2b7ab061 [stream]
+[debug] [2026-04-08T09:48:35.585Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/81414543ad0799b93bf946f0ddfc5a5d48023468fd12fec2eb00f25bc5f3d4cc 200
+[debug] [2026-04-08T09:48:35.585Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/81414543ad0799b93bf946f0ddfc5a5d48023468fd12fec2eb00f25bc5f3d4cc [stream]
+[debug] [2026-04-08T09:48:35.620Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/c33558e8c5979ae234a3464ea3e509df76d8ffc379f5c2e6a4ab95b415e7d0ee 200
+[debug] [2026-04-08T09:48:35.620Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/c33558e8c5979ae234a3464ea3e509df76d8ffc379f5c2e6a4ab95b415e7d0ee [stream]
+[debug] [2026-04-08T09:48:35.621Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a44c5d67bf53f5f4653e54f43404f9c8ec5e19ea44d517b15133adc648b743f7 200
+[debug] [2026-04-08T09:48:35.622Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a44c5d67bf53f5f4653e54f43404f9c8ec5e19ea44d517b15133adc648b743f7 [stream]
+[debug] [2026-04-08T09:48:35.677Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/b9d7d1c967022edbe4757f6eb445a4f9e20d719c9ed4a084d9c249b657352dba 200
+[debug] [2026-04-08T09:48:35.678Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/b9d7d1c967022edbe4757f6eb445a4f9e20d719c9ed4a084d9c249b657352dba [stream]
+[debug] [2026-04-08T09:48:35.709Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/4e9559e3f0f840629dcefe6d03a1e49d350323d03f3f4be94865dd5a943a0708 200
+[debug] [2026-04-08T09:48:35.710Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/4e9559e3f0f840629dcefe6d03a1e49d350323d03f3f4be94865dd5a943a0708 [stream]
+[debug] [2026-04-08T09:48:35.711Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/325983890c5c732451473063e0e85c217d5b37f5a4b353649dd9934abcd38023 200
+[debug] [2026-04-08T09:48:35.711Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/325983890c5c732451473063e0e85c217d5b37f5a4b353649dd9934abcd38023 [stream]
+[debug] [2026-04-08T09:48:35.774Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/81f0c67fdc069e0cba5727f7a40ed504079bb2110d4ab85a8f5720f5f37bcc1d 200
+[debug] [2026-04-08T09:48:35.774Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/81f0c67fdc069e0cba5727f7a40ed504079bb2110d4ab85a8f5720f5f37bcc1d [stream]
+[debug] [2026-04-08T09:48:35.805Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a5963d9157a65044984fdc2492374ed8a2c49370a7e1a6fa427fc26c17e8cb5f 200
+[debug] [2026-04-08T09:48:35.806Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/a5963d9157a65044984fdc2492374ed8a2c49370a7e1a6fa427fc26c17e8cb5f [stream]
+[debug] [2026-04-08T09:48:35.807Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/5c0cec9a7df39618f9f704bbb924f42055cd14b2b91def70700968b0eb9b701e 200
+[debug] [2026-04-08T09:48:35.807Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/5c0cec9a7df39618f9f704bbb924f42055cd14b2b91def70700968b0eb9b701e [stream]
+[debug] [2026-04-08T09:48:35.808Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/539f8c2507798ea7acd427327c964f3a0e6dc61d035c4dce6619a89c100261ad 200
+[debug] [2026-04-08T09:48:35.809Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/539f8c2507798ea7acd427327c964f3a0e6dc61d035c4dce6619a89c100261ad [stream]
+[debug] [2026-04-08T09:48:35.869Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/bf76402e4c9262b59fe2f528bdb08f0a181420a66ac3c46f6a68543aef683fd6 200
+[debug] [2026-04-08T09:48:35.869Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/bf76402e4c9262b59fe2f528bdb08f0a181420a66ac3c46f6a68543aef683fd6 [stream]
+[debug] [2026-04-08T09:48:35.899Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/1576264b1768075b59ff9dff1995bb19d7c7c3037a45f383989bd51fc55f1726 200
+[debug] [2026-04-08T09:48:35.900Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/1576264b1768075b59ff9dff1995bb19d7c7c3037a45f383989bd51fc55f1726 [stream]
+[debug] [2026-04-08T09:48:35.930Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/22c3f4782e59b986b98b75c9b875dddc7ef7f0cd541bf8b93e1f3a54051a744c 200
+[debug] [2026-04-08T09:48:35.930Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/22c3f4782e59b986b98b75c9b875dddc7ef7f0cd541bf8b93e1f3a54051a744c [stream]
+[debug] [2026-04-08T09:48:35.931Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/e0ad9433ea686a1cd5da5878add4dd407a39af7ffb1acb7109ed02e17bccbfb5 200
+[debug] [2026-04-08T09:48:35.931Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/e0ad9433ea686a1cd5da5878add4dd407a39af7ffb1acb7109ed02e17bccbfb5 [stream]
+[debug] [2026-04-08T09:48:35.962Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ba043d4c9b7173b094f0c924daf9d0ee470b05200273b6e4ff19be6dfbf55443 200
+[debug] [2026-04-08T09:48:35.962Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ba043d4c9b7173b094f0c924daf9d0ee470b05200273b6e4ff19be6dfbf55443 [stream]
+[debug] [2026-04-08T09:48:35.993Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/f3cb8747a6c33bb6a50b85015daf940ecd83da9f3795ce29b485bbc5fb1b9263 200
+[debug] [2026-04-08T09:48:35.993Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/f3cb8747a6c33bb6a50b85015daf940ecd83da9f3795ce29b485bbc5fb1b9263 [stream]
+[debug] [2026-04-08T09:48:36.119Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/289b7432dc534a7d52dac59f79e1e1a4be1a5d43cb6a7da2fd7f9bacc26b14f9 200
+[debug] [2026-04-08T09:48:36.119Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/289b7432dc534a7d52dac59f79e1e1a4be1a5d43cb6a7da2fd7f9bacc26b14f9 [stream]
+[debug] [2026-04-08T09:48:36.310Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/d937e8f3f9a88500813335b6065ad7e5cb4f6c9073dbb0035ab91fe5cb8a5b05 200
+[debug] [2026-04-08T09:48:36.310Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/d937e8f3f9a88500813335b6065ad7e5cb4f6c9073dbb0035ab91fe5cb8a5b05 [stream]
+[debug] [2026-04-08T09:48:36.341Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/fc2603e15079e1dd1c81a787adbad28a29e76539353336928da8527f182edc26 200
+[debug] [2026-04-08T09:48:36.341Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/fc2603e15079e1dd1c81a787adbad28a29e76539353336928da8527f182edc26 [stream]
+[debug] [2026-04-08T09:48:36.374Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/0c49ad8f2bf6605fe7d09597e285dc4820a8e2bdd5a46d5b42d8da51b88adfa6 200
+[debug] [2026-04-08T09:48:36.375Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/0c49ad8f2bf6605fe7d09597e285dc4820a8e2bdd5a46d5b42d8da51b88adfa6 [stream]
+[debug] [2026-04-08T09:48:36.437Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/29333a8a520b4a2ca800f235574952c4f5c6df61db693d517e10245058859e9b 200
+[debug] [2026-04-08T09:48:36.437Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/29333a8a520b4a2ca800f235574952c4f5c6df61db693d517e10245058859e9b [stream]
+[debug] [2026-04-08T09:48:36.502Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ec4780eb46956d8b44b224d61eeba2a18db918994d8fc310805e42e9301f0ab0 200
+[debug] [2026-04-08T09:48:36.502Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/ec4780eb46956d8b44b224d61eeba2a18db918994d8fc310805e42e9301f0ab0 [stream]
+[debug] [2026-04-08T09:48:36.753Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/7d61c13b5c2aeb07744c223df2bb788c6d262bc6a787f5e4ce9edbd2ba3e6a0e 200
+[debug] [2026-04-08T09:48:36.753Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/7d61c13b5c2aeb07744c223df2bb788c6d262bc6a787f5e4ce9edbd2ba3e6a0e [stream]
+[info] i  hosting: uploading new files [28/29] (96%) 
+[debug] [2026-04-08T09:48:37.621Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/9d7c9ea7a6d066b99926b2c3906fda4cacb4280a4733726924637e967765d9f4 200
+[debug] [2026-04-08T09:48:37.622Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/85486e05581721f3/files/9d7c9ea7a6d066b99926b2c3906fda4cacb4280a4733726924637e967765d9f4 [stream]
+[debug] [2026-04-08T09:48:37.622Z] [hosting][upload queue][FINAL] {"max":5477,"min":3314,"avg":3824.2413793103447,"active":0,"complete":29,"success":29,"errored":0,"retried":0,"total":29,"elapsed":5499}
+[info] i  hosting: upload complete 
+[info] +  hosting[healthtrackai-23752]: file upload complete 
+[debug] [2026-04-08T09:48:37.623Z] [hosting] deploy completed after 6682ms
+[debug] [2026-04-08T09:48:37.623Z] [
+  {
+    "config": {
+      "public": "dist/mindtrack-ai/browser",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "site": "healthtrackai-23752"
+    },
+    "version": "projects/653093331033/sites/healthtrackai-23752/versions/85486e05581721f3"
+  }
+]
+[info] i  hosting[healthtrackai-23752]: finalizing version... 
+[debug] [2026-04-08T09:48:37.628Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:37.628Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:37.628Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/85486e05581721f3 updateMask=status%2Cconfig
+[debug] [2026-04-08T09:48:37.629Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/85486e05581721f3 {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]}}
+[debug] [2026-04-08T09:48:39.166Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/85486e05581721f3 200
+[debug] [2026-04-08T09:48:39.166Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/85486e05581721f3 {"name":"projects/653093331033/sites/healthtrackai-23752/versions/85486e05581721f3","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-04-08T09:48:30.060352Z","createUser":{"email":"omchaudhary2111@gmail.com"},"finalizeTime":"2026-04-08T09:48:38.861411Z","finalizeUser":{"email":"omchaudhary2111@gmail.com"}}
+[debug] [2026-04-08T09:48:39.167Z] [hosting] finalized version for healthtrackai-23752:[object Object]
+[info] +  hosting[healthtrackai-23752]: version finalized 
+[info] i  hosting[healthtrackai-23752]: releasing new version... 
+[debug] [2026-04-08T09:48:39.168Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:39.168Z] Checked if tokens are valid: true, expires at: 1775645298111
+[debug] [2026-04-08T09:48:39.168Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases versionName=projects%2F653093331033%2Fsites%2Fhealthtrackai-23752%2Fversions%2F85486e05581721f3
+[debug] [2026-04-08T09:48:39.169Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases {}
+[debug] [2026-04-08T09:48:40.206Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases 200
+[debug] [2026-04-08T09:48:40.206Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases {"name":"projects/653093331033/sites/healthtrackai-23752/channels/live/releases/1775641719244000","version":{"name":"projects/653093331033/sites/healthtrackai-23752/versions/85486e05581721f3","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-04-08T09:48:30.060352Z","createUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"},"finalizeTime":"2026-04-08T09:48:38.861411Z","finalizeUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}},"type":"DEPLOY","releaseTime":"2026-04-08T09:48:39.244Z","releaseUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}}
+[debug] [2026-04-08T09:48:40.206Z] [hosting] release: {"name":"projects/653093331033/sites/healthtrackai-23752/channels/live/releases/1775641719244000","version":{"name":"projects/653093331033/sites/healthtrackai-23752/versions/85486e05581721f3","status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-04-08T09:48:30.060352Z","createUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"},"finalizeTime":"2026-04-08T09:48:38.861411Z","finalizeUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}},"type":"DEPLOY","releaseTime":"2026-04-08T09:48:39.244Z","releaseUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}}
+[info] +  hosting[healthtrackai-23752]: release complete 
+[info] 
+[info] +  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/healthtrackai-23752/overview
+[info] Hosting URL: https://healthtrackai-23752.web.app
+[debug] [2026-04-08T09:48:50.240Z] Error: Timed out.
+    at Timeout._onTimeout (C:\Users\OMADITI\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:308:49)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[error] 
+[error] Error: An unexpected error has occurred.

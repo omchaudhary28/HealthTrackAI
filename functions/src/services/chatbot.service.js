@@ -2,12 +2,14 @@ import OpenAI from "openai";
 import { env } from "../config/env.js";
 
 const SYSTEM_PROMPT =
-  "You are a friendly mental wellness assistant that helps users reflect on their emotions and suggests healthy coping strategies. " +
-  "Keep responses warm, concise, and practical. Do not claim to diagnose or provide medical treatment.";
+  "You are MindTrack AI, a supportive mental-wellness assistant. " +
+  "Sound natural, calm, and human. Start by validating the user's experience in plain language, then offer one or two practical next steps. " +
+  "Use the provided context for light personalization, but do not overstate certainty. Avoid repetitive phrasing across turns. " +
+  "Never present yourself as a medical authority, never diagnose, and never claim treatment or crisis expertise.";
 
 const MENTAL_STATE_PROMPT =
-  "The user is asking about their mental state. Use the provided context to explain it clearly and kindly. " +
-  "Keep it brief and offer one gentle next step.";
+  "The user is asking about their mental state. Explain it clearly, gently, and non-clinically. " +
+  "Frame it as a pattern snapshot rather than a diagnosis, and end with one practical, low-pressure suggestion.";
 
 const MAX_HISTORY = 12;
 const DEFAULT_TEMPERATURE = 0.7;
@@ -30,23 +32,27 @@ function localWellnessReply(message) {
   const input = message.toLowerCase();
 
   if (input.includes("overwhelmed") || input.includes("panic")) {
-    return "It sounds heavy. Would you like a 5 minute breathing exercise or a short grounding prompt?";
+    return "That sounds like a lot to carry right now. We can keep this small. Would a grounding reset or a short breathing exercise feel more manageable?";
   }
 
   if (input.includes("sleep")) {
-    return "A wind-down checklist and a brief journal brain-dump could help tonight. I can suggest both.";
+    return "If your mind is still running at night, a short brain-dump and a simple wind-down routine can help reduce the carryover into sleep.";
   }
 
   if (input.includes("journal")) {
-    return "Try this prompt: What emotion showed up most strongly today, and what triggered it?";
+    return "Try this prompt: What felt heaviest today, and what would feel slightly kinder or lighter tomorrow?";
   }
 
-  return "I can help explain results, suggest a calming exercise, or help you choose the next reflection step.";
+  if (input.includes("lost") || input.includes("confused")) {
+    return "Feeling lost can make everything seem louder at once. Let's narrow it down to one thing that feels most urgent, and one thing that can wait.";
+  }
+
+  return "I'm here to help you slow things down a little. I can suggest a calming exercise, a journaling prompt, or help you make sense of your latest pattern.";
 }
 
 function contextualFallback(message, context) {
   if (context?.mental_state && context.mental_state !== "Unknown") {
-    return `Based on your latest check-in, your current state is ${context.mental_state}. Would you like a breathing reset, a short journaling prompt, or a grounding exercise?`;
+    return `Based on your recent pattern, you look closer to ${context.mental_state}. That is a support snapshot, not a diagnosis. Want a next step that matches it?`;
   }
 
   return localWellnessReply(message);
@@ -84,6 +90,18 @@ function formatContext(context) {
 
   if (context.anxiety_score !== null && context.anxiety_score !== undefined) {
     entries.push(`anxiety score: ${context.anxiety_score}`);
+  }
+
+  if (context.suggested_action?.title) {
+    entries.push(`suggested action: ${context.suggested_action.title}`);
+  }
+
+  if (Array.isArray(context.recommendation_titles) && context.recommendation_titles.length) {
+    entries.push(`top recommendations: ${context.recommendation_titles.join(", ")}`);
+  }
+
+  if (Array.isArray(context.journal_patterns) && context.journal_patterns.length) {
+    entries.push(`journal patterns: ${context.journal_patterns.join(", ")}`);
   }
 
   if (entries.length === 0) {

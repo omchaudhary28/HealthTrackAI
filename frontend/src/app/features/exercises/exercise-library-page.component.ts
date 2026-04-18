@@ -1,7 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { animate, style, transition, trigger } from "@angular/animations";
-import { Component } from "@angular/core";
+import { Component, HostListener, OnDestroy } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { Router } from "@angular/router";
 import { Observable, catchError, of } from "rxjs";
 import { Exercise, ExercisesService } from "../../core/services/exercises.service";
 import { BoxBreathingComponent } from "../../shared/components/box-breathing.component";
@@ -20,11 +21,11 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
     ]),
     trigger("exercisePanel", [
       transition(":enter", [
-        style({ opacity: 0, transform: "translateY(10px)" }),
-        animate("260ms ease-out", style({ opacity: 1, transform: "translateY(0)" }))
+        style({ opacity: 0, transform: "scale(0.95) translateY(10px)" }),
+        animate("260ms ease-out", style({ opacity: 1, transform: "scale(1) translateY(0)" }))
       ]),
       transition(":leave", [
-        animate("200ms ease-in", style({ opacity: 0, transform: "translateY(6px)" }))
+        animate("200ms ease-in", style({ opacity: 0, transform: "scale(0.95) translateY(6px)" }))
       ])
     ])
   ],
@@ -73,8 +74,9 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
               class="card-container h-full">
               <div class="card-wrapper">
                 <article
-                  class="card mt-card mt-card-hover comic-corner-doodle"
-                  [style.view-transition-name]="cardTransitionName('recommended', exercise, i)">
+                  class="card mt-card mt-card-hover comic-corner-doodle cursor-pointer"
+                  [style.view-transition-name]="cardTransitionName('recommended', exercise, i)"
+                  (click)="onRecommendedClick($event, exercise, i)">>
                   <div class="card-inner">
                     <div class="mt-card-head">
                       <div class="mt-card-brand">
@@ -100,8 +102,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                     </div>
                     <button
                       type="button"
-                      (click)="open(exercise, cardTransitionName('recommended', exercise, i))"
-                      class="btn-primary mt-4 w-full rounded-2xl px-4 py-3 text-sm font-semibold">
+                      class="btn-primary mt-4 w-full rounded-2xl px-4 py-3 text-sm font-semibold pointer-events-none">
                       Open exercise
                     </button>
                   </div>
@@ -173,12 +174,13 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
         </div>
       </ng-template>
 
-      <div *ngIf="activeExercise" @exerciseOverlay class="fixed inset-0 z-50 flex items-end justify-center p-3 sm:p-4 sm:items-center">
-        <div class="absolute inset-0 bg-slate-950/25 backdrop-blur-sm" (click)="closeActiveExercise()"></div>
+      <div *ngIf="activeExercise" @exerciseOverlay class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/25 backdrop-blur-[4px]" (click)="closeActiveExercise()"></div>
         <div
           @exercisePanel
-          class="relative max-h-[92vh] w-full max-w-3xl overflow-auto rounded-[1.75rem] border border-white/60 bg-white/96 shadow-2xl backdrop-blur sm:rounded-[2.25rem]"
-          [style.view-transition-name]="activeTransitionName()">
+          class="relative w-[min(90%,900px)] max-h-[90vh] overflow-y-auto rounded-[1.75rem] border border-white/60 bg-white/96 shadow-2xl backdrop-blur sm:rounded-[2.25rem]"
+          [style.view-transition-name]="activeTransitionName()"
+          (click)="$event.stopPropagation()">
           <div class="sticky top-0 z-10 border-b border-white/60 bg-white/88 px-4 py-4 backdrop-blur sm:px-6 sm:py-5">
             <div class="flex items-start justify-between gap-3">
               <div class="mt-card-brand">
@@ -299,7 +301,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
     </section>
   `
 })
-export class ExerciseLibraryPageComponent {
+export class ExerciseLibraryPageComponent implements OnDestroy {
   exercises$: Observable<Exercise[]>;
   recommended$: Observable<Exercise[]>;
   activeExercise: Exercise | null = null;
@@ -322,9 +324,22 @@ export class ExerciseLibraryPageComponent {
 
   selectedCategory: string | null = null;
 
-  constructor(private readonly exercisesService: ExercisesService) {
+  constructor(private readonly exercisesService: ExercisesService, private readonly router: Router) {
     this.exercises$ = this.load();
     this.recommended$ = this.loadRecommended();
+  }
+
+  ngOnDestroy(): void {
+    // Ensure overlay is closed when component is destroyed
+    this.activeExercise = null;
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  onEscapeKey(event: KeyboardEvent): void {
+    if (this.activeExercise) {
+      event.preventDefault();
+      this.closeActiveExercise();
+    }
   }
 
   selectCategory(value: string | null): void {
@@ -344,16 +359,19 @@ export class ExerciseLibraryPageComponent {
     this.open(event.exercise, event.transitionName);
   }
 
-  open(exercise: Exercise, transitionName: string | null = null): void {
-    this.activeExerciseTransitionName = transitionName || this.transitionNameFor("library", exercise, 0);
+  onRecommendedClick(event: Event, exercise: Exercise, index: number): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.open(exercise, this.cardTransitionName('recommended', exercise, index));
+  }
 
-    this.withViewTransition(() => {
-      this.activeExercise = exercise;
-      this.feedbackRating = 4;
-      this.feedbackText = "";
-      this.resultAfter = "";
-      this.completionSuccess = false;
-    });
+  open(exercise: Exercise, transitionName: string | null = null): void {
+    this.activeExercise = exercise;
+    this.activeExerciseTransitionName = transitionName || this.transitionNameFor("library", exercise, 0);
+    this.feedbackRating = 4;
+    this.feedbackText = "";
+    this.resultAfter = "";
+    this.completionSuccess = false;
   }
 
   closeActiveExercise(): void {
@@ -361,14 +379,13 @@ export class ExerciseLibraryPageComponent {
       return;
     }
 
-    if (!this.activeExerciseTransitionName) {
-      this.activeExerciseTransitionName = this.transitionNameFor("library", this.activeExercise, 0);
-    }
-
-    this.withViewTransition(() => {
-      this.activeExercise = null;
-      this.completionSuccess = false;
-    });
+    // Reset state immediately without view transition to ensure overlay closes
+    this.activeExercise = null;
+    this.activeExerciseTransitionName = "";
+    this.completionSuccess = false;
+    this.feedbackRating = 4;
+    this.feedbackText = "";
+    this.resultAfter = "";
   }
 
   cardTransitionName(scope: "recommended" | "library", exercise: Exercise, index: number): string | null {
@@ -414,6 +431,8 @@ export class ExerciseLibraryPageComponent {
         },
         error: () => {
           this.completionPending = false;
+          // Close overlay on error so user can retry or navigate away
+          this.closeActiveExercise();
         }
       });
   }

@@ -35,11 +35,14 @@ export async function submitBaselineAssessment(req, res) {
   };
 
   const classification = await classifyMentalState(classificationMetrics);
-  const aiRecommendations = await getAiRecommendations(
-    classificationMetrics,
-    classification.mental_state
-  );
-  const recommendationSet = buildExerciseRecommendations(scored.dimensionScores);
+  const normalizedState = normalizeStateName(classification.mental_state);
+  const aiRecommendations = await getAiRecommendations(classificationMetrics, normalizedState);
+  const recommendationSet = buildExerciseRecommendations({
+    metrics: classificationMetrics,
+    mentalState: normalizedState,
+    journalPatterns: recentJournalEntries.flatMap((entry) => entry?.aiInsights?.patterns || []),
+    limit: 4
+  });
 
   await TestResult.create({
     userId: req.user.sub,
@@ -55,13 +58,19 @@ export async function submitBaselineAssessment(req, res) {
 
   const savedMentalState = await MentalState.create({
     userId: req.user.sub,
-    mentalState: classification.mental_state,
-    description: classification.description,
+    mentalState: normalizedState,
+    description:
+      classification.description ||
+      "Recent signals were combined to create a supportive mental-state snapshot.",
     recommendations: classification.recommendations,
     commonSigns: classification.common_signs || [],
-    recommendedExercises: classification.recommended_exercises || classification.recommendations || [],
-    factors: scored.dimensionScores,
-    confidence: classification.confidence || 0.72
+    recommendedExercises: recommendationSet.map((item) => item.key),
+    factors: classificationMetrics,
+    confidence: classification.confidence || 0.72,
+    source: "baseline",
+    whyNow: recommendationSet[0]?.whyRecommended || "",
+    suggestedAction: recommendationSet[0]?.title || "",
+    recommendationCards: recommendationSet
   });
 
   await User.findByIdAndUpdate(req.user.sub, { baselineComplete: true });
@@ -70,11 +79,22 @@ export async function submitBaselineAssessment(req, res) {
     mental_score: scored.mentalScore,
     labels: scored.labels,
     dimension_scores: scored.dimensionScores,
-    classification,
+    classification: {
+      ...classification,
+      mental_state: normalizedState,
+      name: normalizedState
+    },
     ai_recommendations: aiRecommendations,
     recommended_activities: recommendationSet,
     population_comparison: comparisons,
     state_snapshot_id: savedMentalState.id,
+    suggested_action: recommendationSet[0]
+      ? {
+          title: recommendationSet[0].title,
+          whyRecommended: recommendationSet[0].whyRecommended,
+          expectedOutcome: recommendationSet[0].expectedOutcome
+        }
+      : null,
     disclaimer: "MindTrack AI provides wellness support and self-reflection tools only."
   });
 }
@@ -86,15 +106,28 @@ export async function getPopulationComparisonByMetric(req, res) {
 }
 
 export async function getLatestMentalState(req, res) {
-  const latest = await MentalState.findOne({ userId: req.user.sub }).sort({ createdAt: -1 }).lean();
-  const latestResult = await TestResult.findOne({ userId: req.user.sub, testKey: "baseline" })
-    .sort({ createdAt: -1 })
-    .lean();
+  const { snapshot } = await refreshMentalStateSnapshot(req.user.sub);
 
   res.json({
-    mentalState: latest,
-    latestBaseline: latestResult
+    mentalState: snapshot.mentalStates?.[0] || null,
+    latestBaseline: snapshot.latestBaseline,
+    suggestedAction: snapshot.suggestedAction,
+    recommendationCards: snapshot.recommendationCards,
+    activitySummary: snapshot.activitySummary
   });
+}
+
+function normalizeStateName(value) {
+  const mapping = {
+    "Stress Overloaded": "Stressed",
+    "Burnout Risk": "Stressed",
+    "Low Mood": "Depressed",
+    "FOMO Pattern": "FOMO-driven",
+    "Emotional Sensitivity": "Emotionally overwhelmed",
+    "Social Anxiety": "Emotionally overwhelmed"
+  };
+
+  return mapping[value] || value || "Balanced";
 }
 
 function buildMoodStats(logs) {

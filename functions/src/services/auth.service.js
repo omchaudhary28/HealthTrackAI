@@ -68,6 +68,7 @@ export async function getUserProfile(userId) {
 
 export async function lookupUserByEmail(email) {
   const normalized = normalizeEmail(email);
+
   const user = await User.findOne({ email: normalized }).select("name email baselineComplete").lean();
 
   return {

@@ -9,7 +9,11 @@ const mentalStateSchema = new mongoose.Schema(
     commonSigns: [String],
     recommendedExercises: [String],
     factors: { type: mongoose.Schema.Types.Mixed, default: {} },
-    confidence: { type: Number, default: 0.65 }
+    confidence: { type: Number, default: 0.65 },
+    source: { type: String, default: "system" },
+    whyNow: String,
+    suggestedAction: String,
+    recommendationCards: { type: [mongoose.Schema.Types.Mixed], default: [] }
   },
   { timestamps: true }
 );

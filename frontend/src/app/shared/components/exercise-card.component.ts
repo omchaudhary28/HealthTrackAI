@@ -17,7 +17,7 @@ export interface ExerciseCardStartEvent {
   template: `
     <div class="card-container h-full">
       <div class="card-wrapper">
-        <article class="card mt-card mt-card-hover mt-card-intro comic-corner-doodle" [style.view-transition-name]="transitionName || null">
+        <article class="card mt-card mt-card-hover mt-card-intro comic-corner-doodle cursor-pointer" [style.view-transition-name]="transitionName || null" (click)="emitStart($event)">
           <div class="card-inner">
             <div class="mt-card-head">
               <div class="mt-card-brand">
@@ -65,8 +65,7 @@ export interface ExerciseCardStartEvent {
               </div>
               <button
                 type="button"
-                (click)="emitStart($event)"
-                class="btn-primary w-full rounded-2xl px-4 py-3 text-sm font-semibold sm:w-auto sm:min-w-[8rem]">
+                class="btn-primary w-full rounded-2xl px-4 py-3 text-sm font-semibold sm:w-auto sm:min-w-[8rem] pointer-events-none">
                 Open
               </button>
             </div>
@@ -90,6 +89,9 @@ export class ExerciseCardComponent {
   @Output() start = new EventEmitter<ExerciseCardStartEvent>();
 
   emitStart(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    
     const target = event.currentTarget as HTMLElement | null;
     this.start.emit({
       exercise: this.exercise,
