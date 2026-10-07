@@ -4,11 +4,12 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 import { IconComponent } from "../../shared/components/icon.component";
 import { ProgressChartComponent } from "../../shared/components/progress-chart.component";
 import { StatCardComponent } from "../../shared/components/stat-card.component";
+import { ResilienceWidgetComponent } from "../../shared/components/resilience-widget.component";
 
 @Component({
   selector: "app-progress-tracker-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, IconComponent, ProgressChartComponent, StatCardComponent],
+  imports: [ScrollRevealDirective, CommonModule, IconComponent, ProgressChartComponent, StatCardComponent, ResilienceWidgetComponent],
   template: `
     <section appScrollReveal class="page-stack">
       <div class="mt-card mt-card-hover page-hero">
@@ -53,7 +54,11 @@ import { StatCardComponent } from "../../shared/components/stat-card.component";
           badge="Consistency"></app-stat-card>
       </div>
 
-      <div class="grid gap-6 xl:grid-cols-2">
+      <div class="mt-4 sm:mt-6">
+        <app-resilience-widget></app-resilience-widget>
+      </div>
+
+      <div class="grid gap-6 xl:grid-cols-2 mt-4 sm:mt-6">
         <app-progress-chart
           title="Stress trend"
           subtitle="Four-week change"

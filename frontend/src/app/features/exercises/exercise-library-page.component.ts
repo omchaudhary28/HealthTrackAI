@@ -1,34 +1,16 @@
 import { CommonModule } from "@angular/common";
-import { animate, style, transition, trigger } from "@angular/animations";
-import { Component, HostListener, OnDestroy } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { Router } from "@angular/router";
-import { Observable, catchError, of } from "rxjs";
+import { Component, OnDestroy } from "@angular/core";
+import { Observable, Subscription, catchError, of } from "rxjs";
+import { ExerciseModalService } from "../../core/services/exercise-modal.service";
 import { Exercise, ExercisesService } from "../../core/services/exercises.service";
-import { BoxBreathingComponent } from "../../shared/components/box-breathing.component";
-import { ExerciseCardComponent, ExerciseCardStartEvent } from "../../shared/components/exercise-card.component";
+import { ExerciseCardComponent } from "../../shared/components/exercise-card.component";
 import { IconComponent } from "../../shared/components/icon.component";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
 
 @Component({
   selector: "app-exercise-library-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, ExerciseCardComponent, BoxBreathingComponent, FormsModule, IconComponent],
-  animations: [
-    trigger("exerciseOverlay", [
-      transition(":enter", [style({ opacity: 0 }), animate("220ms ease-out", style({ opacity: 1 }))]),
-      transition(":leave", [animate("180ms ease-in", style({ opacity: 0 }))])
-    ]),
-    trigger("exercisePanel", [
-      transition(":enter", [
-        style({ opacity: 0, transform: "scale(0.95) translateY(10px)" }),
-        animate("260ms ease-out", style({ opacity: 1, transform: "scale(1) translateY(0)" }))
-      ]),
-      transition(":leave", [
-        animate("200ms ease-in", style({ opacity: 0, transform: "scale(0.95) translateY(6px)" }))
-      ])
-    ])
-  ],
+  imports: [ScrollRevealDirective, CommonModule, ExerciseCardComponent, IconComponent],
   template: `
     <section appScrollReveal class="page-stack motion-zone">
       <div class="mt-card mt-card-hover page-hero">
@@ -76,7 +58,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
                 <article
                   class="card mt-card mt-card-hover comic-corner-doodle cursor-pointer"
                   [style.view-transition-name]="cardTransitionName('recommended', exercise, i)"
-                  (click)="onRecommendedClick($event, exercise, i)">>
+                  (click)="openExercise(exercise, cardTransitionName('recommended', exercise, i))">
                   <div class="card-inner">
                     <div class="mt-card-head">
                       <div class="mt-card-brand">
@@ -161,7 +143,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
             [revealDelay]="i * 60"
             [exercise]="exercise"
             [transitionName]="cardTransitionName('library', exercise, i)"
-            (start)="onExerciseCardStart($event)"></app-exercise-card>
+            (start)="openExercise($event.exercise, $event.transitionName)"></app-exercise-card>
         </div>
       </ng-container>
 
@@ -173,144 +155,15 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           </div>
         </div>
       </ng-template>
-
-      <div *ngIf="activeExercise" @exerciseOverlay class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-black/25 backdrop-blur-[4px]" (click)="closeActiveExercise()"></div>
-        <div
-          @exercisePanel
-          class="relative w-[min(90%,900px)] max-h-[90vh] overflow-y-auto rounded-[1.75rem] border border-white/60 bg-white/96 shadow-2xl backdrop-blur sm:rounded-[2.25rem]"
-          [style.view-transition-name]="activeTransitionName()"
-          (click)="$event.stopPropagation()">
-          <div class="sticky top-0 z-10 border-b border-white/60 bg-white/88 px-4 py-4 backdrop-blur sm:px-6 sm:py-5">
-            <div class="flex items-start justify-between gap-3">
-              <div class="mt-card-brand">
-                <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
-                  <app-icon [name]="activeExercise.category === 'breathing' ? 'spa' : activeExercise.category === 'stress-release' ? 'activity' : 'heartbeat'" className="text-base"></app-icon>
-                </div>
-                <div>
-                  <div class="mt-card-kicker">{{ label(activeExercise.category) }} | {{ activeExercise.durationMinutes }} min</div>
-                  <div class="mt-2 text-xl font-semibold text-slate-900 sm:text-2xl">{{ activeExercise.title }}</div>
-                </div>
-              </div>
-              <button
-                type="button"
-                (click)="closeActiveExercise()"
-                class="btn-outline inline-flex h-10 w-10 items-center justify-center rounded-2xl"
-                aria-label="Close">
-                <app-icon name="arrow" className="text-sm rotate-45"></app-icon>
-              </button>
-            </div>
-          </div>
-
-          <div class="px-4 py-4 sm:px-6 sm:py-6">
-            <div class="exercise-layout">
-              <div class="space-y-5">
-                <div class="exercise-note p-5">
-                  <div class="mt-card-kicker">Why</div>
-                  <p class="mt-card-copy mt-2 text-sm">{{ activeExercise.purpose || activeExercise.description }}</p>
-                </div>
-
-                <div class="exercise-note p-5">
-                  <div class="mt-card-kicker">What you get</div>
-                  <p class="mt-card-copy mt-2 text-sm">{{ activeExercise.expectedOutcome || "A calmer next step and a little more room to breathe." }}</p>
-                </div>
-
-                <div *ngIf="activeExercise.benefits?.length" class="exercise-note p-5">
-                  <div class="mt-card-kicker">Benefits</div>
-                  <div class="mt-3 flex flex-wrap gap-2">
-                    <span *ngFor="let benefit of activeExercise.benefits" class="mt-chip">
-                      {{ benefit }}
-                    </span>
-                  </div>
-                </div>
-
-                <div *ngIf="activeExercise.instructions?.length" class="exercise-note p-5">
-                  <div class="mt-card-kicker">Steps</div>
-                  <ol class="mt-4 space-y-3 text-sm leading-7 text-slate-700">
-                    <li *ngFor="let step of activeExercise.instructions; let i = index" class="flex gap-3">
-                      <div class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-slate-900 text-xs font-semibold text-white">{{ i + 1 }}</div>
-                      <div>{{ step }}</div>
-                    </li>
-                  </ol>
-                </div>
-              </div>
-
-              <div class="space-y-5">
-                <div *ngIf="activeExercise.whyRecommended" class="exercise-note p-5">
-                  <div class="mt-card-brand">
-                    <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
-                      <app-icon name="sparkles" className="text-base"></app-icon>
-                    </div>
-                    <div>
-                      <div class="mt-card-kicker">AI note</div>
-                      <p class="mt-card-copy mt-2 text-sm">{{ activeExercise.whyRecommended }}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div *ngIf="activeExercise.category === 'breathing'" class="breathing-card-shell">
-                  <app-box-breathing></app-box-breathing>
-                </div>
-
-                <div class="mt-card p-5">
-                  <div class="mt-card-brand">
-                    <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
-                      <app-icon name="feedback" className="text-base"></app-icon>
-                    </div>
-                    <div>
-                      <div class="mt-card-kicker">Quick feedback</div>
-                      <div class="mt-card-copy mt-2 text-sm">Tell the recommender how this felt.</div>
-                    </div>
-                  </div>
-                  <div class="mt-4">
-                    <div class="mt-card-kicker">How'd it feel?</div>
-                    <div class="mt-3 flex flex-wrap gap-2">
-                      <button *ngFor="let rating of [1,2,3,4,5]" type="button" (click)="feedbackRating = rating"
-                        class="mt-chip transition"
-                        [class.bg-slate-900]="feedbackRating === rating"
-                        [class.border-slate-900]="feedbackRating === rating"
-                        [class.text-white]="feedbackRating === rating">
-                        {{ rating }}/5
-                      </button>
-                    </div>
-                  </div>
-
-                  <label class="mt-4 block text-sm font-medium text-slate-600">
-                    What changed after this?
-                    <textarea [(ngModel)]="resultAfter" rows="3" class="app-textarea mt-2" placeholder="Example: Less tense. More clear."></textarea>
-                  </label>
-
-                  <label class="mt-4 block text-sm font-medium text-slate-600">
-                    Optional note
-                    <textarea [(ngModel)]="feedbackText" rows="3" class="app-textarea mt-2" placeholder="Anything worth remembering?"></textarea>
-                  </label>
-
-                  <div *ngIf="completionSuccess" class="mt-success-pop mt-4 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                    Saved. Future picks will learn from this.
-                  </div>
-
-                  <button type="button" (click)="completeActiveExercise()" [disabled]="completionPending" class="btn-primary mt-5 w-full rounded-2xl px-5 py-4 text-sm font-semibold disabled:opacity-60">
-                    {{ completionPending ? "Saving..." : "Mark complete" }}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
   `
 })
 export class ExerciseLibraryPageComponent implements OnDestroy {
   exercises$: Observable<Exercise[]>;
   recommended$: Observable<Exercise[]>;
-  activeExercise: Exercise | null = null;
-  activeExerciseTransitionName = "";
-  feedbackRating = 4;
-  feedbackText = "";
-  resultAfter = "";
-  completionPending = false;
-  completionSuccess = false;
+  selectedCategory: string | null = null;
+
+  private readonly modalCompletionSubscription: Subscription;
 
   categories = [
     { key: null as string | null, label: "All" },
@@ -322,24 +175,20 @@ export class ExerciseLibraryPageComponent implements OnDestroy {
     { key: "self-reflection", label: "Self reflection" }
   ];
 
-  selectedCategory: string | null = null;
-
-  constructor(private readonly exercisesService: ExercisesService, private readonly router: Router) {
+  constructor(
+    private readonly exercisesService: ExercisesService,
+    private readonly exerciseModalService: ExerciseModalService
+  ) {
     this.exercises$ = this.load();
     this.recommended$ = this.loadRecommended();
+    this.modalCompletionSubscription = this.exerciseModalService.completed$.subscribe(() => {
+      this.refreshRecommendations();
+    });
   }
 
   ngOnDestroy(): void {
-    // Ensure overlay is closed when component is destroyed
-    this.activeExercise = null;
-  }
-
-  @HostListener('document:keydown.escape', ['$event'])
-  onEscapeKey(event: KeyboardEvent): void {
-    if (this.activeExercise) {
-      event.preventDefault();
-      this.closeActiveExercise();
-    }
+    this.modalCompletionSubscription.unsubscribe();
+    this.exerciseModalService.close();
   }
 
   selectCategory(value: string | null): void {
@@ -355,86 +204,17 @@ export class ExerciseLibraryPageComponent implements OnDestroy {
     this.recommended$ = this.loadRecommended();
   }
 
-  onExerciseCardStart(event: ExerciseCardStartEvent): void {
-    this.open(event.exercise, event.transitionName);
-  }
-
-  onRecommendedClick(event: Event, exercise: Exercise, index: number): void {
-    event.preventDefault();
-    event.stopPropagation();
-    this.open(exercise, this.cardTransitionName('recommended', exercise, index));
-  }
-
-  open(exercise: Exercise, transitionName: string | null = null): void {
-    this.activeExercise = exercise;
-    this.activeExerciseTransitionName = transitionName || this.transitionNameFor("library", exercise, 0);
-    this.feedbackRating = 4;
-    this.feedbackText = "";
-    this.resultAfter = "";
-    this.completionSuccess = false;
-  }
-
-  closeActiveExercise(): void {
-    if (!this.activeExercise) {
-      return;
-    }
-
-    // Reset state immediately without view transition to ensure overlay closes
-    this.activeExercise = null;
-    this.activeExerciseTransitionName = "";
-    this.completionSuccess = false;
-    this.feedbackRating = 4;
-    this.feedbackText = "";
-    this.resultAfter = "";
+  openExercise(exercise: Exercise, transitionName: string | null = null): void {
+    const resolvedTransitionName = transitionName || this.transitionNameFor("library", exercise, 0);
+    this.exerciseModalService.open(exercise, resolvedTransitionName);
   }
 
   cardTransitionName(scope: "recommended" | "library", exercise: Exercise, index: number): string | null {
-    if (this.activeExercise) {
+    if (this.exerciseModalService.isOpen()) {
       return "none";
     }
 
     return this.transitionNameFor(scope, exercise, index);
-  }
-
-  activeTransitionName(): string | null {
-    if (!this.activeExercise) {
-      return null;
-    }
-
-    return this.activeExerciseTransitionName;
-  }
-
-  completeActiveExercise(): void {
-    if (!this.activeExercise || this.completionPending) {
-      return;
-    }
-
-    this.completionPending = true;
-    this.exercisesService
-      .complete({
-        exerciseKey: this.activeExercise.key,
-        exerciseTitle: this.activeExercise.title,
-        category: this.activeExercise.category,
-        durationMinutes: this.activeExercise.durationMinutes,
-        source: this.activeExercise.whyRecommended ? "recommended" : "library",
-        feedbackRating: this.feedbackRating,
-        feedbackText: this.feedbackText.trim() || undefined,
-        resultAfter: this.resultAfter.trim() || undefined,
-        whyRecommended: this.activeExercise.whyRecommended,
-        expectedOutcome: this.activeExercise.expectedOutcome
-      })
-      .subscribe({
-        next: () => {
-          this.completionPending = false;
-          this.completionSuccess = true;
-          this.refreshRecommendations();
-        },
-        error: () => {
-          this.completionPending = false;
-          // Close overlay on error so user can retry or navigate away
-          this.closeActiveExercise();
-        }
-      });
   }
 
   label(value: string): string {
@@ -449,24 +229,6 @@ export class ExerciseLibraryPageComponent implements OnDestroy {
 
   private loadRecommended(): Observable<Exercise[]> {
     return this.exercisesService.recommended().pipe(catchError(() => of([])));
-  }
-
-  private withViewTransition(update: () => void): void {
-    if (typeof document === "undefined" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      update();
-      return;
-    }
-
-    const transitionDoc = document as Document & {
-      startViewTransition?: (callback: () => void) => void;
-    };
-
-    if (typeof transitionDoc.startViewTransition !== "function") {
-      update();
-      return;
-    }
-
-    transitionDoc.startViewTransition(() => update());
   }
 
   private transitionNameFor(scope: "recommended" | "library", exercise: Exercise, index: number): string {

@@ -6,6 +6,7 @@ import { filter, Subscription } from "rxjs";
 import { AppRuntimeService } from "./core/services/app-runtime.service";
 import { ROUTE_THEMES, RouteTheme } from "./core/theme/route-themes";
 import { FloatingChatbotComponent } from "./shared/components/floating-chatbot.component";
+import { ExerciseModalComponent } from "./shared/components/exercise-modal.component";
 import { IconComponent, MindtrackIconName } from "./shared/components/icon.component";
 import { SideNavComponent } from "./shared/components/side-nav.component";
 import { TopNavComponent } from "./shared/components/top-nav.component";
@@ -62,7 +63,7 @@ function buildParticle(
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterOutlet, FloatingChatbotComponent, IconComponent, SideNavComponent, TopNavComponent],
+  imports: [CommonModule, RouterLink, RouterOutlet, FloatingChatbotComponent, ExerciseModalComponent, IconComponent, SideNavComponent, TopNavComponent],
   animations: [
     trigger("routeAnimations", [
       transition("* <=> *", [
@@ -163,6 +164,8 @@ function buildParticle(
           </a>
         </nav>
       </div>
+
+      <app-exercise-modal></app-exercise-modal>
 
       <app-floating-chatbot></app-floating-chatbot>
     </div>

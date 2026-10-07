@@ -4,11 +4,12 @@ import { Observable, catchError, of } from "rxjs";
 import { AssessmentService, LatestAssessmentState } from "../../core/services/assessment.service";
 import { IconComponent } from "../../shared/components/icon.component";
 import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.directive";
+import { ResilienceWidgetComponent } from "../../shared/components/resilience-widget.component";
 
 @Component({
   selector: "app-mental-state-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, IconComponent],
+  imports: [ScrollRevealDirective, CommonModule, IconComponent, ResilienceWidgetComponent],
   template: `
     <section appScrollReveal class="page-stack motion-zone">
       <ng-container *ngIf="latest$ | async as latest">
@@ -77,7 +78,11 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
           </div>
         </div>
 
-        <div class="mt-card-soft p-5 text-sm text-slate-600">
+        <div class="mt-6">
+          <app-resilience-widget></app-resilience-widget>
+        </div>
+
+        <div class="mt-card-soft p-5 text-sm text-slate-600 mt-6">
           <div class="mt-card-brand">
             <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]">
               <app-icon name="shield" className="text-base"></app-icon>

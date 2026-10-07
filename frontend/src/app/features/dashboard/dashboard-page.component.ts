@@ -10,6 +10,8 @@ import { MoodService } from "../../core/services/mood.service";
 import { IconComponent, MindtrackIconName } from "../../shared/components/icon.component";
 import { MoodTrackerComponent } from "../../shared/components/mood-tracker.component";
 import { ProgressChartComponent } from "../../shared/components/progress-chart.component";
+import { ResilienceWidgetComponent } from "../../shared/components/resilience-widget.component";
+import { DailyIntentionComponent } from "../../shared/components/daily-intention.component";
 
 interface PatternInsightCard {
   key: string;
@@ -25,7 +27,7 @@ interface PatternInsightCard {
 @Component({
   selector: "app-dashboard-page",
   standalone: true,
-  imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink, IconComponent, MoodTrackerComponent, ProgressChartComponent],
+  imports: [ScrollRevealDirective, CommonModule, FormsModule, RouterLink, IconComponent, MoodTrackerComponent, ProgressChartComponent, ResilienceWidgetComponent, DailyIntentionComponent],
   template: `
     <ng-container *ngIf="summary$ | async as summary; else loading">
       <ng-container *ngIf="summary.error; else content">
@@ -116,6 +118,7 @@ interface PatternInsightCard {
             </div>
           </div>
 
+          <div class="grid gap-4 lg:grid-cols-2"><app-resilience-widget class="block"></app-resilience-widget><app-daily-intention class="block"></app-daily-intention></div>
           <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div class="mt-card mt-card-hover p-5">
               <div class="mt-card-brand">
@@ -392,7 +395,8 @@ interface PatternInsightCard {
           <div class="skeleton mt-5 h-12 w-2/3 rounded-2xl"></div>
           <div class="skeleton mt-4 h-24 rounded-3xl"></div>
         </div>
-        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div class="grid gap-4 lg:grid-cols-2"><app-resilience-widget class="block"></app-resilience-widget><app-daily-intention class="block"></app-daily-intention></div>
+          <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <div *ngFor="let _ of [1,2,3,4]" class="glass-card rounded-[2rem] p-5">
             <div class="skeleton h-4 w-24 rounded-full"></div>
             <div class="skeleton mt-4 h-10 w-20 rounded-2xl"></div>

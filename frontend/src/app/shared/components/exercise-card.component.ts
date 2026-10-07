@@ -5,7 +5,6 @@ import { IconComponent, MindtrackIconName } from "./icon.component";
 
 export interface ExerciseCardStartEvent {
   exercise: Exercise;
-  source: HTMLElement | null;
   transitionName: string;
 }
 
@@ -17,7 +16,7 @@ export interface ExerciseCardStartEvent {
   template: `
     <div class="card-container h-full">
       <div class="card-wrapper">
-        <article class="card mt-card mt-card-hover mt-card-intro comic-corner-doodle cursor-pointer" [style.view-transition-name]="transitionName || null" (click)="emitStart($event)">
+        <div class="exercise-card card mt-card mt-card-hover mt-card-intro comic-corner-doodle cursor-pointer" [style.view-transition-name]="transitionName || null" (click)="emitStart()">
           <div class="card-inner">
             <div class="mt-card-head">
               <div class="mt-card-brand">
@@ -70,7 +69,7 @@ export interface ExerciseCardStartEvent {
               </button>
             </div>
           </div>
-        </article>
+        </div>
       </div>
     </div>
   `,
@@ -88,14 +87,9 @@ export class ExerciseCardComponent {
   @Input() transitionName = "";
   @Output() start = new EventEmitter<ExerciseCardStartEvent>();
 
-  emitStart(event: Event): void {
-    event.preventDefault();
-    event.stopPropagation();
-    
-    const target = event.currentTarget as HTMLElement | null;
+  emitStart(): void {
     this.start.emit({
       exercise: this.exercise,
-      source: target?.closest("article") ?? null,
       transitionName: this.transitionName
     });
   }
