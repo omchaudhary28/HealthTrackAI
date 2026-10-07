@@ -411,3 +411,429 @@
     at process.processTimers (node:internal/timers:541:7)
 [error] 
 [error] Error: An unexpected error has occurred.
+[debug] [2026-10-07T17:11:14.697Z] ----------------------------------------------------------------------
+[debug] [2026-10-07T17:11:14.700Z] Command:       C:\nvm4w\nodejs\node.exe C:\Users\OMADITI\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2026-10-07T17:11:14.700Z] CLI Version:   15.10.1
+[debug] [2026-10-07T17:11:14.700Z] Platform:      win32
+[debug] [2026-10-07T17:11:14.701Z] Node Version:  v24.12.0
+[debug] [2026-10-07T17:11:14.701Z] Time:          Wed Oct 07 2026 22:41:14 GMT+0530 (India Standard Time)
+[debug] [2026-10-07T17:11:14.701Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-10-07T17:11:14.702Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-10-07T17:11:18.146Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-10-07T17:11:18.147Z] > authorizing via signed-in user (omchaudhary2111@gmail.com)
+[debug] [2026-10-07T17:11:18.147Z] [iam] checking project healthtrackai-23752 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-10-07T17:11:18.148Z] Checked if tokens are valid: false, expires at: 1776501767896
+[debug] [2026-10-07T17:11:18.148Z] Checked if tokens are valid: false, expires at: 1776501767896
+[debug] [2026-10-07T17:11:18.149Z] > refreshing access token with scopes: []
+[debug] [2026-10-07T17:11:18.150Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-10-07T17:11:18.150Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-10-07T17:11:18.614Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-10-07T17:11:18.614Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[error] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-10-07T17:11:18.644Z] [iam] error while checking permissions, command may fail: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2026-10-07T17:11:18.645Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:18.645Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:18.645Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/healthtrackai-23752 [none]
+[debug] [2026-10-07T17:11:18.944Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-10-07T17:11:18.945Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[warn] !  Unable to fetch the CLI MOTD and remote config. This is not a fatal error, but may indicate an issue with your network connection. 
+[debug] [2026-10-07T17:11:18.963Z] Failed to fetch MOTD Error: EPERM: operation not permitted, rename 'C:\Users\OMADITI\.config\configstore\firebase-tools.json.3935200261' -> 'C:\Users\OMADITI\.config\configstore\firebase-tools.json'
+[debug] [2026-10-07T17:11:19.503Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/healthtrackai-23752 200
+[debug] [2026-10-07T17:11:19.504Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/healthtrackai-23752 {"projectId":"healthtrackai-23752","projectNumber":"653093331033","displayName":"HealthTrackAI","name":"projects/healthtrackai-23752","resources":{"hostingSite":"healthtrackai-23752"},"state":"ACTIVE","labels":{"firebase":"enabled"},"etag":"1_e2c39748-eb4a-4d52-8d27-a42991532951"}
+[info] 
+[info] === Deploying to 'healthtrackai-23752'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-10-07T17:11:19.511Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:19.511Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:19.511Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions [none]
+[debug] [2026-10-07T17:11:19.511Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-10-07T17:11:21.179Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions 200
+[debug] [2026-10-07T17:11:21.179Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions {"name":"projects/653093331033/sites/healthtrackai-23752/versions/e4203327d3d0363c","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[healthtrackai-23752]: beginning deploy... 
+[info] i  hosting[healthtrackai-23752]: found 33 files in dist/mindtrack-ai/browser 
+[debug] [2026-10-07T17:11:21.194Z] [hosting] uploading with 200 concurrency
+[debug] [2026-10-07T17:11:21.224Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:21.225Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:21.230Z] [hosting] hash cache [ZGlzdFxtaW5kdHJhY2stYWlcYnJvd3Nlcg] stored for 33 files
+[debug] [2026-10-07T17:11:21.230Z] [hosting][hash queue][FINAL] {"max":24,"min":13,"avg":14.363636363636363,"active":0,"complete":33,"success":33,"errored":0,"retried":0,"total":33,"elapsed":33}
+[debug] [2026-10-07T17:11:21.231Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/e4203327d3d0363c:populateFiles [none]
+[debug] [2026-10-07T17:11:21.231Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/e4203327d3d0363c:populateFiles {"files":{"/index.html":"ee76811317f982ae3fb0b01051fd3dad93d537959e6af3e9629fb9249f25bb9b","/chunk-Z5XUB7N6.js":"ffc87b7191a8cccbc93b91d818434c3a2763ffd4a6c5932d3243a76dee1aff14","/chunk-Z3P25U6U.js":"14fd153d7968aea4896272e07defa8382af80d9cf82e46e39f1dbddae4d2a42f","/chunk-YSB7SQXV.js":"2605e4184e473b28d1c264e781f881977e36089dc4bd1f44724c98a5e638dbb0","/chunk-WJSK4M5R.js":"380e4959176da1c501919a0154cead87982140b3d64344ac4fbf117dc61d22e8","/polyfills-DOYHMSTV.js":"c3f1e61a5be7a7fcb648aaf3c15db12b8881f38150ddd9f602baf0744e34aa28","/chunk-VDSQPEZD.js":"af76c6fca8d127d2a0ed25d9d25bf6a85ffd6d6e58dfb3aefb9d6cc692b808a7","/chunk-UXNB6V7M.js":"bc63e98bc55509f62ac8f0913d7645118bb6c79d1ae530664403eda6d1fe786f","/chunk-X5HOAUJX.js":"b048b47607cd964c488e05e764a2211e2a6af65b849b0beb8f628998ba218b27","/chunk-NGJJ7UQP.js":"b6205b5a29627902752764a70ec03a7b2d07abdf5ee787cb8afefa53be3ac341","/chunk-SKYC4FKZ.js":"b529fb3343c726ab8c10d400e1a25077408360e2a3342eea7c94356f51965963","/chunk-NE7ELFRR.js":"00767272831825eaaade7ffe771dda8e17c0dc1e6e7fa5455bc18bbeb3343f5a","/chunk-M5EEOGOG.js":"b1a8e437442aced0d279c3e24d600098375131c47853d156cc9633df5b935cf8","/chunk-FP7HSN5R.js":"be526ec3c35f4b9f598f7fd64c4a40d97962dabd0c2e2190ce75aec9a4967ec1","/chunk-K3DW7GPX.js":"5f8508535a50f299371b2fc7e492f8432a88fa2bfac94e7ba6680083f8074514","/chunk-CAKWV4YH.js":"20a89970bfd67fa87b82c3e9a9ca06b768533edd8de8e9172026bf895420683e","/chunk-CE3QB65O.js":"0da2e77080dae401c96dff39e7be6f4cc66ae844202b4766ceef41a96fdd652e","/chunk-FHT5XMAT.js":"01f343cd8124915d6da93cd0ef725b1ea4e3954d732f168a0b3cc5110809e5ad","/chunk-AUZL53W2.js":"47ab2b31115106788f6a81e3bebb3adecb3a87a0bae4c32becfebf58107e50ef","/chunk-5WRWNDDB.js":"bfa0aa2ac3b7d78cedad4d770f51fbd979ffd20cc86bced6c3f22a60d3d4bfb4","/chunk-APFBELVU.js":"032137ffe8acf3af4f808f274a42f9c518b8b9617969712e2f9da411365673d7","/chunk-H5R6GEBI.js":"266b1c15130050183e82199bf85fc9cbfe93889eff8b90ccfa35b773b1b97b78","/chunk-6E5LRHHD.js":"63a86fb89976837db9b0a55e6381084b12c267e4a9c13a0170ff7fa9f328642b","/chunk-3TQZGGMS.js":"9dc1f9d88a7b9d4ab12eb89244ae0563303d736058bce3afd8eef41e9560cb9a","/chunk-3DPLE3TW.js":"b40f3075b9f13148b86f8790f115876a28348dbebce016b9441b75ddcd5d2e76","/chunk-4XMK5DEP.js":"f19c05c5e2112dabf81e76f6f41efc591a0d070825f52dcd8baae0a9dc7785bf","/chunk-2DLAZORH.js":"90da03bddc10c89bbc29647f6cf6607539906b1874080171c2126fce7f7b0661","/styles-MSE6XSUA.css":"cfbcdab5b91b48b402f39a95d9010e1c9519383984ed8e168f74551d44f2fdcf","/chunk-MHRJGMJP.js":"8adacf8ce04f74a906df51343bb4b790f3ce873a281b06dfa176d3fa433288df","/chunk-2L6ZZ2SI.js":"acb4db157d926c39c8abeff39ae19d6df4fc2281edfd045843ab4bf6ada92684","/main-TQNXPJ5O.js":"99a71086670eb57a4b87703db4d500aff514481c9a3d6052643e419cd9a97697","/chunk-UKLSRY4B.js":"0035cf792e4adc8a91a8344a7fb08ac16ca948626285480ad225a8567e4129ce","/chunk-VYBV67AM.js":"ef473857014a85cd1024d9f83b1e343d0dd11b394d6637f5d28c900efbe9309c"}}
+[debug] [2026-10-07T17:11:22.143Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/e4203327d3d0363c:populateFiles 200
+[debug] [2026-10-07T17:11:22.143Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/653093331033/sites/healthtrackai-23752/versions/e4203327d3d0363c:populateFiles {"uploadRequiredHashes":["b1a8e437442aced0d279c3e24d600098375131c47853d156cc9633df5b935cf8","9dc1f9d88a7b9d4ab12eb89244ae0563303d736058bce3afd8eef41e9560cb9a","99a71086670eb57a4b87703db4d500aff514481c9a3d6052643e419cd9a97697","ee76811317f982ae3fb0b01051fd3dad93d537959e6af3e9629fb9249f25bb9b","cfbcdab5b91b48b402f39a95d9010e1c9519383984ed8e168f74551d44f2fdcf"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files"}
+[debug] [2026-10-07T17:11:22.145Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:22.145Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:22.145Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:22.145Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:22.146Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:22.146Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:22.146Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:22.146Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:22.146Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:22.146Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:22.146Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/b1a8e437442aced0d279c3e24d600098375131c47853d156cc9633df5b935cf8 [none]
+[debug] [2026-10-07T17:11:22.147Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/b1a8e437442aced0d279c3e24d600098375131c47853d156cc9633df5b935cf8 [stream]
+[debug] [2026-10-07T17:11:22.149Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/9dc1f9d88a7b9d4ab12eb89244ae0563303d736058bce3afd8eef41e9560cb9a [none]
+[debug] [2026-10-07T17:11:22.149Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/9dc1f9d88a7b9d4ab12eb89244ae0563303d736058bce3afd8eef41e9560cb9a [stream]
+[debug] [2026-10-07T17:11:22.151Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/99a71086670eb57a4b87703db4d500aff514481c9a3d6052643e419cd9a97697 [none]
+[debug] [2026-10-07T17:11:22.151Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/99a71086670eb57a4b87703db4d500aff514481c9a3d6052643e419cd9a97697 [stream]
+[debug] [2026-10-07T17:11:22.153Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/ee76811317f982ae3fb0b01051fd3dad93d537959e6af3e9629fb9249f25bb9b [none]
+[debug] [2026-10-07T17:11:22.153Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/ee76811317f982ae3fb0b01051fd3dad93d537959e6af3e9629fb9249f25bb9b [stream]
+[debug] [2026-10-07T17:11:22.154Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/cfbcdab5b91b48b402f39a95d9010e1c9519383984ed8e168f74551d44f2fdcf [none]
+[debug] [2026-10-07T17:11:22.155Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/cfbcdab5b91b48b402f39a95d9010e1c9519383984ed8e168f74551d44f2fdcf [stream]
+[debug] [2026-10-07T17:11:22.157Z] [hosting][populate queue][FINAL] {"max":922,"min":922,"avg":922,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":933}
+[debug] [2026-10-07T17:11:22.157Z] [hosting] uploads queued: 5
+[info] i  hosting: uploading new files [0/5] (0%) 
+[debug] [2026-10-07T17:11:23.817Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/9dc1f9d88a7b9d4ab12eb89244ae0563303d736058bce3afd8eef41e9560cb9a 200
+[debug] [2026-10-07T17:11:23.817Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/9dc1f9d88a7b9d4ab12eb89244ae0563303d736058bce3afd8eef41e9560cb9a [stream]
+[debug] [2026-10-07T17:11:23.944Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/cfbcdab5b91b48b402f39a95d9010e1c9519383984ed8e168f74551d44f2fdcf 200
+[debug] [2026-10-07T17:11:23.945Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/cfbcdab5b91b48b402f39a95d9010e1c9519383984ed8e168f74551d44f2fdcf [stream]
+[debug] [2026-10-07T17:11:24.031Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/b1a8e437442aced0d279c3e24d600098375131c47853d156cc9633df5b935cf8 200
+[debug] [2026-10-07T17:11:24.031Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/b1a8e437442aced0d279c3e24d600098375131c47853d156cc9633df5b935cf8 [stream]
+[debug] [2026-10-07T17:11:24.060Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/ee76811317f982ae3fb0b01051fd3dad93d537959e6af3e9629fb9249f25bb9b 200
+[debug] [2026-10-07T17:11:24.060Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/ee76811317f982ae3fb0b01051fd3dad93d537959e6af3e9629fb9249f25bb9b [stream]
+[debug] [2026-10-07T17:11:24.198Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/99a71086670eb57a4b87703db4d500aff514481c9a3d6052643e419cd9a97697 200
+[debug] [2026-10-07T17:11:24.198Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/healthtrackai-23752/versions/e4203327d3d0363c/files/99a71086670eb57a4b87703db4d500aff514481c9a3d6052643e419cd9a97697 [stream]
+[debug] [2026-10-07T17:11:24.198Z] [hosting][upload queue][FINAL] {"max":2053,"min":1672,"avg":1865,"active":0,"complete":5,"success":5,"errored":0,"retried":0,"total":5,"elapsed":2054}
+[info] i  hosting: upload complete 
+[info] +  hosting[healthtrackai-23752]: file upload complete 
+[debug] [2026-10-07T17:11:24.198Z] [hosting] deploy completed after 3016ms
+[debug] [2026-10-07T17:11:24.198Z] [
+  {
+    "config": {
+      "public": "dist/mindtrack-ai/browser",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "redirects": [
+        {
+          "source": "/health",
+          "destination": "https://healthtrackai-v1ug.onrender.com/health",
+          "type": 302
+        },
+        {
+          "source": "/ready",
+          "destination": "https://healthtrackai-v1ug.onrender.com/ready",
+          "type": 302
+        },
+        {
+          "source": "/api",
+          "destination": "https://healthtrackai-v1ug.onrender.com/api/v1",
+          "type": 302
+        },
+        {
+          "source": "/api/**",
+          "destination": "https://healthtrackai-v1ug.onrender.com/api/:splat",
+          "type": 302
+        }
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "/index.html",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/landing",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/about",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/auth",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/auth/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/dashboard",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/dashboard/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/tests",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/tests/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/mental-state",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/mental-state/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/exercises",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/exercises/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/mood",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/mood/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/mood-calendar",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/journal",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/journal/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/community",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/community/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/feedback",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/feedback/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/progress",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/progress/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/profile",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "/profile/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        {
+          "source": "**/*.js",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public,max-age=31536000,immutable"
+            }
+          ]
+        },
+        {
+          "source": "**/*.css",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public,max-age=31536000,immutable"
+            }
+          ]
+        }
+      ],
+      "site": "healthtrackai-23752"
+    },
+    "version": "projects/653093331033/sites/healthtrackai-23752/versions/e4203327d3d0363c"
+  }
+]
+[info] i  hosting[healthtrackai-23752]: finalizing version... 
+[debug] [2026-10-07T17:11:24.202Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:24.202Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:24.203Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/e4203327d3d0363c updateMask=status%2Cconfig
+[debug] [2026-10-07T17:11:24.204Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/e4203327d3d0363c {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}],"redirects":[{"glob":"/health","location":"https://healthtrackai-v1ug.onrender.com/health","statusCode":302},{"glob":"/ready","location":"https://healthtrackai-v1ug.onrender.com/ready","statusCode":302},{"glob":"/api","location":"https://healthtrackai-v1ug.onrender.com/api/v1","statusCode":302},{"glob":"/api/**","location":"https://healthtrackai-v1ug.onrender.com/api/:splat","statusCode":302}],"headers":[{"glob":"/index.html","headers":{"Cache-Control":"no-cache"}},{"glob":"/","headers":{"Cache-Control":"no-cache"}},{"glob":"/landing","headers":{"Cache-Control":"no-cache"}},{"glob":"/about","headers":{"Cache-Control":"no-cache"}},{"glob":"/auth","headers":{"Cache-Control":"no-cache"}},{"glob":"/auth/**","headers":{"Cache-Control":"no-cache"}},{"glob":"/dashboard","headers":{"Cache-Control":"no-cache"}},{"glob":"/dashboard/**","headers":{"Cache-Control":"no-cache"}},{"glob":"/tests","headers":{"Cache-Control":"no-cache"}},{"glob":"/tests/**","headers":{"Cache-Control":"no-cache"}},{"glob":"/mental-state","headers":{"Cache-Control":"no-cache"}},{"glob":"/mental-state/**","headers":{"Cache-Control":"no-cache"}},{"glob":"/exercises","headers":{"Cache-Control":"no-cache"}},{"glob":"/exercises/**","headers":{"Cache-Control":"no-cache"}},{"glob":"/mood","headers":{"Cache-Control":"no-cache"}},{"glob":"/mood/**","headers":{"Cache-Control":"no-cache"}},{"glob":"/mood-calendar","headers":{"Cache-Control":"no-cache"}},{"glob":"/journal","headers":{"Cache-Control":"no-cache"}},{"glob":"/journal/**","headers":{"Cache-Control":"no-cache"}},{"glob":"/community","headers":{"Cache-Control":"no-cache"}},{"glob":"/community/**","headers":{"Cache-Control":"no-cache"}},{"glob":"/feedback","headers":{"Cache-Control":"no-cache"}},{"glob":"/feedback/**","headers":{"Cache-Control":"no-cache"}},{"glob":"/progress","headers":{"Cache-Control":"no-cache"}},{"glob":"/progress/**","headers":{"Cache-Control":"no-cache"}},{"glob":"/profile","headers":{"Cache-Control":"no-cache"}},{"glob":"/profile/**","headers":{"Cache-Control":"no-cache"}},{"glob":"**/*.js","headers":{"Cache-Control":"public,max-age=31536000,immutable"}},{"glob":"**/*.css","headers":{"Cache-Control":"public,max-age=31536000,immutable"}}]}}
+[debug] [2026-10-07T17:11:25.041Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/e4203327d3d0363c 200
+[debug] [2026-10-07T17:11:25.041Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/versions/e4203327d3d0363c {"name":"projects/653093331033/sites/healthtrackai-23752/versions/e4203327d3d0363c","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-cache"},"glob":"/index.html"},{"headers":{"Cache-Control":"no-cache"},"glob":"/"},{"headers":{"Cache-Control":"no-cache"},"glob":"/landing"},{"headers":{"Cache-Control":"no-cache"},"glob":"/about"},{"headers":{"Cache-Control":"no-cache"},"glob":"/auth"},{"headers":{"Cache-Control":"no-cache"},"glob":"/auth/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/dashboard"},{"headers":{"Cache-Control":"no-cache"},"glob":"/dashboard/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/tests"},{"headers":{"Cache-Control":"no-cache"},"glob":"/tests/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mental-state"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mental-state/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/exercises"},{"headers":{"Cache-Control":"no-cache"},"glob":"/exercises/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mood"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mood/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mood-calendar"},{"headers":{"Cache-Control":"no-cache"},"glob":"/journal"},{"headers":{"Cache-Control":"no-cache"},"glob":"/journal/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/community"},{"headers":{"Cache-Control":"no-cache"},"glob":"/community/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/feedback"},{"headers":{"Cache-Control":"no-cache"},"glob":"/feedback/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/progress"},{"headers":{"Cache-Control":"no-cache"},"glob":"/progress/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/profile"},{"headers":{"Cache-Control":"no-cache"},"glob":"/profile/**"},{"headers":{"Cache-Control":"public,max-age=31536000,immutable"},"glob":"**/*.js"},{"headers":{"Cache-Control":"public,max-age=31536000,immutable"},"glob":"**/*.css"}],"redirects":[{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/health","glob":"/health"},{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/ready","glob":"/ready"},{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/api/v1","glob":"/api"},{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/api/:splat","glob":"/api/**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-10-07T17:11:20.391211Z","createUser":{"email":"omchaudhary2111@gmail.com"},"finalizeTime":"2026-10-07T17:11:24.775819Z","finalizeUser":{"email":"omchaudhary2111@gmail.com"}}
+[debug] [2026-10-07T17:11:25.041Z] [hosting] finalized version for healthtrackai-23752:[object Object]
+[info] +  hosting[healthtrackai-23752]: version finalized 
+[info] i  hosting[healthtrackai-23752]: releasing new version... 
+[debug] [2026-10-07T17:11:25.042Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:25.042Z] Checked if tokens are valid: true, expires at: 1791396677615
+[debug] [2026-10-07T17:11:25.042Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases versionName=projects%2F653093331033%2Fsites%2Fhealthtrackai-23752%2Fversions%2Fe4203327d3d0363c
+[debug] [2026-10-07T17:11:25.042Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases {}
+[debug] [2026-10-07T17:11:25.875Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases 200
+[debug] [2026-10-07T17:11:25.876Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/healthtrackai-23752/channels/live/releases {"name":"projects/653093331033/sites/healthtrackai-23752/channels/live/releases/1791393084872000","version":{"name":"projects/653093331033/sites/healthtrackai-23752/versions/e4203327d3d0363c","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-cache"},"glob":"/index.html"},{"headers":{"Cache-Control":"no-cache"},"glob":"/"},{"headers":{"Cache-Control":"no-cache"},"glob":"/landing"},{"headers":{"Cache-Control":"no-cache"},"glob":"/about"},{"headers":{"Cache-Control":"no-cache"},"glob":"/auth"},{"headers":{"Cache-Control":"no-cache"},"glob":"/auth/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/dashboard"},{"headers":{"Cache-Control":"no-cache"},"glob":"/dashboard/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/tests"},{"headers":{"Cache-Control":"no-cache"},"glob":"/tests/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mental-state"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mental-state/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/exercises"},{"headers":{"Cache-Control":"no-cache"},"glob":"/exercises/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mood"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mood/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mood-calendar"},{"headers":{"Cache-Control":"no-cache"},"glob":"/journal"},{"headers":{"Cache-Control":"no-cache"},"glob":"/journal/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/community"},{"headers":{"Cache-Control":"no-cache"},"glob":"/community/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/feedback"},{"headers":{"Cache-Control":"no-cache"},"glob":"/feedback/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/progress"},{"headers":{"Cache-Control":"no-cache"},"glob":"/progress/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/profile"},{"headers":{"Cache-Control":"no-cache"},"glob":"/profile/**"},{"headers":{"Cache-Control":"public,max-age=31536000,immutable"},"glob":"**/*.js"},{"headers":{"Cache-Control":"public,max-age=31536000,immutable"},"glob":"**/*.css"}],"redirects":[{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/health","glob":"/health"},{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/ready","glob":"/ready"},{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/api/v1","glob":"/api"},{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/api/:splat","glob":"/api/**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-10-07T17:11:20.391211Z","createUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"},"finalizeTime":"2026-10-07T17:11:24.775819Z","finalizeUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}},"type":"DEPLOY","releaseTime":"2026-10-07T17:11:24.872Z","releaseUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}}
+[debug] [2026-10-07T17:11:25.876Z] [hosting] release: {"name":"projects/653093331033/sites/healthtrackai-23752/channels/live/releases/1791393084872000","version":{"name":"projects/653093331033/sites/healthtrackai-23752/versions/e4203327d3d0363c","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-cache"},"glob":"/index.html"},{"headers":{"Cache-Control":"no-cache"},"glob":"/"},{"headers":{"Cache-Control":"no-cache"},"glob":"/landing"},{"headers":{"Cache-Control":"no-cache"},"glob":"/about"},{"headers":{"Cache-Control":"no-cache"},"glob":"/auth"},{"headers":{"Cache-Control":"no-cache"},"glob":"/auth/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/dashboard"},{"headers":{"Cache-Control":"no-cache"},"glob":"/dashboard/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/tests"},{"headers":{"Cache-Control":"no-cache"},"glob":"/tests/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mental-state"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mental-state/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/exercises"},{"headers":{"Cache-Control":"no-cache"},"glob":"/exercises/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mood"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mood/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/mood-calendar"},{"headers":{"Cache-Control":"no-cache"},"glob":"/journal"},{"headers":{"Cache-Control":"no-cache"},"glob":"/journal/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/community"},{"headers":{"Cache-Control":"no-cache"},"glob":"/community/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/feedback"},{"headers":{"Cache-Control":"no-cache"},"glob":"/feedback/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/progress"},{"headers":{"Cache-Control":"no-cache"},"glob":"/progress/**"},{"headers":{"Cache-Control":"no-cache"},"glob":"/profile"},{"headers":{"Cache-Control":"no-cache"},"glob":"/profile/**"},{"headers":{"Cache-Control":"public,max-age=31536000,immutable"},"glob":"**/*.js"},{"headers":{"Cache-Control":"public,max-age=31536000,immutable"},"glob":"**/*.css"}],"redirects":[{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/health","glob":"/health"},{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/ready","glob":"/ready"},{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/api/v1","glob":"/api"},{"statusCode":302,"location":"https://healthtrackai-v1ug.onrender.com/api/:splat","glob":"/api/**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-10-07T17:11:20.391211Z","createUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"},"finalizeTime":"2026-10-07T17:11:24.775819Z","finalizeUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}},"type":"DEPLOY","releaseTime":"2026-10-07T17:11:24.872Z","releaseUser":{"email":"omchaudhary2111@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocJ5qa3mCB5kso_YRY6cnT-8PSDlhfkw020H_VF3jEn2nyT5M6-FjA"}}
+[info] +  hosting[healthtrackai-23752]: release complete 
+[info] 
+[info] +  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/healthtrackai-23752/overview
+[info] Hosting URL: https://healthtrackai-23752.web.app
+[debug] [2026-10-07T17:11:31.170Z] Error: Timed out.
+    at Timeout._onTimeout (C:\Users\OMADITI\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:308:49)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+[error] 
+[error] Error: An unexpected error has occurred.

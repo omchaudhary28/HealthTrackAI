@@ -34,7 +34,7 @@ export interface MoodOption {
         </div>
       </div>
 
-      <div class="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:grid-cols-5">
+      <div class="grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
         <button
           *ngFor="let opt of options"
           type="button"
@@ -44,19 +44,19 @@ export interface MoodOption {
           class="mt-card-soft mt-card-hover h-full min-h-[6rem] rounded-[1.4rem] px-4 py-4 text-left disabled:cursor-not-allowed disabled:opacity-60 sm:min-h-[6.75rem]"
           [ngClass]="value === opt.value ? opt.selectedClass : 'border-white/70 bg-white/86'">
           <div class="flex items-start justify-between gap-3">
-            <div class="mt-card-brand gap-3">
-              <div class="mt-card-icon h-11 w-11 rounded-[0.95rem]" [ngClass]="opt.surfaceClass">
+            <div class="mt-card-brand gap-3 min-w-0">
+              <div class="mt-card-icon h-11 w-11 shrink-0 rounded-[0.95rem]" [ngClass]="opt.surfaceClass">
                 <app-icon [name]="opt.icon" className="text-base"></app-icon>
               </div>
-              <div>
-                <div class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Level {{ opt.value }}</div>
-                <div class="mt-2 text-sm font-semibold text-slate-900">{{ opt.label }}</div>
+              <div class="min-w-0">
+                <div class="text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-400 truncate">Level {{ opt.value }}</div>
+                <div class="mt-1 text-sm font-semibold text-slate-900 truncate">{{ opt.label }}</div>
               </div>
             </div>
-            <div class="hidden h-2.5 w-2.5 rounded-full sm:block" [class]="opt.toneClass"></div>
+            <div class="hidden h-2.5 w-2.5 shrink-0 rounded-full sm:block" [class]="opt.toneClass"></div>
           </div>
-          <div class="mt-3 text-[11px] leading-5 text-slate-500">{{ opt.hint }}</div>
-          <div class="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em]" [ngClass]="value === opt.value ? 'text-slate-900' : 'text-slate-400'">
+          <div class="mt-3 text-[11px] leading-5 text-slate-500 break-words">{{ opt.hint }}</div>
+          <div class="mt-3 text-[10px] font-semibold uppercase tracking-[0.15em] break-words" [ngClass]="value === opt.value ? 'text-slate-900' : 'text-slate-400'">
             {{ value === opt.value ? "Selected" : "Tap to choose" }}
           </div>
         </button>
