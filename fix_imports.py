@@ -27,3 +27,4 @@ for line in lines:
         
 with open("frontend/src/app/features/dashboard/dashboard-page.component.ts", "w", encoding="utf-8") as f:
     f.write('\n'.join(clean_lines))
+

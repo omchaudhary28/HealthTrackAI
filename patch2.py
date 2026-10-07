@@ -17,3 +17,4 @@ content = content.replace(widget_str, widget_repl)
 
 with open("frontend/src/app/features/dashboard/dashboard-page.component.ts", "w", encoding="utf-8") as f:
     f.write(content)
+

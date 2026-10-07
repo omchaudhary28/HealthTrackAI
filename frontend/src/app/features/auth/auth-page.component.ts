@@ -27,11 +27,11 @@ import { IconComponent } from "../../shared/components/icon.component";
               </div>
             </div>
 
-            <div class="flex rounded-full bg-slate-100/85 p-1 text-xs min-[360px]:text-sm font-semibold text-slate-600">
-              <button type="button" (click)="setMode('signup')" [class]="tabClass(mode === 'signup')" class="flex-1 rounded-full px-2 py-2 min-[360px]:px-4 transition-colors">
+            <div class="flex shrink-0 rounded-full bg-slate-100/85 p-1 text-xs min-[360px]:text-sm font-semibold text-slate-600">
+              <button type="button" (click)="setMode('signup')" [class]="tabClass(mode === 'signup')" class="flex-1 whitespace-nowrap rounded-full px-2 py-2 min-[360px]:px-4 transition-colors">
                 Create
               </button>
-              <button type="button" (click)="setMode('login')" [class]="tabClass(mode === 'login')" class="flex-1 rounded-full px-2 py-2 min-[360px]:px-4 transition-colors">
+              <button type="button" (click)="setMode('login')" [class]="tabClass(mode === 'login')" class="flex-1 whitespace-nowrap rounded-full px-2 py-2 min-[360px]:px-4 transition-colors">
                 Sign in
               </button>
             </div>
