@@ -1,4 +1,4 @@
-﻿import { CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, NgZone, OnDestroy, computed, signal } from "@angular/core";
 import { animate, group, query, style, transition, trigger } from "@angular/animations";
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from "@angular/router";
@@ -71,10 +71,10 @@ function buildParticle(
         query(":enter", style({ opacity: 0, transform: "translateY(10px)" }), { optional: true }),
         query(":leave", style({ opacity: 1, transform: "translateY(0)" }), { optional: true }),
         group([
-          query(":leave", animate("200ms ease-in", style({ opacity: 0, transform: "translateY(6px)" })), {
+          query(":leave", animate("180ms cubic-bezier(0.4, 0, 1, 1)", style({ opacity: 0, transform: "translateY(6px)" })), {
             optional: true
           }),
-          query(":enter", animate("260ms 20ms ease-out", style({ opacity: 1, transform: "translateY(0)" })), {
+          query(":enter", animate("320ms 40ms cubic-bezier(0.16, 1, 0.3, 1)", style({ opacity: 1, transform: "translateY(0)" })), {
             optional: true
           })
         ])
