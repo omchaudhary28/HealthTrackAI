@@ -66,3 +66,4 @@ export class ResilienceWidgetComponent {
     return "from-amber-400 to-amber-500";
   }
 }
+

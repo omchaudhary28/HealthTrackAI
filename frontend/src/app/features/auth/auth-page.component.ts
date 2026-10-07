@@ -16,7 +16,7 @@ import { IconComponent } from "../../shared/components/icon.component";
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-3 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between">
             <div>
-              <div class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+              <div class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400 break-words max-w-full">
                 {{ mode === "signup" ? "Create account" : "Welcome back" }}
               </div>
               <div class="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950 sm:text-2xl">
@@ -27,11 +27,11 @@ import { IconComponent } from "../../shared/components/icon.component";
               </div>
             </div>
 
-            <div class="flex rounded-full bg-slate-100/85 p-1 text-sm font-semibold text-slate-600">
-              <button type="button" (click)="setMode('signup')" [class]="tabClass(mode === 'signup')" class="flex-1 rounded-full px-4 py-2">
+            <div class="flex rounded-full bg-slate-100/85 p-1 text-xs min-[360px]:text-sm font-semibold text-slate-600">
+              <button type="button" (click)="setMode('signup')" [class]="tabClass(mode === 'signup')" class="flex-1 rounded-full px-2 py-2 min-[360px]:px-4 transition-colors">
                 Create
               </button>
-              <button type="button" (click)="setMode('login')" [class]="tabClass(mode === 'login')" class="flex-1 rounded-full px-4 py-2">
+              <button type="button" (click)="setMode('login')" [class]="tabClass(mode === 'login')" class="flex-1 rounded-full px-2 py-2 min-[360px]:px-4 transition-colors">
                 Sign in
               </button>
             </div>
@@ -171,7 +171,7 @@ import { IconComponent } from "../../shared/components/icon.component";
             <app-icon name="shield" className="text-xl"></app-icon>
           </div>
           <div>
-            <div class="inline-flex rounded-full bg-white/75 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <div class="inline-block max-w-full whitespace-normal rounded-full bg-white/75 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
               Secure access
             </div>
             <h1 class="mt-4 text-xl font-semibold text-slate-900 sm:text-3xl lg:text-4xl">
