@@ -1729,3 +1729,43 @@ form {
     width: 100%;
   }
 }
+
+
+/* ----- GLOBAL FIXES ----- */
+html,
+body,
+app-root {
+  max-width: 100%;
+}
+
+textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+/* Ensure no element can exceed viewport width in mobile */
+@media (max-width: 768px) {
+  .mt-card, .card, .glass-card {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Override any unwanted hover scale animations */
+.card:hover,
+.card:focus-within,
+.glass-card:hover,
+.glass-card:focus-within,
+.mt-card-hover:hover,
+.mt-card-hover:focus-within {
+  transform: translateY(-2px) !important;
+  scale: 1 !important;
+}
+
+/* Fix any charts/graphs expanding past container */
+canvas {
+  max-width: 100% !important;
+}
+
