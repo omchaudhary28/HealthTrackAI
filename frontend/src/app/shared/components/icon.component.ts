@@ -18,6 +18,8 @@ import {
   faClipboardList,
   faComments,
   faDumbbell,
+  faEye,
+  faEyeSlash,
   faFaceSmileBeam,
   faFire,
   faGear,
@@ -76,6 +78,8 @@ export type MindtrackIconName =
   | "time"
   | "user-settings"
   | "users"
+  | "visibility"
+  | "visibility_off"
   | "wand";
 
 const ICONS: Record<MindtrackIconName, IconDefinition> = {
@@ -117,6 +121,8 @@ const ICONS: Record<MindtrackIconName, IconDefinition> = {
   time: faClock,
   "user-settings": faUserGear,
   users: faUsers,
+  visibility: faEye,
+  visibility_off: faEyeSlash,
   wand: faWandSparkles
 };
 

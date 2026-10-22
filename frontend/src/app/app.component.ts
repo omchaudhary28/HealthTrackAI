@@ -143,7 +143,9 @@ function buildParticle(
         </div>
       </div>
 
-      <div class="mx-auto flex w-full max-w-[var(--mt-shell-max)] min-w-0 gap-3 px-[var(--mt-shell-gutter)] pb-[calc(var(--mt-safe-bottom)+1rem)] pt-3 sm:gap-4 sm:pt-4 lg:gap-8 lg:pb-10 lg:pt-8">
+      <div
+        class="mx-auto flex w-full max-w-[var(--mt-shell-max)] min-w-0 gap-3 px-[var(--mt-shell-gutter)] pt-3 sm:gap-4 sm:pt-4 lg:gap-8 lg:pb-10 lg:pt-8"
+        [ngClass]="isPublicRoute() ? 'pb-6 sm:pb-8' : 'pb-[calc(var(--mt-safe-bottom)+1rem)]'">
         <app-side-nav *ngIf="!isPublicRoute()"></app-side-nav>
         <main class="min-w-0 flex-1 overflow-x-hidden">
           <div [@routeAnimations]="prepareRoute(outlet)" class="route-stage relative w-full min-w-0 overflow-x-hidden">
