@@ -95,9 +95,7 @@ function buildParticle(
       <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div class="mindtrack-ambient mindtrack-ambient-a" [style.background]="activeTheme().orbA"></div>
         <div class="mindtrack-ambient mindtrack-ambient-b" [style.background]="activeTheme().orbB"></div>
-        <div class="mindtrack-particle-field">
-          <span *ngFor="let particle of backgroundParticles; trackBy: trackParticle" class="mindtrack-particle" [ngStyle]="particle.style"></span>
-        </div>
+
         <div class="mindtrack-grain"></div>
       </div>
 
@@ -197,23 +195,25 @@ function buildParticle(
 
       .mindtrack-liquid-gradient-layer {
         position: fixed;
-        inset: -14%;
+        inset: 0;
         z-index: -24;
         pointer-events: none;
-        opacity: 0.45;
+        opacity: 0.32;
         background:
-          radial-gradient(circle at 10% 18%, rgba(255, 255, 255, 0.62), transparent 42%),
-          radial-gradient(circle at 86% 18%, var(--mt-accent-soft), transparent 54%),
-          radial-gradient(circle at 46% 84%, rgba(129, 52, 175, 0.22), transparent 56%);
-        filter: blur(18px) saturate(1.08);
-        transform-origin: center;
+          radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.6), transparent 42%),
+          radial-gradient(circle at 86% 18%, var(--mt-accent-soft), transparent 52%),
+          radial-gradient(circle at 48% 84%, rgba(129, 52, 175, 0.16), transparent 56%);
+        transform: translateZ(0);
       }
 
       .mindtrack-ambient {
         position: absolute;
         border-radius: 999px;
-        filter: blur(90px);
-        transition: background 0.7s ease, transform 0.7s ease, opacity 0.7s ease;
+        filter: blur(45px);
+        opacity: 0.55;
+        pointer-events: none;
+        transform: translateZ(0);
+        transition: background 0.5s ease, opacity 0.5s ease;
       }
 
       .mindtrack-ambient-a {

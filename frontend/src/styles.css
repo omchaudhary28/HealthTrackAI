@@ -250,10 +250,7 @@ form {
   will-change: transform;
 }
 
-.card:hover .card-inner,
-.card:focus-within .card-inner {
-  transform: scale(1.04);
-}
+.card:hover .card-inner, .card:focus-within .card-inner { transform: none; }
 
 .exercise-note {
   border-radius: 1rem;
@@ -522,7 +519,7 @@ form {
   border: 1px solid rgba(255, 255, 255, 0.52);
   background:
     linear-gradient(140deg, rgba(252, 254, 255, 0.78), rgba(239, 246, 252, 0.66) 44%, rgba(225, 236, 246, 0.6) 72%, var(--mt-accent-soft) 100%);
-  backdrop-filter: blur(22px) saturate(1.16);
+  backdrop-filter: blur(8px) saturate(1.16);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 34px 76px -52px rgba(15, 23, 42, 0.38);
 }
 
@@ -530,7 +527,7 @@ form {
   border: 1px solid rgba(255, 255, 255, 0.62);
   background:
     linear-gradient(138deg, rgba(251, 254, 255, 0.82), rgba(236, 244, 251, 0.64) 42%, var(--mt-active-surface) 76%, var(--mt-accent-soft) 100%);
-  backdrop-filter: blur(24px) saturate(1.18);
+  backdrop-filter: blur(8px) saturate(1.18);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 34px 78px -48px rgba(15, 23, 42, 0.38);
 }
 
@@ -538,7 +535,7 @@ form {
   border: 1px solid rgba(255, 255, 255, 0.58);
   background:
     linear-gradient(140deg, rgba(251, 254, 255, 0.84), rgba(239, 245, 251, 0.72) 48%, rgba(224, 236, 246, 0.62) 72%, var(--mt-accent-soft) 100%);
-  backdrop-filter: blur(20px) saturate(1.14);
+  backdrop-filter: blur(8px) saturate(1.14);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 30px 60px -40px rgba(15, 23, 42, 0.28);
 }
 
@@ -546,7 +543,7 @@ form {
   border: 1px solid rgba(255, 255, 255, 0.44);
   background:
     linear-gradient(140deg, rgba(248, 252, 255, 0.78), var(--mt-active-surface) 38%, rgba(235, 243, 250, 0.72) 72%, rgba(224, 235, 245, 0.66) 100%);
-  backdrop-filter: blur(20px) saturate(1.16);
+  backdrop-filter: blur(8px) saturate(1.16);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32), 0 24px 50px -34px rgba(15, 23, 42, 0.24);
 }
 
@@ -607,11 +604,11 @@ form {
 .theme-bento-card-soft,
 .theme-bento-card-strong,
 .card {
-  animation-name: mtCardEntry, mtCalmBreath;
-  animation-duration: 0.72s, var(--mt-breathe-duration);
+  animation-name: mtCardEntry;
+animation-duration: 0.35s;
   animation-timing-function: cubic-bezier(0.18, 0.9, 0.28, 1), ease-in-out;
   animation-delay: var(--mt-entry-delay, 0ms), calc(var(--mt-entry-delay, 0ms) + 0.78s);
-  animation-iteration-count: 1, infinite;
+  animation-iteration-count: 1;
   animation-fill-mode: both, both;
 }
 
@@ -628,7 +625,7 @@ form {
   border: 1px solid var(--mt-card-outline);
   background:
     linear-gradient(152deg, rgba(252, 254, 255, 0.8), rgba(240, 247, 253, 0.68) 56%, rgba(224, 236, 246, 0.58) 82%, var(--mt-accent-soft) 100%);
-  backdrop-filter: blur(24px);
+  backdrop-filter: blur(8px);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), var(--mt-card-shadow);
 }
 
@@ -636,7 +633,7 @@ form {
   border: 1px solid rgba(255, 255, 255, 0.54);
   background:
     linear-gradient(152deg, rgba(250, 253, 255, 0.74), rgba(238, 245, 251, 0.64) 54%, rgba(224, 235, 245, 0.56) 100%);
-  backdrop-filter: blur(24px);
+  backdrop-filter: blur(8px);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 24px 52px -40px rgba(15, 23, 42, 0.28);
 }
 
@@ -801,11 +798,11 @@ form {
 }
 
 .mt-card-intro {
-  animation-name: mtCardEntry, mtCalmBreath;
-  animation-duration: 0.72s, var(--mt-breathe-duration);
+  animation-name: mtCardEntry;
+animation-duration: 0.35s;
   animation-timing-function: cubic-bezier(0.18, 0.9, 0.28, 1), ease-in-out;
   animation-delay: var(--mt-entry-delay, 0ms), calc(var(--mt-entry-delay, 0ms) + 0.78s);
-  animation-iteration-count: 1, infinite;
+  animation-iteration-count: 1;
   animation-fill-mode: both, both;
 }
 
@@ -840,7 +837,7 @@ form {
     box-shadow 0.42s ease,
     color 0.42s ease,
     filter 0.42s ease;
-  animation: mtIconFloat 5.4s ease-in-out infinite;
+  animation: none;
 }
 
 .mt-card-icon::before {
@@ -1076,7 +1073,7 @@ form {
   border: 1px solid rgba(148, 163, 184, 0.38);
   color: var(--mt-accent-strong);
   transform-origin: center;
-  animation: assistantAvatarDrift 5.8s ease-in-out infinite;
+  animation: none;
   will-change: transform;
 }
 
@@ -1494,10 +1491,7 @@ form {
   transform: none;
 }
 
-.card:hover .card-inner,
-.card:focus-within .card-inner {
-  transform: none;
-}
+.card:hover .card-inner, .card:focus-within .card-inner { transform: none; }
 
 .reveal {
   opacity: 0;
@@ -1546,11 +1540,12 @@ form {
 :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):hover,
 :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):focus-within,
 .mt-tilt-active {
-  transform: none;
+  transform: translateY(-2px);
   scale: 1;
   filter: none;
   background-position: 0% 50%;
-  box-shadow: inherit;
+  box-shadow: 0 20px 42px -24px rgba(15, 23, 42, 0.32);
+  border-color: rgba(255, 255, 255, 0.85);
 }
 
 .mt-card-intro {
@@ -1691,9 +1686,10 @@ form {
 }
 
 @media (max-width: 768px) {
-  * {
-    animation: none !important;
-    transition: none !important;
+  :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):hover,
+  :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):focus-within {
+    transform: none !important;
+    scale: 1 !important;
   }
 
   .exercise-layout {
@@ -1711,11 +1707,7 @@ form {
 
   :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):hover,
   :is(.mt-card-hover, .glass-card, .theme-hero-card, .theme-bento-card, .theme-bento-card-soft, .theme-bento-card-strong, .card):focus-within,
-  .card:hover .card-inner,
-  .card:focus-within .card-inner {
-    transform: none !important;
-    scale: 1 !important;
-  }
+  .card:hover .card-inner, .card:focus-within .card-inner { transform: none; }
 
   .card,
   .glass-card,

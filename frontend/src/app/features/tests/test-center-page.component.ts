@@ -63,7 +63,7 @@ import { ScrollRevealDirective } from "../../shared/directives/scroll-reveal.dir
 
         <div class="mt-card-soft mt-5 p-5">
           <div class="mt-card-kicker">Question 4 of 12</div>
-          <div class="mt-4 grid gap-3 min-[430px]:grid-cols-2 sm:grid-cols-5">
+          <div class="mt-4 flex flex-wrap gap-2.5">
             <button *ngFor="let choice of choices" type="button" class="mt-chip justify-center px-4 py-3 text-center text-sm">{{ choice }}</button>
           </div>
         </div>
