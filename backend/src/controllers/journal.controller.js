@@ -34,6 +34,10 @@ export async function analyzeJournalEntry(req, res) {
     return res.status(404).json({ error: "Journal entry not found" });
   }
 
+  if (req.body.content && req.body.content.trim()) {
+    entry.content = req.body.content.trim();
+  }
+
   const insights = await analyzeJournalText(entry.content, req.body.recentMood);
   entry.aiInsights = insights;
   await entry.save();
@@ -49,6 +53,17 @@ export async function readVibeMode(req, res) {
   const entry = await JournalEntry.findOne({ _id: req.params.entryId, userId: req.user.sub });
   if (!entry) {
     return res.status(404).json({ error: "Journal entry not found" });
+  }
+
+  // Update content or mood tags if passed from client
+  if (req.body.content && req.body.content.trim()) {
+    entry.content = req.body.content.trim();
+  }
+  if (Array.isArray(req.body.moodTags) && req.body.moodTags.length) {
+    entry.moodTags = req.body.moodTags;
+  }
+  if (req.body.aiPrompt) {
+    entry.aiPrompt = req.body.aiPrompt;
   }
 
   const allowHistorical = req.body.allowHistorical !== undefined ? Boolean(req.body.allowHistorical) : true;

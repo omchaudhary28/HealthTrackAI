@@ -680,13 +680,20 @@ export class JournalEditorComponent {
   }
 
   activateReadVibe(): void {
-    // If not saved yet, save first
-    if (!this.savedEntry() && this.canSave()) {
+    const currentText = this.content().trim();
+    if (!currentText) {
+      this.error.set("Please write a reflection before activating Read Vibe Mode.");
+      return;
+    }
+
+    const saved = this.savedEntry();
+    // If not saved yet OR the user modified the note text since last save
+    if (!saved || (saved.content || "").trim() !== currentText) {
       this.error.set("");
       this.saving.set(true);
       this.journalService
         .create({
-          content: this.content().trim(),
+          content: currentText,
           moodTags: Array.from(this.tagSet()),
           aiPrompt: this.prompt()
         })
@@ -695,7 +702,7 @@ export class JournalEditorComponent {
             this.savedEntry.set(entry);
             this.saved.emit(entry);
             this.saving.set(false);
-            this.executeReadVibe(entry._id);
+            this.executeReadVibe(entry._id, currentText);
           },
           error: (err) => {
             this.error.set(err?.error?.error || "Couldn't save note before reading vibe.");
@@ -705,13 +712,10 @@ export class JournalEditorComponent {
       return;
     }
 
-    const entry = this.savedEntry();
-    if (entry) {
-      this.executeReadVibe(entry._id);
-    }
+    this.executeReadVibe(saved._id, currentText);
   }
 
-  private executeReadVibe(entryId: string): void {
+  private executeReadVibe(entryId: string, contentText: string): void {
     if (this.analyzing()) {
       return;
     }
@@ -724,17 +728,20 @@ export class JournalEditorComponent {
     // Progressive step indicator
     const stepTimer1 = setTimeout(() => {
       this.analysisStep.set("Identifying core concerns & emotional themes...");
-    }, 1200);
+    }, 1000);
 
     const stepTimer2 = setTimeout(() => {
       this.analysisStep.set("Synthesizing practical next steps...");
-    }, 2800);
+    }, 2200);
 
     const tagsArray = Array.from(this.tagSet());
-    const recentMood = tagsArray[0] || "neutral";
+    const isHappy = /\b(happy|joy|grateful|proud|peaceful|good day|feeling good)\b/i.test(contentText);
+    const recentMood = tagsArray[0] || (isHappy ? "happy" : "neutral");
 
     this.journalService
       .readVibe(entryId, {
+        content: contentText,
+        moodTags: tagsArray,
         recentMood,
         allowHistorical: this.allowHistorical()
       })

@@ -131,7 +131,7 @@ export class JournalService {
     return this.http.post<JournalInsights>(`${this.apiBaseUrl}/journal/${entryId}/analyze`, { recentMood });
   }
 
-  readVibe(entryId: string, payload: { recentMood?: string; allowHistorical?: boolean } = {}): Observable<ReadVibeResponse> {
+  readVibe(entryId: string, payload: { content?: string; moodTags?: string[]; recentMood?: string; allowHistorical?: boolean } = {}): Observable<ReadVibeResponse> {
     return this.http.post<ReadVibeResponse>(`${this.apiBaseUrl}/journal/${entryId}/read-vibe`, payload);
   }
 

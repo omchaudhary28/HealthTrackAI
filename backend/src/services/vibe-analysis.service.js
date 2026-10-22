@@ -4,7 +4,7 @@ import { env } from "../config/env.js";
 let openaiClient = null;
 
 function getOpenAiClient() {
-  if (!env.openAiApiKey || env.openAiApiKey === "your_openai_api_key_here") {
+  if (!env.openAiApiKey || env.openAiApiKey === "your_openai_api_key_here" || env.openAiApiKey === "sk-your-real-key") {
     return null;
   }
   if (!openaiClient) {
@@ -37,11 +37,12 @@ export function checkSafetyAndCrisis(text = "") {
 }
 
 /**
- * Intelligent context-aware rule-based fallback generator
- * Used when external AI service is unreachable, timed out, or unconfigured.
+ * Context-aware intelligent reflection engine
+ * Dynamically adapts to positive, anxious, sad, angry, exhausted, unmotivated,
+ * comparison, relationship, decision, or everyday reflection inputs.
  */
 export function generateLocalReadVibe(content = "", recentMood = "neutral", historyEntries = []) {
-  const text = content.trim();
+  const text = (content || "").trim();
   const lower = text.toLowerCase();
   const safety = checkSafetyAndCrisis(text);
 
@@ -78,18 +79,32 @@ export function generateLocalReadVibe(content = "", recentMood = "neutral", hist
     };
   }
 
-  // Detect thematic markers
-  const isComparison = /compar(e|ing|ison)|behind|everyone else|peers|classmates|colleagues|imposter|not good enough/i.test(lower);
-  const isOverwork = /work(ed|ing)? hard|exhaust(ed|ion)|burnout|deadlines?|overwhelm|too much|drained|tired|hours/i.test(lower);
-  const isRelationship = /argument|fight|disagree|friend|partner|boss|they said|ignoring|misunderstood|conflict|relationship/i.test(lower);
-  const isDecisionFriction = /can't decide|stuck|uncertain|don't know what to do|choice|crossroads|overthink(ing)?/i.test(lower);
-  const isSleepIssue = /sleep|insomnia|wake|bed|restless|can't turn my brain off/i.test(lower);
-  const isPositive = /grateful|happy|proud|accomplish|peaceful|good day|relieved|excited|progress/i.test(lower);
+  // Sentiment and thematic detectors
+  const isPositive = /\b(happy|joy|grateful|gratitude|proud|accomplish|peaceful|content|relieved|excited|progress|good day|feeling good|great day|smile|wonderful|blessed|delighted|serene|cheerful|loved)\b/i.test(lower);
+  const isSadness = /\b(sad|crying|tears|lonely|alone|miss (them|him|her)|grief|heartbroken|empty|down|depressed|unloved|hurting|grieving|lost|gloomy)\b/i.test(lower);
+  const isAnxiety = /\b(anxious|anxiety|nervous|scared|fear|panic|heart racing|dread|worried|worrying|what if|freaking out|paralyzed|terrified|shaking)\b/i.test(lower);
+  const isAnger = /\b(angry|furious|mad|pissed|annoyed|frustrated|unfair|resent|hate|irritated|bitter|injustice|rude|disrespect)\b/i.test(lower);
+  const isComparison = /\b(compar(e|ing|ison)|behind|everyone else|peers|classmates|colleagues|imposter|not good enough|portfolio|internship|lagging)\b/i.test(lower);
+  const isOverwork = /\b(work(ed|ing)? hard|exhaust(ed|ion)|burnout|deadlines?|overwhelm|too much|drained|tired|hours|overtime)\b/i.test(lower);
+  const isLowMotivation = /\b(lazy|can't do anything|unmotivated|procrastinat|stuck in bed|bored|no energy|don't care|apathy|sluggish|slump)\b/i.test(lower);
+  const isRelationship = /\b(argument|fight|disagree|friend|partner|boss|they said|ignoring|misunderstood|conflict|relationship|boyfriend|girlfriend|spouse)\b/i.test(lower);
+  const isDecisionFriction = /\b(can't decide|stuck|uncertain|don't know what to do|choice|crossroads|overthink(ing)?|doubt)\b/i.test(lower);
+  const isSleepIssue = /\b(sleep|insomnia|wake|bed|restless|can't turn my brain off|nightmare|awake)\b/i.test(lower);
 
   // 1. What I Hear
   let whatIHear = "";
-  if (isComparison) {
+  if (isPositive) {
+    whatIHear = "It sounds like today brought a genuine sense of happiness, ease, and lightness, and you're pausing to acknowledge and enjoy that good feeling.";
+  } else if (isSadness) {
+    whatIHear = "It sounds like you're carrying a deep sense of sadness or emotional heaviness right now, and finding the words to express it is an act of real honesty.";
+  } else if (isAnxiety) {
+    whatIHear = "It sounds like anxiety has kicked your internal alarm system into overdrive, making future unknowns feel like immediate, looming pressures.";
+  } else if (isAnger) {
+    whatIHear = "It sounds like a boundary was crossed or something felt deeply unfair, and your frustration is a clear signal that your values were compromised.";
+  } else if (isComparison) {
     whatIHear = "It sounds like you're putting in earnest effort, but seeing where others are makes your own progress feel smaller or slower than it truly is.";
+  } else if (isLowMotivation) {
+    whatIHear = "It sounds like your energy and motivation are running low today, and self-criticism about not being productive is only making the inertia heavier.";
   } else if (isOverwork && isSleepIssue) {
     whatIHear = "It sounds like your mind and body are running on empty, but the momentum of your responsibilities makes it difficult to fully power down and rest.";
   } else if (isOverwork) {
@@ -98,15 +113,49 @@ export function generateLocalReadVibe(content = "", recentMood = "neutral", hist
     whatIHear = "It sounds like this interaction left an uncomfortable residue, leaving you replaying what happened and feeling uncertain about where things stand.";
   } else if (isDecisionFriction) {
     whatIHear = "It sounds like having to make this choice is pulling you in different directions, and fear of making the wrong move is keeping you stuck in analysis.";
-  } else if (isPositive) {
-    whatIHear = "It sounds like you experienced moments of genuine connection, relief, or accomplishment today, and you're taking time to anchor into that good feeling.";
   } else {
-    whatIHear = "It sounds like there's a lot on your mind right now, and writing this down is your way of untangling the thoughts before they pile up further.";
+    whatIHear = "It sounds like you're taking a thoughtful pause to reflect on how today unfolded, giving yourself space to sort through your experiences.";
   }
 
-  // 2. Possible Root Concerns
+  // 2. Possible Root Concerns / Emotional Foundations
   const rootConcerns = [];
-  if (isComparison) {
+  if (isPositive) {
+    rootConcerns.push({
+      concern: "Savoring positive momentum",
+      explanation: "One possibility is that taking an intentional moment to acknowledge this happiness helps anchor it in your memory, building long-term emotional resilience."
+    });
+    rootConcerns.push({
+      concern: "Inner safety & alignment",
+      explanation: "This may be connected to feeling in flow with your values or experiencing well-earned relief after a stretch of effort."
+    });
+  } else if (isSadness) {
+    rootConcerns.push({
+      concern: "Need for emotional comfort & release",
+      explanation: "One possibility is that a loss, feeling of disconnection, or accumulated ache needs gentle recognition rather than quick problem-solving."
+    });
+    rootConcerns.push({
+      concern: "Holding heavy feelings alone",
+      explanation: "This may stem from bearing emotional sorrow in silence, which can make the isolation feel larger."
+    });
+  } else if (isAnxiety) {
+    rootConcerns.push({
+      concern: "Need for predictability & security",
+      explanation: "One possibility is that an upcoming event or uncertain outcome is triggering your mind to demand guaranteed answers."
+    });
+    rootConcerns.push({
+      concern: "Catastrophic forecasting",
+      explanation: "This might be connected to treating worst-case hypothetical scenarios as probable realities rather than distant possibilities."
+    });
+  } else if (isAnger) {
+    rootConcerns.push({
+      concern: "Boundary violation or unmet expectations",
+      explanation: "One possibility is that someone's behavior felt disrespectful, invalidating, or out of step with mutual fairness."
+    });
+    rootConcerns.push({
+      concern: "Frustration with limited control",
+      explanation: "This may be connected to wanting to fix an external situation that you cannot unilaterally dictate."
+    });
+  } else if (isComparison) {
     rootConcerns.push({
       concern: "Fear of falling behind",
       explanation: "One possibility is that seeing others hit milestones activates a worry that your own timeline is inadequate, even when you're working steadily."
@@ -114,6 +163,15 @@ export function generateLocalReadVibe(content = "", recentMood = "neutral", hist
     rootConcerns.push({
       concern: "External validation as the primary metric",
       explanation: "This may be connected to measuring your daily worth against visible external benchmarks rather than your personal baseline."
+    });
+  } else if (isLowMotivation) {
+    rootConcerns.push({
+      concern: "Energy conservation & recovery debt",
+      explanation: "One possibility is that lack of motivation is your body's protective way of signaling that you are overdue for genuine rest."
+    });
+    rootConcerns.push({
+      concern: "High activation friction",
+      explanation: "This might stem from viewing tasks as all-or-nothing, which makes taking the first small step feel intimidating."
     });
   } else if (isOverwork) {
     rootConcerns.push({
@@ -140,52 +198,123 @@ export function generateLocalReadVibe(content = "", recentMood = "neutral", hist
     });
   } else {
     rootConcerns.push({
-      concern: "Mental load & processing space",
-      explanation: "One possibility is that several unresolved threads are competing for your attention simultaneously."
+      concern: "Mental clarity & daily integration",
+      explanation: "One possibility is that stepping back to write helps organize your thoughts and prioritize what actually matters today."
     });
   }
 
   // 3. Emotional Themes
   const emotionalThemes = [];
-  if (isComparison) {
+  if (isPositive) {
+    emotionalThemes.push({ emotion: "Joy & Ease", context: "Feeling lighthearted and comfortable in the present moment" });
+    emotionalThemes.push({ emotion: "Grounded Contentment", context: "Appreciating where you are without rushing to the next stressor" });
+  } else if (isSadness) {
+    emotionalThemes.push({ emotion: "Sorrow or Ache", context: "Feeling the weight of sadness or longing" });
+    emotionalThemes.push({ emotion: "Vulnerability", context: "Honoring that things feel tender and delicate right now" });
+  } else if (isAnxiety) {
+    emotionalThemes.push({ emotion: "Hypervigilance", context: "High alert nervous system response to anticipated pressure" });
+    emotionalThemes.push({ emotion: "Internal Tension", context: "Feeling physical or mental tightness regarding upcoming outcomes" });
+  } else if (isAnger) {
+    emotionalThemes.push({ emotion: "Frustration", context: "A surging reaction to feeling dismissed or treated unfairly" });
+    emotionalThemes.push({ emotion: "Guardedness", context: "An urge to protect personal boundaries and self-respect" });
+  } else if (isComparison) {
     emotionalThemes.push({ emotion: "Self-Doubt", context: "Questioning whether your efforts are truly moving the needle" });
     emotionalThemes.push({ emotion: "Urgency", context: "A restless pressure to accelerate or catch up" });
+  } else if (isLowMotivation) {
+    emotionalThemes.push({ emotion: "Sluggishness", context: "Low physical or mental drive to initiate demanding tasks" });
+    emotionalThemes.push({ emotion: "Self-Pressure", context: "Feeling guilty or frustrated with yourself for moving slowly" });
   } else if (isOverwork) {
     emotionalThemes.push({ emotion: "Depletion", context: "Mental and physical stamina feeling stretched thin" });
     emotionalThemes.push({ emotion: "Duty or Obligation", context: "Continuing forward despite clear signals of fatigue" });
   } else if (isRelationship) {
-    emotionalThemes.push({ emotion: "Frustration", context: "Wishing communication had gone differently" });
-    emotionalThemes.push({ emotion: "Vulnerability", context: "Uncertainty about how you are perceived by someone who matters" });
-  } else if (isPositive) {
-    emotionalThemes.push({ emotion: "Quiet Satisfaction", context: "Appreciating a win or grounded moment" });
-    emotionalThemes.push({ emotion: "Relief", context: "Letting go of tension after a stretch of effort" });
+    emotionalThemes.push({ emotion: "Disconnection", context: "Wishing communication had felt warmer or more collaborative" });
+    emotionalThemes.push({ emotion: "Apprehension", context: "Uncertainty about how you are perceived by someone who matters" });
   } else {
-    emotionalThemes.push({ emotion: "Mixed Feelings", context: "Balancing multiple overlapping thoughts and responsibilities" });
+    emotionalThemes.push({ emotion: "Reflective Awareness", context: "Observing your day with openness and curiosity" });
+    emotionalThemes.push({ emotion: "Settling", context: "Allowing the rush of daily tasks to find equilibrium" });
   }
 
   // 4. Maintaining Cycle
   let maintainingCycle = null;
-  if (isComparison) {
+  if (isPositive) {
     maintainingCycle = {
       steps: [
-        "Spot other people's highlights",
-        "Contrast with your behind-the-scenes effort",
-        "Feel sudden urgency & self-criticism",
-        "Work in a rushed state or hesitate",
-        "Re-check what others are doing for reassurance"
+        "Notice a positive moment",
+        "Give yourself permission to fully feel it",
+        "Savor what contributed to the good rhythm",
+        "Anchor the memory as proof of your capability and peace"
       ],
-      summary: "Comparison frequently creates a loop where checking others' progress temporarily spikes urgency, but drains the grounded energy needed for your own craft."
+      summary: "Savoring good moments without bracing for what might go wrong next trains your nervous system to trust ease."
+    };
+  } else if (isSadness) {
+    maintainingCycle = {
+      steps: [
+        "Feel emotional sadness",
+        "Judge yourself for feeling down",
+        "Isolate and pull back from connection",
+        "The sadness feels heavier in silence"
+      ],
+      summary: "When we try to force sadness away quickly, it often lingers. Giving it compassionate room allows it to naturally soften."
+    };
+  } else if (isAnxiety) {
+    maintainingCycle = {
+      steps: [
+        "Notice a 'what-if' thought",
+        "Body tenses up in response",
+        "Search frantically for absolute certainty",
+        "Anxiety spikes even higher"
+      ],
+      summary: "Trying to solve every hypothetical future outcome feeds the alarm loop rather than soothing it."
+    };
+  } else if (isAnger) {
+    maintainingCycle = {
+      steps: [
+        "Perceive an unfair situation",
+        "Replay the scenario repeatedly",
+        "Anger builds with each replay",
+        "Physical tension and irritability stay high"
+      ],
+      summary: "Mentally arguing with past events keeps the adrenaline active long after the actual moment has passed."
+    };
+  } else if (isComparison) {
+    maintainingCycle = {
+      steps: [
+        "Notice someone else's highlight",
+        "Assume their progress came with ease",
+        "Diminish your own steady efforts",
+        "Feel behind and check for more updates"
+      ],
+      summary: "Comparing someone else's external milestone with your internal uncertainty sustains an unfair loop."
+    };
+  } else if (isLowMotivation) {
+    maintainingCycle = {
+      steps: [
+        "Feel low energy",
+        "Procrastinate on large tasks",
+        "Criticize yourself for not doing them",
+        "Emotional energy drops even lower"
+      ],
+      summary: "Treating low energy as a personal defect creates guilt that drains the very motivation needed to begin."
     };
   } else if (isOverwork) {
     maintainingCycle = {
       steps: [
-        "Overload schedule with tasks",
-        "Push through warning signs of fatigue",
-        "Efficiency dips due to depletion",
-        "Tasks take longer to complete",
-        "Feel compelled to work even later"
+        "Feel overloaded with demands",
+        "Skip breaks to gain time",
+        "Fatigue impairs mental focus",
+        "Tasks take longer, extending the work"
       ],
-      summary: "Postponing recovery usually prolongs the time each task takes, making rest seem even less accessible."
+      summary: "Pushing through fatigue without micro-recovery creates diminishing returns where effort increases but clarity drops."
+    };
+  } else if (isRelationship) {
+    maintainingCycle = {
+      steps: [
+        "Experience awkward interaction",
+        "Re-read words or analyze body language",
+        "Predict negative future reactions",
+        "Act with guarded tension next time"
+      ],
+      summary: "Attempting to mind-read what others are thinking turns personal assumptions into emotional friction."
     };
   } else if (isDecisionFriction) {
     maintainingCycle = {
@@ -196,13 +325,73 @@ export function generateLocalReadVibe(content = "", recentMood = "neutral", hist
         "Pressure grows as time passes",
         "Analyze even more intensely"
       ],
-      summary: "Treating every detail as critical can lead to decision fatigue, where delaying feels protective but prolongs tension."
+      summary: "Treating every detail as make-or-break leads to decision fatigue, where delaying feels protective but prolongs tension."
     };
   }
 
-  // 5. Your Next Move
+  // 5. Practical Next Steps (Your Next Move)
   const nextMoves = [];
-  if (isComparison) {
+  if (isPositive) {
+    nextMoves.push({
+      title: "Savor what sparked this good feeling",
+      whyItHelps: "Identifying the specific ingredients of a good day helps you intentionally weave them into future routines.",
+      smallStart: "Write down 1 or 2 specific elements that made today feel light (e.g. good rest, a conversation, a finished task).",
+      timeEstimate: "3 mins",
+      completed: false
+    });
+    nextMoves.push({
+      title: "Carry the light energy forward guilt-free",
+      whyItHelps: "Enjoying positive momentum without anticipating future stress strengthens your capacity for contentment.",
+      smallStart: "Send a quick kind note to someone you appreciate, or do an activity you genuinely enjoy this evening.",
+      timeEstimate: "5 mins",
+      completed: false
+    });
+  } else if (isSadness) {
+    nextMoves.push({
+      title: "Offer yourself gentle sensory comfort",
+      whyItHelps: "Warmth and physical soothing directly signal safety to the nervous system when feeling down.",
+      smallStart: "Wrap up in a warm blanket, hold a hot cup of tea, or listen to a calming track without multitasking.",
+      timeEstimate: "5 mins",
+      completed: false
+    });
+    nextMoves.push({
+      title: "Lower the bar on productivity for today",
+      whyItHelps: "Releasing unnecessary demands gives your emotional batteries space to recharge.",
+      smallStart: "Pick one non-essential task and officially move it to tomorrow with zero guilt.",
+      timeEstimate: "2 mins",
+      completed: false
+    });
+  } else if (isAnxiety) {
+    nextMoves.push({
+      title: "Ground your physical senses (3-3-3 rule)",
+      whyItHelps: "Brings your awareness out of future catastrophes and back into the physically safe present.",
+      smallStart: "Look around you: name 3 things you see, 3 sounds you hear, and move 3 parts of your body.",
+      timeEstimate: "2 mins",
+      completed: false
+    });
+    nextMoves.push({
+      title: "Contain the worry on paper",
+      whyItHelps: "Externalizing fearful thoughts stops them from echoing repeatedly in working memory.",
+      smallStart: "Write down the single main worry in one sentence, then write next to it: 'I will handle this one step at a time.'",
+      timeEstimate: "5 mins",
+      completed: false
+    });
+  } else if (isAnger) {
+    nextMoves.push({
+      title: "Discharge physical tension before responding",
+      whyItHelps: "Anger triggers physical adrenaline; moving the body clears the impulse to react sharply.",
+      smallStart: "Take a brisk 5-minute walk, shake out your arms and shoulders, or splash cold water on your wrists.",
+      timeEstimate: "5 mins",
+      completed: false
+    });
+    nextMoves.push({
+      title: "Clarify the core boundary on paper",
+      whyItHelps: "Translates reactive frustration into constructive self-respect.",
+      smallStart: "Finish this sentence in your notebook: 'What I actually needed in that moment was...'",
+      timeEstimate: "4 mins",
+      completed: false
+    });
+  } else if (isComparison) {
     nextMoves.push({
       title: "Name your own current milestone",
       whyItHelps: "Refocusing attention on your own timeline breaks the comparison reflex.",
@@ -217,11 +406,26 @@ export function generateLocalReadVibe(content = "", recentMood = "neutral", hist
       timeEstimate: "2 mins",
       completed: false
     });
+  } else if (isLowMotivation) {
+    nextMoves.push({
+      title: "The 2-Minute Micro-Start",
+      whyItHelps: "Action precedes motivation. Shrinking the task to almost zero overcomes inertia.",
+      smallStart: "Open the file or put on your walking shoes—commit to just 120 seconds of effort.",
+      timeEstimate: "2 mins",
+      completed: false
+    });
+    nextMoves.push({
+      title: "Release guilt over having an off-peak day",
+      whyItHelps: "Self-criticism burns energy that could otherwise go into simple recovery.",
+      smallStart: "Tell yourself: 'Human beings are not machines. It is safe for me to move slowly today.'",
+      timeEstimate: "1 min",
+      completed: false
+    });
   } else if (isOverwork) {
     nextMoves.push({
       title: "Define an official stopping point for today",
       whyItHelps: "Gives your nervous system permission to transition from performance to recovery.",
-      smallStart: "Choose one task to finish, then close the laptop/notebook completely.",
+      smallStart: "Choose one task to finish, then close the laptop or notebook completely.",
       timeEstimate: "5 mins",
       completed: false
     });
@@ -232,27 +436,52 @@ export function generateLocalReadVibe(content = "", recentMood = "neutral", hist
       timeEstimate: "5 mins",
       completed: false
     });
-  } else {
+  } else if (isRelationship) {
     nextMoves.push({
-      title: "Identify what is directly within your control",
-      whyItHelps: "Separates what you can influence right now from what you can only worry about.",
-      smallStart: "Draw two columns on a sticky note: 'My move today' vs 'Things that will take time.'",
-      timeEstimate: "5 mins",
+      title: "Separate observable facts from assumptions",
+      whyItHelps: "Prevents anxiety from filling in the gaps of another person's thoughts.",
+      smallStart: "Write down only what was literally said or done, leaving out what you fear they meant.",
+      timeEstimate: "4 mins",
       completed: false
     });
     nextMoves.push({
-      title: "Choose one low-friction next step",
-      whyItHelps: "Action reduces anxiety much faster than further deliberation.",
-      smallStart: "Pick the smallest 10-minute task that moves this forward and complete it without aiming for perfection.",
-      timeEstimate: "10 mins",
+      title: "Allow a pause before following up",
+      whyItHelps: "Giving emotional dust time to settle almost always leads to a clearer conversation.",
+      smallStart: "Wait until tomorrow morning before sending an explanatory text or message.",
+      timeEstimate: "1 min",
+      completed: false
+    });
+  } else {
+    nextMoves.push({
+      title: "Identify one thing that brought you groundedness",
+      whyItHelps: "Anchors positive or neutral observations into your daily perspective.",
+      smallStart: "Write down one moment from today that felt quiet, clear, or steady.",
+      timeEstimate: "3 mins",
+      completed: false
+    });
+    nextMoves.push({
+      title: "Choose one simple intention for tonight",
+      whyItHelps: "Bridges today's reflection into a restful, smooth transition into tomorrow.",
+      smallStart: "Decide on one enjoyable or relaxing thing to do before sleep.",
+      timeEstimate: "2 mins",
       completed: false
     });
   }
 
   // 6. Reflection Question
   let reflectionQuestion = "";
-  if (isComparison) {
+  if (isPositive) {
+    reflectionQuestion = "What specifically contributed most to feeling happy today, and how can you give yourself permission to fully soak it in without rushing to what's next?";
+  } else if (isSadness) {
+    reflectionQuestion = "If you didn't have to put on a brave face for anyone right now, what is the softest, kindest thing you could offer yourself?";
+  } else if (isAnxiety) {
+    reflectionQuestion = "What is one concrete fact about your current safety or capability that your anxiety is currently overlooking?";
+  } else if (isAnger) {
+    reflectionQuestion = "What boundary or value is this anger trying to protect, and what is the cleanest, most constructive way to honor that boundary?";
+  } else if (isComparison) {
     reflectionQuestion = "If you had no visibility into what anyone else was building or achieving, what would feel like meaningful progress to you this week?";
+  } else if (isLowMotivation) {
+    reflectionQuestion = "If this low motivation is actually a sign of tiredness rather than laziness, what kind of genuine rest do you most need today?";
   } else if (isOverwork) {
     reflectionQuestion = "What is one thing on your to-do list that feels urgent, but could realistically wait until tomorrow without any true harm?";
   } else if (isRelationship) {
@@ -260,13 +489,28 @@ export function generateLocalReadVibe(content = "", recentMood = "neutral", hist
   } else if (isDecisionFriction) {
     reflectionQuestion = "What would you choose if you trusted that a reversible 'good enough' decision is better than no decision at all?";
   } else {
-    reflectionQuestion = "Looking at what you wrote, what is the single most important thing you need for yourself right now?";
+    reflectionQuestion = "Looking at what you experienced today, what is one thing you want to give yourself credit for?";
   }
 
   // 7. Gentle Closing
-  const gentleClosing = isPositive
-    ? "Celebrate the good rhythm today. Even small moments of calm and clarity are genuine evidence of growth."
-    : "You're dealing with real things, and it makes sense that you felt this way. Take things one grounded step at a time today.";
+  let gentleClosing = "";
+  if (isPositive) {
+    gentleClosing = "Let this good feeling linger. You deserve to experience ease and joy today.";
+  } else if (isSadness) {
+    gentleClosing = "Your feelings are valid. Be extraordinarily gentle with yourself as this moves through.";
+  } else if (isAnxiety) {
+    gentleClosing = "You are not your anxiety. Take one slow, full breath and let your shoulders drop.";
+  } else if (isAnger) {
+    gentleClosing = "Anger is natural information about your boundaries. Give it space to settle before you act.";
+  } else if (isComparison) {
+    gentleClosing = "Your timeline belongs to you. Keep your eyes on your own paper.";
+  } else if (isLowMotivation) {
+    gentleClosing = "You don't have to be in top gear every single day. A quiet, low-demand rhythm is completely okay.";
+  } else if (isOverwork) {
+    gentleClosing = "Rest is not a reward for finished work; it is a requirement for being human.";
+  } else {
+    gentleClosing = "Take things one grounded step at a time today.";
+  }
 
   // 8. Recurring themes from user history
   const recurringThemes = [];
@@ -345,12 +589,13 @@ export async function analyzeJournalVibe(content = "", recentMood = "neutral", h
 Your purpose is to help a person reflect deeply on their journal entry and discover practical, grounded next steps.
 
 CRITICAL RULES:
-1. NEVER diagnose mental illnesses or assign psychiatric labels (no clinical terminology).
-2. Distinguish explicit statements from uncertain interpretations. Use phrases like "One possibility is...", "This may be connected to...".
-3. Avoid generic motivational fluff, toxic positivity, or patronizing reassurances.
-4. Offer 2 or 3 manageable, concrete actions in 'nextMoves' with time estimates and a small way to start today.
-5. If historical entries are provided, note genuine recurring themes ONLY if backed by evidence. If not supported, leave 'recurringThemes' empty.
-6. Return ONLY valid JSON adhering strictly to the schema provided.
+1. Ground your reflection directly in the user's specific text. If they are happy, acknowledge happiness and savoring; if they are anxious, validate anxiety; if sad, offer warmth. NEVER give a canned generic response.
+2. NEVER diagnose mental illnesses or assign psychiatric labels (no clinical terminology).
+3. Distinguish explicit statements from uncertain interpretations. Use phrases like "One possibility is...", "This may be connected to...".
+4. Avoid generic motivational fluff, toxic positivity, or patronizing reassurances.
+5. Offer 2 or 3 manageable, concrete actions in 'nextMoves' with time estimates and a small way to start today.
+6. If historical entries are provided, note genuine recurring themes ONLY if backed by evidence. If not supported, leave 'recurringThemes' empty.
+7. Return ONLY valid JSON adhering strictly to the schema provided.
 
 Output JSON format:
 {
@@ -439,7 +684,9 @@ export async function generateFollowUpTurn(entryContent = "", previousAnalysis =
     // Local contextual conversational reply
     const lower = userMessage.toLowerCase();
     let reply = "";
-    if (/internship|job|career|hiring|recruit/i.test(lower)) {
+    if (/happy|joy|good|great|proud|grateful/i.test(lower)) {
+      reply = "It's wonderful to hear you lean into that. Acknowledging what feels good is just as important as working through hard days. Carry this light feeling with you and let it fuel whatever you choose to do next.";
+    } else if (/internship|job|career|hiring|recruit/i.test(lower)) {
       reply = "That makes the concern much more specific. It sounds like this isn't just about general progress, but about concrete career security. A practical next move here is to pick one specific role description, identify one real skill to build, and set a low-pressure application goal rather than comparing yourself to people who are already on the other side of that milestone.";
     } else if (/alone|no one|isolated/i.test(lower)) {
       reply = "Hearing that you feel so on your own with this adds significant weight to the problem. When we don't share our struggles, they echo louder in our heads. Could you share even 10% of this with someone you feel relatively safe with?";
@@ -513,6 +760,7 @@ export function extractRecurringThemesFromHistory(historyEntries = []) {
   const uncertaintyDates = [];
   const criticDates = [];
   const boundaryDates = [];
+  const positiveDates = [];
 
   for (const entry of historyEntries) {
     const text = (entry.content || "").toLowerCase();
@@ -535,8 +783,18 @@ export function extractRecurringThemesFromHistory(historyEntries = []) {
     if (/people[- ]pleas|saying yes|boundary|boundaries|overwhelm/i.test(text)) {
       if (dateStr && !boundaryDates.includes(dateStr)) boundaryDates.push(dateStr);
     }
+    if (/happy|joy|grateful|proud|peaceful|good day|progress/i.test(text)) {
+      if (dateStr && !positiveDates.includes(dateStr)) positiveDates.push(dateStr);
+    }
   }
 
+  if (positiveDates.length >= 2) {
+    themes.push({
+      theme: "Moments of Grounded Joy & Ease",
+      observation: "Reflections frequently record genuine contentment and gratitude during steady periods.",
+      datesOrParaphrase: `Captured in entries from ${positiveDates.slice(0, 3).join(", ")}.`
+    });
+  }
   if (compDates.length >= 2) {
     themes.push({
       theme: "Self-Comparison Under Pressure",
@@ -575,4 +833,3 @@ export function extractRecurringThemesFromHistory(historyEntries = []) {
 
   return themes;
 }
-
