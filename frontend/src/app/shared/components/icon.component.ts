@@ -59,6 +59,7 @@ export type MindtrackIconName =
   | "insights"
   | "journal"
   | "lightning"
+  | "list-check"
   | "message"
   | "mood"
   | "pen"
@@ -102,6 +103,7 @@ const ICONS: Record<MindtrackIconName, IconDefinition> = {
   insights: faWandSparkles,
   journal: faBookOpen,
   lightning: faBolt,
+  "list-check": faListCheck,
   message: faMessage,
   mood: faFaceSmileBeam,
   pen: faPenNib,

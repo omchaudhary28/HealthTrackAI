@@ -15,5 +15,8 @@ __pycache__/
 .pytest_cache/
 *.pyc
 *.pyo
+*.log
+firebase-debug.log
+frontend/firebase-debug.log
 .DS_Store
 Thumbs.db
